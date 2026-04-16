@@ -33,58 +33,57 @@ const COURSES = [{
   rating: 4.9, students: 1247,
   duration: '3h 0m', totalLessons: 12,
   description: 'Master the art and science of architectural lighting. This industry-grade curriculum covers physics, human perception, architectural principles, and real-world frameworks for residential and commercial spaces.',
+  objective: 'To equip students with the scientific foundations, architectural principles, and psychological insights required to design professional-grade, human-centric lighting environments.',
+  sourceMaterial: 'Synthesized from 18 proprietary PDF guides covering architectural lighting, visual comfort, psychology of light, and human-centric lighting.',
   tags: ['Architecture', 'Professional', 'Lighting'],
   chapters: [
     {
       id: 101,
       title: 'Module 1: The Foundations of Light & Vision',
+      objective: 'Understand the physics of light, how the human eye perceives it, and the scientific metrics used to measure it.',
       lessons: [
         { id: 1011, title: '1.1 The Nature of Light', video: '/lessons/1.1.mp4' },
         { id: 1012, title: '1.2 Human Vision & Perception', video: '/lessons/1.2.mp4' },
         { id: 1013, title: '1.3 Scientific Metrics & Photometry', video: '/lessons/1.3.mp4' }
       ],
-      quiz: [
-        { id: 1014, question: 'What is the visible light range of the electromagnetic spectrum?', options: ['100-300 nm', '380-780 nm', '800-1200 nm', '10-100 nm'], correct: 1 }
-      ]
+      quiz: [{ id: 1014, question: 'What is the visible light range of the electromagnetic spectrum?', options: ['100-300 nm', '380-780 nm', '800-1200 nm', '10-100 nm'], correct: 1 }]
     },
     {
       id: 102,
       title: 'Module 2: Architectural Lighting & Visual Comfort',
+      objective: 'Learn the core principles of lighting design, layers of light, and how to ensure spaces are visually comfortable.',
       lessons: [
         { id: 1021, title: '2.1 Principles of Lighting Design', video: '/lessons/2.1.mp4' },
         { id: 1022, title: '2.2 Visual Comfort & Ergonomics', video: '/lessons/2.2.mp4' },
         { id: 1023, title: '2.3 Spatial Perspectives', video: '/lessons/2.3.mp4' }
       ],
-      quiz: [
-        { id: 1024, question: 'Which of Richard Kelly’s elements refers to task or highlight lighting?', options: ['Ambient luminescence', 'Focal glow', 'Play of brilliants', 'Sparkle'], correct: 1 }
-      ]
+      quiz: [{ id: 1024, question: 'Which of Richard Kelly’s elements refers to task or highlight lighting?', options: ['Ambient luminescence', 'Focal glow', 'Play of brilliants', 'Sparkle'], correct: 1 }]
     },
     {
       id: 103,
       title: 'Module 3: Human Centric Lighting (HCL) & Psychology',
+      objective: 'Explore how light biologically and psychologically impacts human health, mood, and productivity.',
       lessons: [
         { id: 1031, title: '3.1 Biological Impact of Light', video: '/lessons/3.1.mp4' },
         { id: 1032, title: '3.2 The Psychology of Light and Color', video: '/lessons/3.2.mp4' },
         { id: 1033, title: '3.3 Implementing HCL', video: '/lessons/3.3.mp4' }
       ],
-      quiz: [
-        { id: 1034, question: 'What biological process does light primarily control in humans?', options: ['Digestion', 'Circadian rhythms', 'Muscle growth', 'Hearing'], correct: 1 }
-      ]
+      quiz: [{ id: 1034, question: 'What biological process does light primarily control in humans?', options: ['Digestion', 'Circadian rhythms', 'Muscle growth', 'Hearing'], correct: 1 }]
     },
     {
       id: 104,
       title: 'Module 4: The Environmental Lighting Framework',
+      objective: 'Apply foundational, architectural, and psychological principles directly to real-world environments using a structured, space-by-space framework.',
       lessons: [
         { id: 1041, title: '4.1 Framework for Residential Spaces', video: '/lessons/4.1.mp4' },
         { id: 1042, title: '4.2 Framework for Outdoor & Transitional Spaces', video: '/lessons/4.2.mp4' },
         { id: 1043, title: '4.3 Framework for Commercial Workspaces', video: '/lessons/4.3.mp4' }
       ],
-      quiz: [
-        { id: 1044, question: 'Which zone requires specific visual comfort limits for screen productivity?', options: ['Offices', 'Luxury Villas', 'Terraces', 'Beachside Villas'], correct: 0 }
-      ]
+      quiz: [{ id: 1044, question: 'Which zone requires specific visual comfort limits for screen productivity?', options: ['Offices', 'Luxury Villas', 'Terraces', 'Beachside Villas'], correct: 0 }]
     }
   ],
 }];
+
 
 
 // ── SVG ICON ──────────────────────────────────────────────
@@ -848,9 +847,10 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
   const [editingCourseId, setEditingCourseId] = useState(null);
   const [form, setForm] = useState({ 
     title: '', instructor: '', price: '', originalPrice: '', trailer: '', thumbnail: '', 
-    passPercentage: 80, description: '', tags: [], rating: 4.9, students: 0, duration: '3h 0m',
-    chapters: [{ id: Date.now(), title: '', lessons: [], quiz: [] }] 
+    passPercentage: 80, description: '', objective: '', sourceMaterial: '', tags: [], rating: 4.9, students: 0, duration: '3h 0m',
+    chapters: [{ id: Date.now(), title: '', objective: '', lessons: [], quiz: [] }] 
   });
+
   const [toast, setToast] = useState(false);
 
   const handleEdit = (c) => {
@@ -865,12 +865,15 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
       thumbnail: c.thumbnail,
       passPercentage: c.passPercentage,
       description: c.description,
+      objective: c.objective || '',
+      sourceMaterial: c.sourceMaterial || '',
       tags: c.tags,
       rating: c.rating || 4.9,
       students: c.students || 0,
       duration: c.duration || '3h 0m',
-      chapters: c.chapters.length > 0 ? c.chapters : [{ id: Date.now(), title: '', lessons: [], quiz: [] }]
+      chapters: c.chapters.length > 0 ? c.chapters : [{ id: Date.now(), title: '', objective: '', lessons: [], quiz: [] }]
     });
+
     setShowForm(true);
   };
 
@@ -878,9 +881,10 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
     setEditingCourseId(null);
     setForm({ 
       title: '', instructor: '', price: '', originalPrice: '', trailer: '', thumbnail: '', 
-      passPercentage: 80, description: '', tags: [], rating: 4.9, students: 0, duration: '3h 0m',
-      chapters: [{ id: Date.now(), title: '', lessons: [], quiz: [] }] 
+      passPercentage: 80, description: '', objective: '', sourceMaterial: '', tags: [], rating: 4.9, students: 0, duration: '3h 0m',
+      chapters: [{ id: Date.now(), title: '', objective: '', lessons: [], quiz: [] }] 
     });
+
     setShowForm(true);
   };
   const set = k => e => {
@@ -889,8 +893,9 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
   };
 
   
-  const addChapter = () => setForm(f => ({ ...f, chapters: [...f.chapters, { id: Date.now(), title: '', lessons: [], quiz: [] }] }));
-  const updateChapter = (id, val) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === id ? { ...c, title: val } : c) }));
+  const addChapter = () => setForm(f => ({ ...f, chapters: [...f.chapters, { id: Date.now(), title: '', objective: '', lessons: [], quiz: [] }] }));
+  const updateChapter = (id, field, val) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === id ? { ...c, [field]: val } : c) }));
+
   
   const addLesson = (chId) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, lessons: [...c.lessons, { id: Date.now(), title: '', video: '' }] } : c) }));
   const updateLesson = (chId, lesId, field, val) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, lessons: c.lessons.map(l => l.id === lesId ? { ...l, [field]: val } : l) } : c) }));
@@ -961,11 +966,24 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
                   <input type="file" accept="video/mp4" style={{ fontSize: 13, color: C.muted, border: `1.5px solid ${C.border}`, padding: 8, borderRadius: 8 }} />
                 </div>
               </div>
-              <div style={{ marginTop: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: C.muted, marginBottom: 6 }}>Description</div>
-                <textarea rows={3} placeholder="Short course description..." value={form.description} onChange={set('description')}
-                  style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${C.border}`, borderRadius: 8, fontSize: 14, resize: 'vertical', outline: 'none', fontFamily: 'Inter, sans-serif' }} />
+              <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: C.muted, marginBottom: 6 }}>Description</div>
+                  <textarea rows={3} placeholder="Short course description..." value={form.description} onChange={set('description')}
+                    style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${C.border}`, borderRadius: 8, fontSize: 14, resize: 'vertical', outline: 'none', fontFamily: 'Inter, sans-serif' }} />
+                </div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: C.muted, marginBottom: 6 }}>Course Objective</div>
+                  <textarea rows={3} placeholder="What will students learn?" value={form.objective} onChange={set('objective')}
+                    style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${C.border}`, borderRadius: 8, fontSize: 14, resize: 'vertical', outline: 'none', fontFamily: 'Inter, sans-serif' }} />
+                </div>
               </div>
+              <div style={{ marginTop: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: C.muted, marginBottom: 6 }}>Source Material Reference</div>
+                <input placeholder="e.g. Synthesized from 18 proprietary PDF guides..." value={form.sourceMaterial} onChange={set('sourceMaterial')}
+                  style={{ width: '100%', padding: '11px 14px', border: `1.5px solid ${C.border}`, borderRadius: 8, fontSize: 14, outline: 'none', fontFamily: 'Inter, sans-serif' }} />
+              </div>
+
             </section>
 
             <section>
@@ -977,9 +995,11 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 {form.chapters.map((ch, chIdx) => (
                   <Card key={ch.id} style={{ background: C.surface, borderStyle: 'dashed' }}>
-                    <div style={{ marginBottom: 16 }}>
-                      <Field label={`Chapter ${chIdx + 1} Title`} placeholder="Introduction to Light" value={ch.title} onChange={e => updateChapter(ch.id, e.target.value)} />
+                    <div style={{ marginBottom: 16, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                      <Field label={`Chapter ${chIdx + 1} Title`} placeholder="Introduction to Light" value={ch.title} onChange={e => updateChapter(ch.id, 'title', e.target.value)} />
+                      <Field label={`Chapter ${chIdx + 1} Objective`} placeholder="Module learning goal..." value={ch.objective} onChange={e => updateChapter(ch.id, 'objective', e.target.value)} />
                     </div>
+
                     
                     <div style={{ marginLeft: 20, borderLeft: `2px solid ${C.border}`, paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
                       <div>

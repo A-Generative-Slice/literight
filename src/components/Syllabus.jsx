@@ -101,6 +101,15 @@ const Syllabus = ({ course, progress, onSelectLesson }) => {
                   transform: isOpen ? 'rotate(90deg)' : 'none' 
                 }} />
               </div>
+
+              {isOpen && chapter.objective && (
+                <div style={{ padding: '0 24px 16px 76px', marginTop: -8 }}>
+                   <div style={{ padding: '8px 12px', background: C.surface, borderRadius: 8, fontSize: 12, color: C.muted, borderLeft: `3px solid ${C.accent}`, lineHeight: 1.5 }}>
+                     <strong style={{ color: C.text, fontSize: 10, textTransform: 'uppercase', display: 'block', marginBottom: 2 }}>Module Objective</strong>
+                     {chapter.objective}
+                   </div>
+                </div>
+              )}
               
               {/* Lessons List */}
               <div style={{ 
