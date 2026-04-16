@@ -345,12 +345,15 @@ const PublicLanding = ({ onCourse, courses }) => (
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,73,255,0.18)'; e.currentTarget.style.borderColor = `${C.accent}33`; }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = C.border; }}>
           {/* Thumbnail */}
-          <div style={{ height: 200, background: `linear-gradient(135deg,${C.bg},${C.navy})`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', borderBottom: `1px solid ${C.border}` }}>
-            <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(0,0,0,0.05)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.2)' }}>
+          <div style={{ height: 200, background: course.thumbnail ? `url($ {course.thumbnail}) center/cover no-repeat` : `linear-gradient(135deg,${C.bg},${C.surface})`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', borderBottom: `1px solid ${C.border}` }}>
+            {course.thumbnail ? (
+              <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.1)' }} />
+            ) : null}
+            <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.4)', zIndex: 1 }}>
               <Icon name="play" size={24} color="#ffffff" />
             </div>
-            <div style={{ position: 'absolute', top: 14, left: 14 }}><Badge label="Best Seller" color="#f59e0b" /></div>
-            <div style={{ position: 'absolute', top: 14, right: 14, background: 'rgba(0,0,0,0.5)', padding: '4px 10px', borderRadius: 6 }}>
+            <div style={{ position: 'absolute', top: 14, left: 14, zIndex: 2 }}><Badge label="Best Seller" color="#f59e0b" /></div>
+            <div style={{ position: 'absolute', top: 14, right: 14, background: 'rgba(0,0,0,0.5)', padding: '4px 10px', borderRadius: 6, zIndex: 2 }}>
               <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{course.totalLessons} lessons</span>
             </div>
           </div>
@@ -410,7 +413,15 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
   return (
     <div style={{ background: C.bg, minHeight: '100vh' }}>
       {/* Hero Section */}
-      <div style={{ background: `linear-gradient(135deg, ${C.text} 0%, #1e293b 100%)`, color: '#fff', padding: '60px 0 100px 0', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ 
+        background: course.thumbnail 
+          ? `linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.7)), url(${course.thumbnail}) center/cover no-repeat`
+          : `linear-gradient(135deg, ${C.text} 0%, #1e293b 100%)`, 
+        color: '#fff', 
+        padding: '60px 0 100px 0', 
+        position: 'relative', 
+        overflow: 'hidden' 
+      }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60, alignItems: 'center', position: 'relative', zIndex: 10 }}>
           <div>
             <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>

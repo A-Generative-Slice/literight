@@ -14,6 +14,9 @@ export class UploadsController {
         cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
       },
     }),
+    limits: {
+      fileSize: 500 * 1024 * 1024, // 500MB
+    },
   }))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     // Generate a public URL path
