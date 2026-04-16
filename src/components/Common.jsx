@@ -34,3 +34,9 @@ export const Card = ({ children, style: ex = {}, padding = '24px' }) => (
     {children}
   </div>
 );
+
+export const Avatar = ({ user, size = 40 }) => (
+  <div style={{ width: size, height: size, borderRadius: '50%', background: C.accentLight, color: C.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 800, border: `2px solid #fff`, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+    {user.photo ? <img src={user.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (user.username || user.name || 'A')[0].toUpperCase()}
+  </div>
+);
