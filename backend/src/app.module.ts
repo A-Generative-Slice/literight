@@ -13,12 +13,14 @@ import { Chapter } from './courses/entities/chapter.entity';
 import { Lesson } from './courses/entities/lesson.entity';
 import { Progress } from './progress/entities/progress.entity';
 
+import { User } from './auth/entities/user.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'data/lms.db',
-      entities: [Course, Chapter, Lesson, Progress],
+      entities: [Course, Chapter, Lesson, Progress, User],
       synchronize: true, // Auto-create tables for now
     }),
     ProgressModule, 

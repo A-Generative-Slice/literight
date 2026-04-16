@@ -39,7 +39,7 @@ const AdminCourses = ({ courses, onSaveCourse, onDeleteCourse }) => {
   const [form, setForm] = useState({ 
     title: '', instructor: '', price: '', originalPrice: '', trailer: '', thumbnail: '', 
     passPercentage: 80, description: '', objective: '', sourceMaterial: '', tags: [], rating: 4.9, students: 0, duration: '3h 0m',
-    chapters: [{ id: Date.now(), title: '', objective: '', lessons: [], quiz: [] }] 
+    chapters: [{ id: 'new-' + Date.now(), title: '', objective: '', lessons: [], quiz: [] }] 
   });
 
   const [uploading, setUploading] = useState(false);
@@ -51,14 +51,8 @@ const AdminCourses = ({ courses, onSaveCourse, onDeleteCourse }) => {
     formData.append('file', file);
 
     try {
-      const res = await fetch('/api/uploads', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      if (data.url) {
-        callback(data.url);
-      }
+      const res = await axios.post('/uploads', formData);
+      if (res.data.url) callback(res.data.url);
     } catch (err) {
       console.error('Upload failed:', err);
     } finally {
@@ -77,7 +71,7 @@ const AdminCourses = ({ courses, onSaveCourse, onDeleteCourse }) => {
     setForm({ 
       title: '', instructor: '', price: '', originalPrice: '', trailer: '', thumbnail: '', 
       passPercentage: 80, description: '', objective: '', sourceMaterial: '', tags: [], rating: 4.9, students: 0, duration: '3h 0m',
-      chapters: [{ id: Date.now(), title: '', objective: '', lessons: [], quiz: [] }] 
+      chapters: [{ id: 'new-' + Date.now(), title: '', objective: '', lessons: [], quiz: [] }] 
     });
     setShowForm(true);
   };
@@ -87,11 +81,15 @@ const AdminCourses = ({ courses, onSaveCourse, onDeleteCourse }) => {
     setForm(f => ({ ...f, [k]: val }));
   };
 
-  const addChapter = () => setForm(f => ({ ...f, chapters: [...f.chapters, { id: Date.now(), title: '', objective: '', lessons: [], quiz: [] }] }));
+  const addChapter = () => setForm(f => ({ ...f, chapters: [...f.chapters, { id: 'new-' + Date.now(), title: '', objective: '', lessons: [], quiz: [] }] }));
+  const removeChapter = (id) => setForm(f => ({ ...f, chapters: f.chapters.filter(c => c.id !== id) }));
   const updateChapter = (id, field, val) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === id ? { ...c, [field]: val } : c) }));
-  const addLesson = (chId) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, lessons: [...c.lessons, { id: Date.now(), title: '', video: '' }] } : c) }));
+  
+  const addLesson = (chId) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, lessons: [...c.lessons, { id: 'new-' + Date.now(), title: '', video: '' }] } : c) }));
+  const removeLesson = (chId, lesId) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, lessons: c.lessons.filter(l => l.id !== lesId) } : c) }));
   const updateLesson = (chId, lesId, field, val) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, lessons: c.lessons.map(l => l.id === lesId ? { ...l, [field]: val } : l) } : c) }));
-  const addQuiz = (chId) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, quiz: [...c.quiz, { id: Date.now(), question: '', options: ['', '', '', ''], correct: 0 }] } : c) }));
+  
+  const addQuiz = (chId) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, quiz: [...c.quiz, { id: 'new-' + Date.now(), question: '', options: ['', '', '', ''], correct: 0 }] } : c) }));
   const updateQuiz = (chId, qId, field, val, optIdx) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === chId ? { ...c, quiz: c.quiz.map(q => {
     if (q.id === qId) {
       if (optIdx !== undefined) {
@@ -109,6 +107,7 @@ const AdminCourses = ({ courses, onSaveCourse, onDeleteCourse }) => {
 
   return (
     <div style={{ paddingBottom: 100 }}>
+      {/* Header ... */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 32 }}>
         <div>
           <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 26, fontWeight: 800 }}>Course Management</h1>
@@ -121,7 +120,10 @@ const AdminCourses = ({ courses, onSaveCourse, onDeleteCourse }) => {
         <Card style={{ marginBottom: 28, position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
             <h3 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800, fontSize: 22, color: C.accent }}>{editingCourseId ? 'Edit Course' : 'Build Your Course'}</h3>
-            <Btn variant="ghost" onClick={() => setShowForm(false)}><Icon name="x" size={16} /></Btn>
+            <div style={{ display: 'flex', gap: 10 }}>
+              {editingCourseId && <Btn variant="danger" size="sm" onClick={() => { if(confirm('Delete course permanently?')) onDeleteCourse(editingCourseId); setShowForm(false); }}>Delete Entire Course</Btn>}
+              <Btn variant="ghost" onClick={() => setShowForm(false)}><Icon name="x" size={16} /></Btn>
+            </div>
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
@@ -141,16 +143,23 @@ const AdminCourses = ({ courses, onSaveCourse, onDeleteCourse }) => {
                 <h4 style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', color: C.muted }}>Curriculum Builder</h4>
                 <Btn variant="secondary" size="sm" onClick={addChapter}>+ Add Chapter</Btn>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                {form.chapters.map((ch, idx) => (
-                  <Card key={ch.id} style={{ background: C.surface, borderStyle: 'dashed' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                {form.chapters?.map((ch, idx) => (
+                  <Card key={ch.id} style={{ background: C.surface, borderStyle: 'dashed', position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: 20, right: 20 }}>
+                      <Btn variant="ghost" size="sm" onClick={() => removeChapter(ch.id)}><Icon name="trash" size={14} color={C.danger} /></Btn>
+                    </div>
                     <Field label={`Chapter ${idx + 1}`} value={ch.title} onChange={e => updateChapter(ch.id, 'title', e.target.value)} />
                     <div style={{ marginLeft: 20, marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      {ch.lessons.map((l, lIdx) => (
-                        <div key={l.id} style={{ display: 'flex', gap: 10 }}>
-                          <input placeholder="Lesson Title" value={l.title} onChange={e => updateLesson(ch.id, l.id, 'title', e.target.value)} style={{ flex: 1 }} />
-                          {/* Simple upload mockup */}
-                          <input type="file" onChange={e => handleFileUpload(e.target.files[0], url => updateLesson(ch.id, l.id, 'video', url))} />
+                      {ch.lessons?.map((l, lIdx) => (
+                        <div key={l.id} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                           <Badge label={lIdx + 1} />
+                          <input placeholder="Lesson Title" value={l.title} onChange={e => updateLesson(ch.id, l.id, 'title', e.target.value)} style={{ flex: 1, padding: '8px 12px', borderRadius: 6, border: `1px solid ${C.border}` }} />
+                          <input type="file" style={{ display: 'none' }} id={`file-${l.id}`} onChange={e => handleFileUpload(e.target.files[0], url => updateLesson(ch.id, l.id, 'video', url))} />
+                          <Btn variant="secondary" size="sm" onClick={() => document.getElementById(`file-${l.id}`).click()}>
+                            <Icon name="upload" size={12} /> {l.video ? 'Uploaded' : 'Upload Video'}
+                          </Btn>
+                          <Btn variant="ghost" size="sm" onClick={() => removeLesson(ch.id, l.id)}><Icon name="x" size={14} color={C.danger} /></Btn>
                         </div>
                       ))}
                       <Btn variant="ghost" size="sm" onClick={() => addLesson(ch.id)}>+ Add Lesson</Btn>

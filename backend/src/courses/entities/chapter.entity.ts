@@ -7,8 +7,11 @@ export class Chapter {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  title: string;
+  @Column({ nullable: true })
+  objective: string;
+
+  @Column({ type: 'simple-json', nullable: true })
+  quiz: any[];
 
   @ManyToOne(() => Course, (course) => course.chapters, { onDelete: 'CASCADE' })
   course: Course;

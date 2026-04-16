@@ -20,7 +20,8 @@ export default function App() {
     fetchCourses, 
     user, 
     token,
-    isLoading 
+    isLoading,
+    init
   } = useLmsStore();
 
   const [screen, setScreen] = useState('public'); // 'public', 'course', 'admin', 'auth'
@@ -29,8 +30,9 @@ export default function App() {
   const [toast, setToast] = useState({ msg: '', visible: false, type: 'success' });
 
   useEffect(() => {
+    init();
     fetchCourses();
-  }, [fetchCourses]);
+  }, [fetchCourses, init]);
 
   // Handle routing logic (simplified for production v1)
   useEffect(() => {

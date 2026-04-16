@@ -84,9 +84,11 @@ export class CoursesService implements OnModuleInit {
   }
 
   async upsertCourse(courseData: any) {
-    // If it has an ID, we update. If not, create.
     if (courseData.id) {
-       return await this.courseRepository.save(courseData);
+      // For updates, we use preload to merge changes including relations
+      const course = await this.courseRepository.preload(courseData);
+      if (!course) throw new Error(`Course #${courseData.id} not found`);
+      return await this.courseRepository.save(course);
     } else {
       const nested = this.courseRepository.create(courseData);
       return await this.courseRepository.save(nested);

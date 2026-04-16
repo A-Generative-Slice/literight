@@ -10,7 +10,13 @@ export class Lesson {
   title: string;
 
   @Column({ nullable: true })
-  video: string;
+  duration: string;
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
+
+  @Column({ nullable: true })
+  sourceMaterial: string;
 
   @ManyToOne(() => Chapter, (chapter) => chapter.lessons, { onDelete: 'CASCADE' })
   chapter: Chapter;
