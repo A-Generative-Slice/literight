@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
 import { PlayCircle, CheckCircle2, ChevronRight, Lock, HelpCircle } from 'lucide-react';
 
+// Design Tokens (Matching App.jsx)
+const C = {
+  bg: '#ffffff',
+  surface: '#f8fafc',
+  border: '#e2e8f0',
+  text: '#0f172a',
+  muted: '#64748b',
+  accent: '#e11d48',
+  accentLight: '#fff1f2',
+  success: '#16a34a',
+  warning: '#f59e0b',
+  danger: '#dc2626',
+};
+
 const Syllabus = ({ course, progress, onSelectLesson }) => {
   const [openChapters, setOpenChapters] = useState({ 0: true });
+  
   if (!course || !course.chapters) return null;
 
   const toggleChapter = (idx) => {
@@ -28,108 +43,155 @@ const Syllabus = ({ course, progress, onSelectLesson }) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between mb-8 animate-fade-in">
-        <h2 className="text-2xl font-bold font-title">Course content</h2>
-        <span className="text-sm text-text-secondary font-medium">
-          {course.chapters.length} chapters • {course.totalLessons} lessons
-        </span>
+    <div className="animate-fade-in" style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
+        <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, color: C.text }}>Course Content</h2>
+        <div style={{ fontSize: 13, fontWeight: 600, color: C.muted, background: C.surface, padding: '4px 12px', borderRadius: 99, border: `1px solid ${C.border}` }}>
+          {course.chapters.length} Modules • {course.totalLessons} Lessons
+        </div>
       </div>
 
-      {course.chapters.map((chapter, idx) => {
-        const locked = isChapterLocked(idx);
-        const isOpen = openChapters[idx];
-        const { completed, total } = getChapterProgress(idx);
-        
-        return (
-          <div key={chapter.id} className={`border border-border rounded-2xl transition-all duration-300 ${locked ? 'opacity-60 grayscale' : 'shadow-sm hover:shadow-md bg-white'} overflow-hidden`}>
-            <div 
-              onClick={() => !locked && toggleChapter(idx)}
-              className={`px-6 py-5 flex items-center justify-between cursor-pointer transition-colors ${isOpen ? 'bg-slate-50' : 'bg-white'}`}
-            >
-              <div className="flex items-center gap-4">
-                <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all ${completed === total ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-border text-muted'}`}>
-                  {completed === total ? <CheckCircle2 className="w-5 h-5" /> : idx + 1}
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-text-primary leading-tight">{chapter.title || `Chapter ${idx + 1}`}</h3>
-                  <div className="text-xs text-text-secondary mt-0.5">{total} modules · {completed}/{total} done</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                {locked ? (
-                  <Lock className="w-4 h-4 text-muted" />
-                ) : (
-                  <ChevronRight className={`w-5 h-5 text-muted transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} />
-                )}
-              </div>
-            </div>
-            
-            <div 
-              className="transition-all duration-500 ease-in-out"
-              style={{ 
-                maxHeight: isOpen ? '1000px' : '0',
-                opacity: isOpen ? 1 : 0,
-                visibility: isOpen ? 'visible' : 'hidden'
-              }}
-            >
-              <div className="divide-y divide-border border-t border-border">
-                {chapter.lessons.map((lesson) => {
-                  const lessonCompleted = progress && progress[lesson.id]?.completed;
-                  return (
-                    <div 
-                      key={lesson.id} 
-                      onClick={() => !locked && onSelectLesson({ ...lesson, type: 'video' })}
-                      className={`px-6 py-4 flex items-center justify-between hover:bg-accentLight/30 transition-all cursor-pointer group ${lessonCompleted ? 'bg-emerald-50/20' : ''}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`p-2 rounded-lg transition-colors ${lessonCompleted ? 'bg-emerald-100' : 'bg-slate-100 group-hover:bg-accentLight'}`}>
-                          {lessonCompleted ? (
-                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                          ) : (
-                            <PlayCircle className={`h-4 w-4 ${locked ? 'text-muted' : 'text-accent'}`} />
-                          )}
-                        </div>
-                        <span className={`text-sm font-semibold transition-colors ${lessonCompleted ? 'text-emerald-700' : 'text-text-primary group-hover:text-accent'}`}>
-                          {lesson.title}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-[10px] font-bold tracking-widest text-text-secondary uppercase">Video</span>
-                        <ChevronRight className="h-4 w-4 text-border group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {chapter.quiz && chapter.quiz.length > 0 && (
-                  <div 
-                    onClick={() => !locked && onSelectLesson({ id: `quiz_${chapter.id}`, title: `${chapter.title} Quiz`, type: 'quiz', quizData: chapter.quiz, chId: chapter.id })}
-                    className={`px-6 py-4 flex items-center justify-between hover:bg-accentLight/30 transition-all cursor-pointer group ${progress && progress[`quiz_${chapter.id}`]?.completed ? 'bg-emerald-50/20' : ''}`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className={`p-2 rounded-lg transition-colors ${progress && progress[`quiz_${chapter.id}`]?.completed ? 'bg-emerald-100' : 'bg-slate-100 group-hover:bg-accentLight'}`}>
-                        {progress && progress[`quiz_${chapter.id}`]?.completed ? (
-                          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                        ) : (
-                          <HelpCircle className={`h-4 w-4 ${locked ? 'text-muted' : 'text-accent'}`} />
-                        )}
-                      </div>
-                      <span className={`text-sm font-bold transition-colors ${progress && progress[`quiz_${chapter.id}`]?.completed ? 'text-emerald-700' : 'text-text-primary group-hover:text-accent'}`}>
-                        Chapter Knowledge Check
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="px-2 py-0.5 rounded bg-accent text-[9px] font-black text-white uppercase tracking-tighter">Required</span>
-                      <ChevronRight className="h-4 w-4 text-border group-hover:translate-x-1 transition-transform" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        {course.chapters.map((chapter, idx) => {
+          const locked = isChapterLocked(idx);
+          const isOpen = openChapters[idx];
+          const { completed, total } = getChapterProgress(idx);
+          const isFull = completed === total && total > 0;
+          
+          return (
+            <div key={chapter.id} style={{ 
+              borderRadius: 20, 
+              border: `1px solid ${locked ? C.border : isOpen ? C.accent + '22' : C.border}`,
+              background: locked ? C.surface : '#fff',
+              overflow: 'hidden',
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+              boxShadow: isOpen && !locked ? '0 12px 30px rgba(225,29,72,0.06)' : 'none',
+              opacity: locked ? 0.7 : 1,
+            }}>
+              {/* Chapter Header */}
+              <div 
+                onClick={() => !locked && toggleChapter(idx)}
+                style={{ 
+                  padding: '20px 24px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between', 
+                  cursor: locked ? 'not-allowed' : 'pointer',
+                  background: isOpen && !locked ? `linear-gradient(to right, ${C.accentLight} 0%, #fff 40%)` : 'transparent',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <div style={{ 
+                    width: 36, height: 36, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800,
+                    background: isFull ? C.success : locked ? C.border : isOpen ? C.accent : C.surface,
+                    color: isFull || (isOpen && !locked) ? '#fff' : C.muted,
+                    transition: 'all 0.3s'
+                  }}>
+                    {isFull ? <CheckCircle2 size={18} /> : locked ? <Lock size={16} /> : idx + 1}
+                  </div>
+                  <div>
+                    <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 16, fontWeight: 700, color: locked ? C.muted : C.text, marginBottom: 2 }}>{chapter.title}</h3>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: isFull ? C.success : C.muted, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      {total} Units • {completed}/{total} Completed
                     </div>
                   </div>
-                )}
+                </div>
+                <ChevronRight size={20} color={locked ? C.border : C.muted} style={{ 
+                  transition: 'transform 0.4s', 
+                  transform: isOpen ? 'rotate(90deg)' : 'none' 
+                }} />
+              </div>
+              
+              {/* Lessons List */}
+              <div style={{ 
+                maxHeight: isOpen ? '2000px' : '0', 
+                opacity: isOpen ? 1 : 0, 
+                visibility: isOpen ? 'visible' : 'hidden',
+                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                borderTop: isOpen ? `1px solid ${C.border}` : 'none',
+                paddingLeft: 30,
+              }}>
+                <div style={{ padding: '8px 0 20px 0', borderLeft: `2px solid ${C.border}`, marginLeft: 6 }}>
+                  {chapter.lessons.map((lesson, lIdx) => {
+                    const lessonCompleted = progress && progress[lesson.id]?.completed;
+                    return (
+                      <div 
+                        key={lesson.id} 
+                        onClick={() => !locked && onSelectLesson({ ...lesson, type: 'video' })}
+                        style={{ 
+                          padding: '14px 24px', 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'space-between', 
+                          cursor: 'pointer',
+                          position: 'relative',
+                          transition: 'all 0.2s',
+                          borderRadius: '0 12px 12px 0',
+                        }}
+                        className="group"
+                        onMouseEnter={e => e.currentTarget.style.background = C.accentLight}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >
+                        {/* Timeline Node */}
+                        <div style={{ 
+                          position: 'absolute', left: -7, top: '50%', transform: 'translateY(-50%)', 
+                          width: 12, height: 12, borderRadius: '50%', background: lessonCompleted ? C.success : '#fff', 
+                          border: `2.5px solid ${lessonCompleted ? C.success : C.border}`,
+                          transition: 'all 0.3s',
+                          zIndex: 2
+                        }} />
+                        
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                          <PlayCircle size={18} color={lessonCompleted ? C.success : C.accent} style={{ opacity: lessonCompleted ? 0.7 : 1 }} />
+                          <span style={{ 
+                            fontSize: 14, fontWeight: lessonCompleted ? 600 : 700, 
+                            color: lessonCompleted ? C.muted : C.text,
+                            textDecoration: lessonCompleted ? 'line-through' : 'none',
+                            opacity: lessonCompleted ? 0.6 : 1
+                          }}>{lesson.title}</span>
+                        </div>
+                        <span style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', color: C.muted, letterSpacing: '0.1em', background: C.surface, padding: '2px 8px', borderRadius: 4 }}>Video</span>
+                      </div>
+                    );
+                  })}
+
+                  {chapter.quiz && chapter.quiz.length > 0 && (
+                    <div 
+                      onClick={() => !locked && onSelectLesson({ id: `quiz_${chapter.id}`, title: `${chapter.title} Quiz`, type: 'quiz', quizData: chapter.quiz, chId: chapter.id })}
+                      style={{ 
+                        padding: '14px 24px', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'space-between', 
+                        cursor: 'pointer',
+                        position: 'relative',
+                        marginTop: 4,
+                        borderRadius: '0 12px 12px 0',
+                      }}
+                      className="group"
+                      onMouseEnter={e => e.currentTarget.style.background = '#fef3c7'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <div style={{ 
+                        position: 'absolute', left: -7, top: '50%', transform: 'translateY(-50%)', 
+                        width: 12, height: 12, borderRadius: '50%', 
+                        background: progress && progress[`quiz_${chapter.id}`]?.completed ? C.success : '#fff', 
+                        border: `2.5px solid ${progress && progress[`quiz_${chapter.id}`]?.completed ? C.success : C.warning}`,
+                        zIndex: 2
+                      }} />
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                        <HelpCircle size={18} color={C.warning} />
+                        <span style={{ fontSize: 14, fontWeight: 700, color: C.text }}>Module Knowledge Check</span>
+                      </div>
+                      <span style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', color: '#fff', background: C.warning, padding: '2px 8px', borderRadius: 4, letterSpacing: '0.05em' }}>Required</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };
