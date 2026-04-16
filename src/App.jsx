@@ -41,7 +41,7 @@ export default function App() {
     }
   }, [user, screen]);
 
-  const activeCourse = courses.find(c => c.id === selectedCourseId);
+  const activeCourse = (courses || []).find(c => c.id === selectedCourseId);
 
   const showMsg = (msg, type = 'success') => {
     setToast({ msg, visible: true, type });

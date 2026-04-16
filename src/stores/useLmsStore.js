@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:3000'; // In production, this can be an env var or empty string if same origin
+const API_BASE = '/api'; // Use relative path for production proxy
 
 export const useLmsStore = create(
   persist(

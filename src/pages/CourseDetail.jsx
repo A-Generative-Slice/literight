@@ -44,23 +44,23 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60, alignItems: 'center', position: 'relative', zIndex: 10 }}>
           <div>
             <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
-              {course.tags?.map(t => <span key={t} style={{ background: 'rgba(255,255,255,0.1)', padding: '5px 12px', borderRadius: 99, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t}</span>)}
+              {course?.tags?.map(t => <span key={t} style={{ background: 'rgba(255,255,255,0.1)', padding: '5px 12px', borderRadius: 99, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t}</span>)}
             </div>
-            <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 48, fontWeight: 800, lineHeight: 1.1, marginBottom: 24 }}>{course.title}</h1>
-            <p style={{ fontSize: 18, color: '#94a3b8', lineHeight: 1.6, marginBottom: 32, maxWidth: 600 }}>{course.description}</p>
+            <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 48, fontWeight: 800, lineHeight: 1.1, marginBottom: 24 }}>{course?.title || 'Course Details'}</h1>
+            <p style={{ fontSize: 18, color: '#94a3b8', lineHeight: 1.6, marginBottom: 32, maxWidth: 600 }}>{course?.description || 'No description available for this course yet.'}</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <Avatar user={{ name: course.instructor }} size={48} />
+                <Avatar user={{ name: course?.instructor || 'Staff' }} size={48} />
                 <div>
                   <div style={{ fontSize: 13, color: '#94a3b8' }}>Instructor</div>
-                  <div style={{ fontWeight: 700, fontSize: 15 }}>{course.instructor}</div>
+                  <div style={{ fontWeight: 700, fontSize: 15 }}>{course?.instructor || 'Literight Expert'}</div>
                 </div>
               </div>
               <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.1)' }} />
               <div>
                 <div style={{ fontSize: 13, color: '#94a3b8' }}>Rating</div>
                 <div style={{ fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <Icon name="star" size={14} color="#f59e0b" /> {course.rating} ({course.students} students)
+                  <Icon name="star" size={14} color="#f59e0b" /> {course?.rating || '5.0'} ({(course?.students || 0).toLocaleString()} students)
                 </div>
               </div>
             </div>
@@ -70,8 +70,8 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
             <Card style={{ padding: 40, background: '#fff', color: C.text, boxShadow: '10px 30px 60px rgba(0,0,0,0.1)', transform: 'translateY(40px)' }}>
               <div style={{ marginBottom: 32 }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 36, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>${course.price}</span>
-                  <span style={{ color: C.muted, textDecoration: 'line-through' }}>${course.originalPrice || course.price * 1.5}</span>
+                  <span style={{ fontSize: 36, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>${course?.price || '0'}</span>
+                  <span style={{ color: C.muted, textDecoration: 'line-through' }}>${course?.originalPrice || (course?.price * 1.5) || '0'}</span>
                 </div>
                 <div style={{ color: C.success, fontSize: 13, fontWeight: 700 }}>Exclusive Early Bird Offer</div>
               </div>
@@ -92,7 +92,7 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
           <section style={{ marginBottom: 60 }}>
             <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 24 }}>About this course</h2>
             <div style={{ color: C.muted, fontSize: 16, lineHeight: 1.8 }}>
-              {course.description}
+              {course?.description || 'Full curriculum details are being finalized. Enrollment provides lifetime access to all future updates.'}
             </div>
           </section>
 
@@ -101,7 +101,7 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
               <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 32 }}>Course Player</h2>
               {currentContent}
               <div style={{ marginTop: 24, padding: 24, background: C.surface, borderRadius: 16, border: `1px solid ${C.border}` }}>
-                <h3 style={{ fontWeight: 700, marginBottom: 8 }}>{activeLesson?.title || 'Course Preview'}</h3>
+                <h3 style={{ fontWeight: 700, marginBottom: 8 }}>{activeLesson?.title || 'Welcome to the Course!'}</h3>
                 <p style={{ fontSize: 14, color: C.muted }}>Select a lesson from the curriculum to start learning.</p>
               </div>
             </section>

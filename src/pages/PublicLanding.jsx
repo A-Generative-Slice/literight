@@ -30,7 +30,7 @@ const PublicLanding = ({ onCourse, courses }) => (
     {/* Course Grid */}
     <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 26, fontWeight: 800, marginBottom: 24, color: C.text }}>Available Courses</h2>
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(340px,1fr))', gap: 24 }}>
-      {courses.map(course => (
+      {courses?.length > 0 ? courses.map(course => (
         <div key={course.id} onClick={() => onCourse(course)} style={{ background: C.surface, borderRadius: 14, border: `1px solid ${C.border}`, cursor: 'pointer', overflow: 'hidden', transition: 'transform 0.2s, box-shadow 0.2s' }}
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,73,255,0.18)'; e.currentTarget.style.borderColor = `${C.accent}33`; }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = C.border; }}>
@@ -44,7 +44,7 @@ const PublicLanding = ({ onCourse, courses }) => (
             </div>
             <div style={{ position: 'absolute', top: 14, left: 14, zIndex: 2 }}><Badge label="Best Seller" color="#f59e0b" /></div>
             <div style={{ position: 'absolute', top: 14, right: 14, background: 'rgba(0,0,0,0.5)', padding: '4px 10px', borderRadius: 6, zIndex: 2 }}>
-              <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{course.totalLessons} lessons</span>
+              <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{course.totalLessons || 0} lessons</span>
             </div>
           </div>
           {/* Info */}
@@ -52,26 +52,32 @@ const PublicLanding = ({ onCourse, courses }) => (
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
               {course.tags?.map(t => <Badge key={t} label={t} />)}
             </div>
-            <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 18, fontWeight: 700, marginBottom: 8, lineHeight: 1.3 }}>{course.title}</h3>
-            <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.55, marginBottom: 16 }}>{course.description.slice(0, 90)}…</p>
+            <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 18, fontWeight: 700, marginBottom: 8, lineHeight: 1.3 }}>{course.title || 'Untitled Course'}</h3>
+            <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.55, marginBottom: 16 }}>{course.description?.slice(0, 90) || 'No description available.'}…</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, fontSize: 13 }}>
               <Icon name="star" size={14} color="#f59e0b" />
-              <strong>{course.rating}</strong>
+              <strong>{course.rating || '5.0'}</strong>
               <span style={{ color: C.muted }}>·</span>
-              <span style={{ color: C.muted }}>{course.students.toLocaleString()} students</span>
+              <span style={{ color: C.muted }}>{(course.students || 0).toLocaleString()} students</span>
               <span style={{ color: C.muted }}>·</span>
-              <span style={{ color: C.muted }}>{course.duration}</span>
+              <span style={{ color: C.muted }}>{course.duration || 'Flexible'}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: `1px solid ${C.border}` }}>
               <div>
-                <span style={{ fontSize: 22, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>${course.price}</span>
-                <span style={{ fontSize: 14, color: '#9ca3af', textDecoration: 'line-through', marginLeft: 8 }}>${course.originalPrice || course.price * 1.5}</span>
+                <span style={{ fontSize: 22, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>${course.price || '0'}</span>
+                <span style={{ fontSize: 14, color: '#9ca3af', textDecoration: 'line-through', marginLeft: 8 }}>${course.originalPrice || (course.price * 1.5) || '0'}</span>
               </div>
               <Btn size="sm">Preview <Icon name="arrow" size={14} color="#fff" /></Btn>
             </div>
           </div>
         </div>
-      ))}
+      )) : (
+        <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '60px 20px', background: C.surface, borderRadius: 20, border: `2px dashed ${C.border}` }}>
+          <Icon name="book-open" size={48} color={C.muted} />
+          <h3 style={{ marginTop: 16, fontWeight: 700, color: C.text }}>Our classes are currently full</h3>
+          <p style={{ color: C.muted, fontSize: 14, marginTop: 4 }}>New Cohorts starting next week. Follow us for updates!</p>
+        </div>
+      )}
     </div>
   </div>
 );
