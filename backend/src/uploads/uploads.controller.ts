@@ -1,26 +1,25 @@
-import { Controller, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Get, Param, Res } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
+import { Response } from 'express';
 
-@Controller('uploads')
+@Controller('api/uploads')
 export class UploadsController {
   @Post()
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads',
       filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
-      },
-    }),
-    limits: {
-      fileSize: 500 * 1024 * 1024, // 500MB
-    },
+        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+        cb(null, `${randomName}${extname(file.originalname)}`);
+      }
+    })
   }))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    // Generate a public URL path
-    const url = `/uploads/${file.filename}`;
-    return { url };
+    return {
+      url: `/uploads/${file.filename}`,
+      filename: file.filename,
+    };
   }
 }

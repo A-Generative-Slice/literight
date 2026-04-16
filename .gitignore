@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Security & Data
+*.pem
+backend/data/*.db
+backend/data/courses.json
+uploads/
