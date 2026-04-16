@@ -5,7 +5,7 @@ import * as path from 'node:path';
 @Injectable()
 export class CoursesService implements OnModuleInit {
   private readonly dataPath = path.join(process.cwd(), 'data', 'courses.json');
-  private courses = [];
+  private courses: any[] = [];
 
   onModuleInit() {
     this.ensureDataDirectory();
