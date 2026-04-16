@@ -1,83 +1,82 @@
 import React from 'react';
-import { C, Logo, Badge } from '../components/Common';
+import { C, Badge, Avatar } from '../components/Common';
 import { Btn } from '../components/Inputs';
 import Icon from '../components/Icon';
+import { LitelabHeritage } from '../components/LitelabHeritage';
 
 const PublicLanding = ({ onCourse, courses }) => (
-  <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px 80px' }}>
-    {/* Hero */}
-    <div style={{ margin: '48px 0 56px', padding: '56px', background: `linear-gradient(135deg,#fff 0%,${C.accentLight} 60%,#ffe4e6 100%)`, borderRadius: 20, color: C.text, position: 'relative', overflow: 'hidden', border: `1px solid ${C.border}` }}>
-      <div style={{ position: 'absolute', top: -60, right: -60, width: 300, height: 300, borderRadius: '50%', background: 'rgba(225,29,72,0.05)' }} />
-      <Badge label="Professional Certification" color="#60a5fa" />
-      <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 44, fontWeight: 800, marginTop: 20, marginBottom: 16, lineHeight: 1.15, maxWidth: 560 }}>
-        Master Architectural Lighting Design
-      </h1>
-      <p style={{ color: '#94a3b8', fontSize: 16, lineHeight: 1.65, maxWidth: 460, marginBottom: 32 }}>
-        Industry-grade curriculum taught by working professionals. Learn at your pace, earn your certification.
-      </p>
-      <div style={{ display: 'flex', gap: 12 }}>
-        <Btn onClick={() => onCourse(courses[0])} size="lg" style={{ background: C.accent }}>
-          <Icon name="play-circle" size={18} color="#fff" /> Explore Courses
-        </Btn>
+  <div style={{ background: '#fff' }}>
+    {/* Hero Section - Elite Professional Look */}
+    <div style={{ padding: '100px 32px 140px', background: C.text, color: '#fff', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', inset: 0, opacity: 0.1, background: 'url("https://images.unsplash.com/photo-1542744095-2ad48e00b36a?q=80&w=1470&auto=format&fit=crop") center/cover no-repeat' }} />
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 800, margin: '0 auto' }}>
+        <Badge label="Elite Lighting Education" color={C.accent} />
+        <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 62, fontWeight: 900, marginTop: 24, marginBottom: 24, lineHeight: 1.05, letterSpacing: '-0.03em' }}>
+          Master the Art of <span style={{ color: C.accent }}>Light & Design.</span>
+        </h1>
+        <p style={{ fontSize: 20, color: '#94a3b8', lineHeight: 1.6, marginBottom: 44, maxWidth: 640, margin: '0 auto 44px' }}>
+          Join the professional community of LiteRight Academy. Learn from the heritage of Litelab Milano and industry experts.
+        </p>
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+          <Btn onClick={() => {}} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>Explore the Curriculum</Btn>
+          <Btn variant="ghost" size="lg" style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>View Certification</Btn>
+        </div>
       </div>
-      <div style={{ display: 'flex', gap: 32, marginTop: 40, paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-        {[['1,247', 'Students'], ['18', 'Video Lessons'], ['Certificate', 'On Completion']].map(([v, l]) => (
-          <div key={l}><div style={{ fontSize: 22, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>{v}</div><div style={{ color: C.muted, fontSize: 12, marginTop: 2 }}>{l}</div></div>
+    </div>
+
+    {/* Course Discovery - Domestika Grid Style */}
+    <div style={{ maxWidth: 1200, margin: '-60px auto 100px', padding: '0 32px', position: 'relative', zIndex: 2 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(360px,1fr))', gap: 32 }}>
+        {courses?.map(course => (
+          <div key={course.id} onClick={() => onCourse(course)} style={{ background: '#fff', borderRadius: 24, border: `1px solid ${C.border}`, cursor: 'pointer', overflow: 'hidden', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.12)'; e.currentTarget.style.borderColor = C.accent; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.05)'; e.currentTarget.style.borderColor = C.border; }}>
+            
+            <div style={{ height: 230, background: course.thumbnail ? `url(${course.thumbnail}) center/cover no-repeat` : C.surface, position: 'relative' }}>
+              <div style={{ position: 'absolute', bottom: 16, right: 16, background: 'rgba(0,0,0,0.7)', padding: '6px 12px', borderRadius: 8, fontSize: 12, color: '#fff', fontWeight: 700 }}>
+                {course.duration || '3h 20m'}
+              </div>
+              <div style={{ position: 'absolute', top: 16, left: 16 }}><Badge label="Domestika Fresh" color="#e50914" /></div>
+            </div>
+
+            <div style={{ padding: 28 }}>
+              <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 20, fontWeight: 800, marginBottom: 12, lineHeight: 1.3 }}>{course.title}</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+                <Avatar user={{ name: course.instructor }} size={28} />
+                <span style={{ fontSize: 14, color: C.muted }}>By <strong>{course.instructor}</strong></span>
+              </div>
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${C.border}`, paddingTop: 20 }}>
+                <div>
+                  <div style={{ fontSize: 24, fontWeight: 900, color: C.accent, fontFamily: 'Outfit, sans-serif' }}>${course.price || 0}</div>
+                  <div style={{ fontSize: 12, color: '#9ca3af', textDecoration: 'line-through' }}>${course.originalPrice || 120}</div>
+                </div>
+                <Btn size="sm" variant="ghost" style={{ border: 'none', color: C.muted }}>Preview Syllabus →</Btn>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </div>
 
-    {/* Course Grid */}
-    <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 26, fontWeight: 800, marginBottom: 24, color: C.text }}>Available Courses</h2>
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(340px,1fr))', gap: 24 }}>
-      {courses?.length > 0 ? courses.map(course => (
-        <div key={course.id} onClick={() => onCourse(course)} style={{ background: C.surface, borderRadius: 14, border: `1px solid ${C.border}`, cursor: 'pointer', overflow: 'hidden', transition: 'transform 0.2s, box-shadow 0.2s' }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,73,255,0.18)'; e.currentTarget.style.borderColor = `${C.accent}33`; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = C.border; }}>
-          {/* Thumbnail */}
-          <div style={{ height: 200, background: course.thumbnail ? `url(${course.thumbnail}) center/cover no-repeat` : `linear-gradient(135deg,${C.bg},${C.surface})`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', borderBottom: `1px solid ${C.border}` }}>
-            {course.thumbnail ? (
-              <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.1)' }} />
-            ) : null}
-            <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.4)', zIndex: 1 }}>
-              <Icon name="play" size={24} color="#ffffff" />
-            </div>
-            <div style={{ position: 'absolute', top: 14, left: 14, zIndex: 2 }}><Badge label="Best Seller" color="#f59e0b" /></div>
-            <div style={{ position: 'absolute', top: 14, right: 14, background: 'rgba(0,0,0,0.5)', padding: '4px 10px', borderRadius: 6, zIndex: 2 }}>
-              <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{course.totalLessons || 0} lessons</span>
-            </div>
+    {/* Heritage Section - The Litelab Story */}
+    <LitelabHeritage />
+
+    {/* Trust & Stats Section */}
+    <div style={{ padding: '80px 32px', textAlign: 'center', background: C.text, color: '#fff' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, maxWidth: 1000, margin: '0 auto' }}>
+        {[
+          ['50,000+', 'Active Students'],
+          ['120+', 'Countries'],
+          ['4.9/5', 'Average Rating'],
+          ['100%', 'Certified Career Paths']
+        ].map(([v, l]) => (
+          <div key={l}>
+            <div style={{ fontSize: 42, fontWeight: 900, fontFamily: 'Outfit, sans-serif', color: C.accent }}>{v}</div>
+            <div style={{ fontSize: 14, color: '#94a3b8', marginTop: 4, fontWeight: 600 }}>{l}</div>
           </div>
-          {/* Info */}
-          <div style={{ padding: '20px 20px 24px' }}>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
-              {course.tags?.map(t => <Badge key={t} label={t} />)}
-            </div>
-            <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 18, fontWeight: 700, marginBottom: 8, lineHeight: 1.3 }}>{course.title || 'Untitled Course'}</h3>
-            <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.55, marginBottom: 16 }}>{course.description?.slice(0, 90) || 'No description available.'}…</p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, fontSize: 13 }}>
-              <Icon name="star" size={14} color="#f59e0b" />
-              <strong>{course.rating || '5.0'}</strong>
-              <span style={{ color: C.muted }}>·</span>
-              <span style={{ color: C.muted }}>{(course.students || 0).toLocaleString()} students</span>
-              <span style={{ color: C.muted }}>·</span>
-              <span style={{ color: C.muted }}>{course.duration || 'Flexible'}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 14, borderTop: `1px solid ${C.border}` }}>
-              <div>
-                <span style={{ fontSize: 22, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>${course.price || '0'}</span>
-                <span style={{ fontSize: 14, color: '#9ca3af', textDecoration: 'line-through', marginLeft: 8 }}>${course.originalPrice || (course.price * 1.5) || '0'}</span>
-              </div>
-              <Btn size="sm">Preview <Icon name="arrow" size={14} color="#fff" /></Btn>
-            </div>
-          </div>
-        </div>
-      )) : (
-        <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '60px 20px', background: C.surface, borderRadius: 20, border: `2px dashed ${C.border}` }}>
-          <Icon name="book-open" size={48} color={C.muted} />
-          <h3 style={{ marginTop: 16, fontWeight: 700, color: C.text }}>Our classes are currently full</h3>
-          <p style={{ color: C.muted, fontSize: 14, marginTop: 4 }}>New Cohorts starting next week. Follow us for updates!</p>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   </div>
 );

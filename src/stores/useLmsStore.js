@@ -35,6 +35,23 @@ export const useLmsStore = create(
         set({ isLoading: true });
         try {
           const res = await axios.post('/auth/login', { username, password });
+          if (res.data.requiresVerification) {
+            set({ isLoading: false });
+            return { requiresVerification: true, email: res.data.email };
+          }
+          const { user, access_token } = res.data;
+          set({ user, token: access_token, isLoading: false });
+          return { success: true };
+        } catch (error) {
+          set({ isLoading: false });
+          return { success: false, error: error.response?.data?.message || 'Login failed' };
+        }
+      },
+
+      verifyOtp: async (email, code) => {
+        set({ isLoading: true });
+        try {
+          const res = await axios.post('/auth/verify-otp', { email, code });
           const { user, access_token } = res.data;
           set({ user, token: access_token, isLoading: false });
           return true;

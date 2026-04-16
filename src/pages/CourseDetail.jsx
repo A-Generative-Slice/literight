@@ -101,16 +101,29 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
               <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 32 }}>Course Player</h2>
               {currentContent}
               <div style={{ marginTop: 24, padding: 24, background: C.surface, borderRadius: 16, border: `1px solid ${C.border}` }}>
-                <h3 style={{ fontWeight: 700, marginBottom: 8 }}>{activeLesson?.title || 'Welcome to the Course!'}</h3>
-                <p style={{ fontSize: 14, color: C.muted }}>Select a lesson from the curriculum to start learning.</p>
+                <h3 style={{ fontWeight: 700, marginBottom: 8, color: C.text }}>{activeLesson?.title || 'Welcome to the Course!'}</h3>
+                <p style={{ fontSize: 14, color: C.muted }}>{activeLesson?.description || 'Select a lesson from the curriculum to start learning.'}</p>
               </div>
             </section>
           ) : (
-            <section style={{ padding: 60, background: C.accentLight, borderRadius: 24, textAlign: 'center', border: `2px dashed ${C.accent}33` }}>
-              <Icon name="lock" size={48} color={C.accent} />
-              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, margin: '20px 0 12px 0' }}>Enrolled Students Only</h2>
-              <p style={{ color: C.muted, marginBottom: 32 }}>Sign in or enroll to access all professional lessons and certification quizzes.</p>
-              <Btn onClick={onEnroll}>Get Started Now</Btn>
+            <section>
+              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 32 }}>Course Preview</h2>
+              <div style={{ position: 'relative', paddingTop: '56.25%', background: '#000', borderRadius: 16, overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }}>
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', zIndex: 10 }}>
+                  <div style={{ width: 80, height: 80, background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, border: '2px solid rgba(255,255,255,0.2)' }}>
+                    <Icon name="lock" size={32} color="#fff" />
+                  </div>
+                  <h3 style={{ color: '#fff', fontSize: 24, fontWeight: 800, marginBottom: 12 }}>Unlock this Lesson</h3>
+                  <p style={{ color: '#94a3b8', fontSize: 16, marginBottom: 32, textAlign: 'center', maxWidth: 360 }}>Join the academy and verify your account to access all professional curriculum content.</p>
+                  <Btn onClick={onEnroll} size="lg">Verify & Enroll Now</Btn>
+                </div>
+                <img src={course.thumbnail} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }} />
+              </div>
+              
+              <div style={{ marginTop: 24, padding: 24, background: C.surface, borderRadius: 16, border: `1px solid ${C.border}` }}>
+                <h3 style={{ fontWeight: 700, marginBottom: 8, color: C.text }}>{activeLesson?.title || 'Course Objective'}</h3>
+                <p style={{ fontSize: 14, color: C.muted }}>{activeLesson?.description || course.description}</p>
+              </div>
             </section>
           )}
         </div>

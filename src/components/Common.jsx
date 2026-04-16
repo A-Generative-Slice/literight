@@ -2,14 +2,14 @@ import React from 'react';
 
 export const C = {
   bg: '#ffffff',
-  surface: '#f8fafc',
-  border: '#e2e8f0',
-  text: '#0f172a',
-  muted: '#64748b',
-  accent: '#e11d48',
-  accentLight: '#fff1f2',
-  success: '#16a34a',
-  warning: '#f59e0b',
+  surface: '#f3f4f6', // Domestika-style light grey
+  border: '#e5e7eb',
+  text: '#111827', // Almost black
+  muted: '#4b5563',
+  accent: '#e50914', // Domestika Vibrant Red
+  accentLight: '#fef2f2',
+  success: '#059669',
+  warning: '#d97706',
   danger: '#dc2626',
 };
 

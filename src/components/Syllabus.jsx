@@ -1,21 +1,9 @@
 import React, { useState } from 'react';
 import { PlayCircle, CheckCircle2, ChevronRight, Lock, HelpCircle } from 'lucide-react';
 
-// Design Tokens (Matching App.jsx)
-const C = {
-  bg: '#ffffff',
-  surface: '#f8fafc',
-  border: '#e2e8f0',
-  text: '#0f172a',
-  muted: '#64748b',
-  accent: '#e11d48',
-  accentLight: '#fff1f2',
-  success: '#16a34a',
-  warning: '#f59e0b',
-  danger: '#dc2626',
-};
+import { C } from './Common';
 
-const Syllabus = ({ course, progress, onSelectLesson }) => {
+const Syllabus = ({ course, progress, onSelectLesson, isLoggedIn }) => {
   const [openChapters, setOpenChapters] = useState({ 0: true });
   
   if (!course || !course.chapters) return null;
@@ -37,6 +25,7 @@ const Syllabus = ({ course, progress, onSelectLesson }) => {
   };
 
   const isChapterLocked = (chapterIndex) => {
+    if (!isLoggedIn) return false; // Allowed for preview
     if (chapterIndex === 0) return false;
     const prev = getChapterProgress(chapterIndex - 1);
     return prev.completed < prev.total;

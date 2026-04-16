@@ -11,8 +11,14 @@ export class User {
   @Column({ nullable: true })
   passwordHash: string;
 
-  @Column({ default: 'student' })
-  role: string;
+  @Column({ default: false })
+  isVerified: boolean;
+
+  @Column({ nullable: true })
+  otpCode: string;
+
+  @Column({ type: 'datetime', nullable: true })
+  otpExpiry: Date;
 
   @CreateDateColumn()
   createdAt: Date;

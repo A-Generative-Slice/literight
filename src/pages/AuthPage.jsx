@@ -4,22 +4,51 @@ import { Btn, Field } from '../components/Inputs';
 import Icon from '../components/Icon';
 import { useLmsStore } from '../stores/useLmsStore';
 
-const OTPInput = ({ onChange }) => {
+const OTPInput = ({ onChange, onComplete }) => {
   const len = 6;
   const [digits, setDigits] = useState(Array(len).fill(''));
   const refs = Array.from({ length: len }, () => useRef(null));
+  
   const handle = (i, v) => {
     if (!/^\d?$/.test(v)) return;
-    const next = [...digits]; next[i] = v; setDigits(next);
-    onChange(next.join(''));
-    if (v && i < len - 1) refs[i + 1].current?.focus();
+    const next = [...digits]; 
+    next[i] = v; 
+    setDigits(next);
+    const code = next.join('');
+    onChange(code);
+    
+    if (v && i < len - 1) {
+      refs[i + 1].current?.focus();
+    }
+    
+    if (code.length === len) {
+      onComplete(code);
+    }
   };
-  const keyDown = (i, e) => { if (e.key === 'Backspace' && !digits[i] && i > 0) refs[i - 1].current?.focus(); };
+
+  const keyDown = (i, e) => { 
+    if (e.key === 'Backspace' && !digits[i] && i > 0) {
+      refs[i - 1].current?.focus(); 
+    }
+  };
+
   return (
-    <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+    <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 32 }}>
       {digits.map((d, i) => (
-        <input key={i} ref={refs[i]} value={d} maxLength={1} onChange={e => handle(i, e.target.value)} onKeyDown={e => keyDown(i, e)}
-          style={{ width: 46, height: 54, textAlign: 'center', fontSize: 22, fontWeight: 700, border: `1.5px solid ${d ? C.accent : C.border}`, borderRadius: 8, background: d ? C.accentLight : C.surface, color: C.accent, outline: 'none', fontFamily: 'Inter, sans-serif' }} />
+        <input 
+          key={i} 
+          ref={refs[i]} 
+          value={d} 
+          maxLength={1} 
+          onChange={e => handle(i, e.target.value)} 
+          onKeyDown={e => keyDown(i, e)}
+          style={{ 
+            width: 48, height: 60, textAlign: 'center', fontSize: 24, fontWeight: 800, 
+            border: `2px solid ${d ? C.accent : C.border}`, borderRadius: 12, 
+            background: d ? C.accentLight : '#fff', color: C.accent, outline: 'none', 
+            fontFamily: 'Outfit, sans-serif', transition: 'all 0.2s'
+          }} 
+        />
       ))}
     </div>
   );
@@ -27,48 +56,94 @@ const OTPInput = ({ onChange }) => {
 
 const AuthPage = ({ onBack }) => {
   const [tab, setTab] = useState('login');
-  const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ username: '', password: '', email: '', otp: '', first: '', last: '', photo: null });
+  const [step, setStep] = useState('auth'); // 'auth', 'otp'
+  const [form, setForm] = useState({ username: '', password: '', otp: '' });
   const [err, setErr] = useState('');
+  
   const login = useLmsStore(state => state.login);
+  const verifyOtp = useLmsStore(state => state.verifyOtp);
 
-  const handleLogin = async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
-    const success = await login(form.username, form.password);
-    if (!success) setErr('Invalid credentials');
+    setErr('');
+    // For this academy, username IS the email for students
+    const result = await login(form.username, form.password || 'student123'); 
+    
+    if (result.requiresVerification) {
+      setStep('otp');
+    } else if (result.success) {
+      // Logic handled by App.jsx through store update
+    } else {
+      setErr(result.error || 'Invalid credentials');
+    }
+  };
+
+  const handleOtpVerify = async (code) => {
+    setErr('');
+    const success = await verifyOtp(form.username, code || form.otp);
+    if (!success) {
+      setErr('Invalid security code. Please try again.');
+    }
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: `linear-gradient(135deg, ${C.surface} 0%, #ffffff 50%, ${C.accentLight} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-      <div style={{ width: '100%', maxWidth: 460 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+    <div style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div style={{ width: '100%', maxWidth: 480 }}>
+        <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <Logo size="lg" />
-          <Btn variant="ghost" onClick={onBack}>← Back</Btn>
+          <p style={{ color: C.muted, marginTop: 12, fontWeight: 500 }}>The Gateway to Architectural Mastery</p>
         </div>
 
-        <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: 12, padding: 6, marginBottom: 28, border: `1px solid ${C.border}` }}>
-          {[['login', 'Log In'], ['signup', 'Sign Up']].map(([t, l]) => (
-            <button key={t} onClick={() => { setTab(t); setStep(1); }}
-              style={{ flex: 1, padding: '12px', border: 'none', cursor: 'pointer', borderRadius: 8, fontSize: 14, fontWeight: 800, background: tab === t ? '#fff' : 'transparent', color: tab === t ? C.accent : C.muted }}>
-              {l.toUpperCase()}
-            </button>
-          ))}
-        </div>
+        <Card padding="40px" style={{ border: 'none', boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
+          {step === 'auth' ? (
+            <>
+              <div style={{ display: 'flex', background: C.surface, borderRadius: 14, padding: 6, marginBottom: 32 }}>
+                {[['login', 'Log In'], ['signup', 'Verify Mail ID']].map(([t, l]) => (
+                  <button key={t} onClick={() => setTab(t)}
+                    style={{ flex: 1, padding: '12px', border: 'none', cursor: 'pointer', borderRadius: 10, fontSize: 13, fontWeight: 800, background: tab === t ? '#fff' : 'transparent', color: tab === t ? C.accent : C.muted, transition: 'all 0.2s' }}>
+                    {l.toUpperCase()}
+                  </button>
+                ))}
+              </div>
 
-        <Card padding="32px">
-          {tab === 'login' && (
-            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <Field label="Username" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="user" required />
-              <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" required />
-              {err && <div style={{ color: C.danger, fontSize: 13 }}>{err}</div>}
-              <Btn full size="lg" type="submit">Log In</Btn>
-            </form>
-          )}
-
-          {tab === 'signup' && (
+              <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
+                {tab === 'login' && (
+                  <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="••••••••" required />
+                )}
+                
+                {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
+                
+                <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
+                  {tab === 'login' ? 'Continue' : 'Send Verification Code'}
+                </Btn>
+                
+                <button type="button" onClick={onBack} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>
+                  ← Back to Academy
+                </button>
+              </form>
+            </>
+          ) : (
             <div style={{ textAlign: 'center' }}>
-              <p>Sign up is disabled for v1 production. Please contact Admin.</p>
-              <Btn variant="secondary" onClick={() => setTab('login')}>Go to Login</Btn>
+              <div style={{ width: 64, height: 64, background: C.accentLight, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+                <Icon name="shield-check" size={32} color={C.accent} />
+              </div>
+              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 8 }}>Check your inbox</h2>
+              <p style={{ color: C.muted, fontSize: 15, marginBottom: 32, lineHeight: 1.5 }}>
+                We've sent a 6-digit verification code to <br /><strong style={{ color: C.text }}>{form.username}</strong>
+              </p>
+              
+              <OTPInput onChange={v => setForm({ ...form, otp: v })} onComplete={handleOtpVerify} />
+              
+              {err && <div style={{ color: C.danger, fontSize: 13, marginBottom: 20 }}>{err}</div>}
+              
+              <Btn full size="lg" onClick={() => handleOtpVerify(form.otp)} style={{ height: 56, fontSize: 16, marginBottom: 20 }}>
+                Verify & Enter Academy
+              </Btn>
+
+              <button type="button" onClick={() => setStep('auth')} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>
+                Didn't get a code? <span style={{ color: C.accent }}>Resend</span>
+              </button>
             </div>
           )}
         </Card>
