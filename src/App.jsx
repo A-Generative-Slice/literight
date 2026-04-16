@@ -30,12 +30,62 @@ const COURSES = [{
   thumbnail: '',
   passPercentage: 80,
   price: 199, originalPrice: 299,
-  rating: 0, students: 0,
-  duration: '0h 0m', totalLessons: 0,
-  description: 'Master the art and science of architectural lighting with our flagship professional certification.',
-  tags: ['Architecture', 'Professional'],
-  chapters: [],
+  rating: 4.9, students: 1247,
+  duration: '3h 0m', totalLessons: 12,
+  description: 'Master the art and science of architectural lighting. This industry-grade curriculum covers physics, human perception, architectural principles, and real-world frameworks for residential and commercial spaces.',
+  tags: ['Architecture', 'Professional', 'Lighting'],
+  chapters: [
+    {
+      id: 101,
+      title: 'Module 1: The Foundations of Light & Vision',
+      lessons: [
+        { id: 1011, title: '1.1 The Nature of Light', video: '/lessons/1.1.mp4' },
+        { id: 1012, title: '1.2 Human Vision & Perception', video: '/lessons/1.2.mp4' },
+        { id: 1013, title: '1.3 Scientific Metrics & Photometry', video: '/lessons/1.3.mp4' }
+      ],
+      quiz: [
+        { id: 1014, question: 'What is the visible light range of the electromagnetic spectrum?', options: ['100-300 nm', '380-780 nm', '800-1200 nm', '10-100 nm'], correct: 1 }
+      ]
+    },
+    {
+      id: 102,
+      title: 'Module 2: Architectural Lighting & Visual Comfort',
+      lessons: [
+        { id: 1021, title: '2.1 Principles of Lighting Design', video: '/lessons/2.1.mp4' },
+        { id: 1022, title: '2.2 Visual Comfort & Ergonomics', video: '/lessons/2.2.mp4' },
+        { id: 1023, title: '2.3 Spatial Perspectives', video: '/lessons/2.3.mp4' }
+      ],
+      quiz: [
+        { id: 1024, question: 'Which of Richard Kelly’s elements refers to task or highlight lighting?', options: ['Ambient luminescence', 'Focal glow', 'Play of brilliants', 'Sparkle'], correct: 1 }
+      ]
+    },
+    {
+      id: 103,
+      title: 'Module 3: Human Centric Lighting (HCL) & Psychology',
+      lessons: [
+        { id: 1031, title: '3.1 Biological Impact of Light', video: '/lessons/3.1.mp4' },
+        { id: 1032, title: '3.2 The Psychology of Light and Color', video: '/lessons/3.2.mp4' },
+        { id: 1033, title: '3.3 Implementing HCL', video: '/lessons/3.3.mp4' }
+      ],
+      quiz: [
+        { id: 1034, question: 'What biological process does light primarily control in humans?', options: ['Digestion', 'Circadian rhythms', 'Muscle growth', 'Hearing'], correct: 1 }
+      ]
+    },
+    {
+      id: 104,
+      title: 'Module 4: The Environmental Lighting Framework',
+      lessons: [
+        { id: 1041, title: '4.1 Framework for Residential Spaces', video: '/lessons/4.1.mp4' },
+        { id: 1042, title: '4.2 Framework for Outdoor & Transitional Spaces', video: '/lessons/4.2.mp4' },
+        { id: 1043, title: '4.3 Framework for Commercial Workspaces', video: '/lessons/4.3.mp4' }
+      ],
+      quiz: [
+        { id: 1044, question: 'Which zone requires specific visual comfort limits for screen productivity?', options: ['Offices', 'Luxury Villas', 'Terraces', 'Beachside Villas'], correct: 0 }
+      ]
+    }
+  ],
 }];
+
 
 // ── SVG ICON ──────────────────────────────────────────────
 const PATHS = {
@@ -554,10 +604,8 @@ const AuthPage = ({ onStudent, onAdmin, onBack }) => {
                 {err && <span style={{ color: C.danger, fontSize: 13 }}>{err}</span>}
                 <Btn full size="lg" onClick={handleLogin}>Log In <Icon name="arrow" size={16} color="#fff" /></Btn>
               </form>
-              <div style={{ padding: '10px 14px', background: C.bg, border: `1px solid ${C.border}`, borderRadius: 8, fontSize: 12, color: C.muted, textAlign: 'center' }}>
-                Admin? Use your admin credentials — you'll be routed automatically.
-              </div>
             </div>
+
           )}
 
           {/* ── SIGN UP ── */}
@@ -799,7 +847,8 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
   const [showForm, setShowForm] = useState(false);
   const [editingCourseId, setEditingCourseId] = useState(null);
   const [form, setForm] = useState({ 
-    title: '', instructor: '', price: '', originalPrice: '', trailer: '', thumbnail: '', passPercentage: 80, description: '', tags: [],
+    title: '', instructor: '', price: '', originalPrice: '', trailer: '', thumbnail: '', 
+    passPercentage: 80, description: '', tags: [], rating: 4.9, students: 0, duration: '3h 0m',
     chapters: [{ id: Date.now(), title: '', lessons: [], quiz: [] }] 
   });
   const [toast, setToast] = useState(false);
@@ -817,6 +866,9 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
       passPercentage: c.passPercentage,
       description: c.description,
       tags: c.tags,
+      rating: c.rating || 4.9,
+      students: c.students || 0,
+      duration: c.duration || '3h 0m',
       chapters: c.chapters.length > 0 ? c.chapters : [{ id: Date.now(), title: '', lessons: [], quiz: [] }]
     });
     setShowForm(true);
@@ -825,12 +877,17 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
   const handleNew = () => {
     setEditingCourseId(null);
     setForm({ 
-      title: '', instructor: '', price: '', originalPrice: '', trailer: '', thumbnail: '', passPercentage: 80, description: '', tags: [],
+      title: '', instructor: '', price: '', originalPrice: '', trailer: '', thumbnail: '', 
+      passPercentage: 80, description: '', tags: [], rating: 4.9, students: 0, duration: '3h 0m',
       chapters: [{ id: Date.now(), title: '', lessons: [], quiz: [] }] 
     });
     setShowForm(true);
   };
-  const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
+  const set = k => e => {
+    const val = k === 'tags' ? e.target.value.split(',').map(t => t.trim()) : e.target.value;
+    setForm(f => ({ ...f, [k]: val }));
+  };
+
   
   const addChapter = () => setForm(f => ({ ...f, chapters: [...f.chapters, { id: Date.now(), title: '', lessons: [], quiz: [] }] }));
   const updateChapter = (id, val) => setForm(f => ({ ...f, chapters: f.chapters.map(c => c.id === id ? { ...c, title: val } : c) }));
@@ -853,11 +910,9 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
     const courseData = {
       ...form,
       id: editingCourseId || Date.now(),
-      rating: form.rating || 0,
-      students: form.students || 0,
       totalLessons: form.chapters.reduce((acc, c) => acc + c.lessons.length, 0),
-      duration: '0h 0m' 
     };
+
     onSaveCourse(courseData);
     setToast(true); 
     setShowForm(false); 
@@ -888,7 +943,13 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
                 <Field label="Course Title" placeholder="e.g. Advanced Lighting" required value={form.title} onChange={set('title')} />
                 <Field label="Instructor Name" placeholder="e.g. Admin" required value={form.instructor} onChange={set('instructor')} />
                 <Field label="Price (USD)" type="number" placeholder="199" value={form.price} onChange={set('price')} />
+                <Field label="Original Price (Display Only)" type="number" placeholder="299" value={form.originalPrice} onChange={set('originalPrice')} />
                 <Field label="Pass Percentage (%)" type="number" placeholder="80" value={form.passPercentage} onChange={set('passPercentage')} />
+                <Field label="Duration (e.g. 3h 15m)" placeholder="3h 0m" value={form.duration} onChange={set('duration')} />
+                <Field label="Simulated Rating (1-5)" type="number" step="0.1" placeholder="4.9" value={form.rating} onChange={set('rating')} />
+                <Field label="Students Enrolled" type="number" placeholder="1247" value={form.students} onChange={set('students')} />
+                <Field label="Tags (Comma separated)" placeholder="Architecture, Design, Pro" value={form.tags.join(', ')} onChange={set('tags')} />
+
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -1222,7 +1283,8 @@ export default function App() {
       <AuthPage
         onStudent={handleStudent}
         onAdmin={handleAdmin}
-        onBack={() => setScreen(selectedCourse ? 'course' : 'public')}
+        onBack={() => setScreen(activeCourse ? 'course' : 'public')}
+
       />
     );
   }
