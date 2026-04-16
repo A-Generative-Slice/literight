@@ -1039,31 +1039,34 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
         </Card>
       )}
 
-      <Card padding="0" style={{ overflow: 'hidden' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2.5fr 1fr 1fr 1fr 130px', padding: '12px 20px', background: '#111', borderBottom: `1px solid ${C.border}` }}>
-          {['Title', 'Students', 'Revenue', 'Status', 'Actions'].map(h => (
-            <span key={h} style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: C.muted }}>{h}</span>
-          ))}
-        </div>
-        {courses.map(c => (
-          <div key={c.id} style={{ display: 'grid', gridTemplateColumns: '2.5fr 1fr 1fr 1fr 130px', padding: '16px 20px', alignItems: 'center', borderBottom: `1px solid ${C.border}` }}>
-            <div>
-              <div style={{ fontWeight: 600, fontSize: 14 }}>{c.title}</div>
-              <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 2 }}>By {c.instructor} · ${c.price}</div>
-            </div>
-            <span style={{ fontWeight: 600 }}>{c.students.toLocaleString()}</span>
-            <span style={{ fontWeight: 700, color: C.success }}>${(c.students * c.price).toLocaleString()}</span>
-            <div style={{ display: 'flex' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', padding: '4px 12px', borderRadius: 99, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', background: '#ecfdf5', color: '#059669', border: '1px solid #d1fae5' }}>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', marginRight: 8 }} />
-                Published
-              </span>
-            </div>
-            <Btn size="sm" variant="secondary" onClick={() => handleEdit(c)} style={{ color: C.text }}><Icon name="edit" size={13} /> Edit</Btn>
+      {!showForm && (
+        <Card padding="0" style={{ overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '2.5fr 1fr 1fr 1fr 130px', padding: '12px 20px', background: '#111', borderBottom: `1px solid ${C.border}` }}>
+            {['Title', 'Students', 'Revenue', 'Status', 'Actions'].map(h => (
+              <span key={h} style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: C.muted }}>{h}</span>
+            ))}
           </div>
-        ))}
-        <div style={{ padding: '16px 20px', textAlign: 'center', color: C.muted, fontSize: 13 }}>Click "New Course" to add more.</div>
-      </Card>
+          {courses.map(c => (
+            <div key={c.id} style={{ display: 'grid', gridTemplateColumns: '2.5fr 1fr 1fr 1fr 130px', padding: '16px 20px', alignItems: 'center', borderBottom: `1px solid ${C.border}` }}>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: 14 }}>{c.title}</div>
+                <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 2 }}>By {c.instructor} · ${c.price}</div>
+              </div>
+              <span style={{ fontWeight: 600 }}>{c.students.toLocaleString()}</span>
+              <span style={{ fontWeight: 700, color: C.success }}>${(c.students * c.price).toLocaleString()}</span>
+              <div style={{ display: 'flex' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', padding: '4px 12px', borderRadius: 99, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', background: '#ecfdf5', color: '#059669', border: '1px solid #d1fae5' }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', marginRight: 8 }} />
+                  Published
+                </span>
+              </div>
+              <Btn size="sm" variant="secondary" onClick={() => handleEdit(c)} style={{ color: C.text }}><Icon name="edit" size={13} /> Edit</Btn>
+            </div>
+          ))}
+          <div style={{ padding: '16px 20px', textAlign: 'center', color: C.muted, fontSize: 13 }}>Click "New Course" to add more.</div>
+        </Card>
+      )}
+
       <Toast message="Course saved!" visible={toast} />
     </div>
   );
