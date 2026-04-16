@@ -852,6 +852,31 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
   });
 
   const [toast, setToast] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileUpload = async (file, callback) => {
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/uploads', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.url) {
+        callback(data.url);
+        onSaveCourse({ ...form, id: editingCourseId }); // Trigger a sync if needed or just update local form
+      }
+    } catch (err) {
+      console.error('Upload failed:', err);
+      alert('Upload failed. Please check server logs.');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleEdit = (c) => {
     setEditingCourseId(c.id);
@@ -958,12 +983,16 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: C.muted }}>Course Thumbnail (Image)</label>
-                  <input type="file" accept="image/*" style={{ fontSize: 13, color: C.muted, border: `1.5px solid ${C.border}`, padding: 8, borderRadius: 8 }} />
+                  <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: C.muted }}>Course Thumbnail (Image) {uploading && '...'}</label>
+                  <input type="file" accept="image/*" onChange={e => handleFileUpload(e.target.files[0], url => setForm(f => ({ ...f, thumbnail: url })))}
+                    style={{ fontSize: 13, color: C.muted, border: `1.5px solid ${C.border}`, padding: 8, borderRadius: 8 }} />
+                  {form.thumbnail && <div style={{ fontSize: 10, color: C.success }}>Uploaded: {form.thumbnail}</div>}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: C.muted }}>Trailer Video (MP4)</label>
-                  <input type="file" accept="video/mp4" style={{ fontSize: 13, color: C.muted, border: `1.5px solid ${C.border}`, padding: 8, borderRadius: 8 }} />
+                  <label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: C.muted }}>Trailer Video (MP4) {uploading && '...'}</label>
+                  <input type="file" accept="video/mp4" onChange={e => handleFileUpload(e.target.files[0], url => setForm(f => ({ ...f, trailer: url })))}
+                    style={{ fontSize: 13, color: C.muted, border: `1.5px solid ${C.border}`, padding: 8, borderRadius: 8 }} />
+                  {form.trailer && <div style={{ fontSize: 10, color: C.success }}>Uploaded: {form.trailer}</div>}
                 </div>
               </div>
               <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
@@ -1013,7 +1042,10 @@ const AdminCourses = ({ courses, onSaveCourse }) => {
                               <span style={{ fontSize: 12, color: C.muted }}>{lIdx+1}.</span>
                               <input placeholder="Lesson Title" value={l.title} onChange={e => updateLesson(ch.id, l.id, 'title', e.target.value)}
                                 style={{ flex: 1, padding: '8px 12px', border: `1px solid ${C.border}`, borderRadius: 6, fontSize: 13, outline: 'none' }} />
-                              <input type="file" accept="video/mp4" style={{ fontSize: 11, width: 180 }} />
+                              <input type="file" accept="video/mp4" 
+                                onChange={e => handleFileUpload(e.target.files[0], url => updateLesson(ch.id, l.id, 'video', url))}
+                                style={{ fontSize: 11, width: 180 }} />
+                              {l.video && <div style={{ fontSize: 9, color: C.success }}>✔</div>}
                             </div>
                           ))}
                         </div>
@@ -1250,9 +1282,9 @@ const AdminDashboard = ({ user, onLogout, courses, onSaveCourse }) => {
 // ── ROOT APP ──────────────────────────────────────────────
 export default function App() {
   const [courses, setCourses] = useState([]);
-  const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null);
-  const [screen, setScreen] = useState('public');
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('lt_user')));
+  const [role, setRole] = useState(() => localStorage.getItem('lt_role'));
+  const [screen, setScreen] = useState(() => localStorage.getItem('lt_screen') || 'public');
   const [selectedCourseId, setSelectedCourseId] = useState(null);
   const [phoneModal, setPhoneModal] = useState(false);
   const [toast, setToast] = useState({ msg: '', visible: false });
@@ -1295,15 +1327,24 @@ export default function App() {
 
   const handleStudent = userData => {
     setUser(userData); setRole('student'); setScreen('public');
+    localStorage.setItem('lt_user', JSON.stringify(userData));
+    localStorage.setItem('lt_role', 'student');
+    localStorage.setItem('lt_screen', 'public');
     showToast(`Welcome, ${userData.name}! 🎉`);
   };
 
   const handleAdmin = adminData => {
     setUser(adminData); setRole('admin'); setScreen('admin');
+    localStorage.setItem('lt_user', JSON.stringify(adminData));
+    localStorage.setItem('lt_role', 'admin');
+    localStorage.setItem('lt_screen', 'admin');
   };
 
   const handleLogout = () => {
     setUser(null); setRole(null); setScreen('public');
+    localStorage.removeItem('lt_user');
+    localStorage.removeItem('lt_role');
+    localStorage.setItem('lt_screen', 'public');
     showToast('Logged out.', 'info');
   };
 
@@ -1324,8 +1365,11 @@ export default function App() {
       <AuthPage
         onStudent={handleStudent}
         onAdmin={handleAdmin}
-        onBack={() => setScreen(activeCourse ? 'course' : 'public')}
-
+        onBack={() => { 
+          const prev = activeCourse ? 'course' : 'public';
+          setScreen(prev);
+          localStorage.setItem('lt_screen', prev);
+        }}
       />
     );
   }
@@ -1342,10 +1386,10 @@ export default function App() {
 
   return (
     <>
-      <PublicNav user={user} onLoginClick={() => setScreen('auth')} onLogout={handleLogout} role={role} setScreen={s => { setScreen(s); }} />
+      <PublicNav user={user} onLoginClick={() => { setScreen('auth'); localStorage.setItem('lt_screen', 'auth'); }} onLogout={handleLogout} role={role} setScreen={s => { setScreen(s); localStorage.setItem('lt_screen', s); }} />
       {screen === 'course' && activeCourse
         ? <CourseDetail course={activeCourse} onEnroll={handleEnroll} isLoggedIn={!!user} />
-        : <PublicLanding courses={courses} onCourse={c => { setSelectedCourseId(c.id); setScreen('course'); }} />
+        : <PublicLanding courses={courses} onCourse={c => { setSelectedCourseId(c.id); setScreen('course'); localStorage.setItem('lt_screen', 'course'); }} />
       }
       <PhoneOTPModal open={phoneModal} onClose={() => setPhoneModal(false)} onVerified={handlePhoneVerified} />
       <Toast message={toast.msg} type={toast.type} visible={toast.visible} />
