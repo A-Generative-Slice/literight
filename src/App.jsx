@@ -1226,7 +1226,7 @@ const AdminDashboard = ({ user, onLogout, courses, onSaveCourse }) => {
 
 // ── ROOT APP ──────────────────────────────────────────────
 export default function App() {
-  const [courses, setCourses] = useState(COURSES);
+  const [courses, setCourses] = useState([]);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [screen, setScreen] = useState('public');
@@ -1234,17 +1234,35 @@ export default function App() {
   const [phoneModal, setPhoneModal] = useState(false);
   const [toast, setToast] = useState({ msg: '', visible: false });
 
+  // Fetch courses from persistent backend
+  useEffect(() => {
+    fetch('/api/courses')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) setCourses(data);
+        else setCourses(COURSES); // Fallback to template
+      })
+      .catch(() => setCourses(COURSES));
+  }, []);
+
   const activeCourse = courses.find(c => c.id === selectedCourseId);
 
   const handleSaveCourse = (updatedCourse) => {
+    // Optimistic Update
     setCourses(prev => {
       const exists = prev.find(c => c.id === updatedCourse.id);
-      if (exists) {
-        return prev.map(c => c.id === updatedCourse.id ? updatedCourse : c);
-      }
+      if (exists) return prev.map(c => c.id === updatedCourse.id ? updatedCourse : c);
       return [...prev, updatedCourse];
     });
-    showToast(updatedCourse.id ? 'Course updated successfully!' : 'Course created successfully!');
+
+    // Persistent Sync
+    fetch('/api/courses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedCourse)
+    })
+    .then(() => showToast(updatedCourse.id ? 'Course updated & synced! ☁️' : 'Course created & synced! ☁️'))
+    .catch(() => showToast('Saved locally, sync failed.', 'warning'));
   };
 
   const showToast = (msg, type = 'success') => {
