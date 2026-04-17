@@ -38,10 +38,7 @@ export const PublicNav = ({ onLoginClick }) => {
             )}
           </div>
         ) : (
-          <>
-            <Btn variant="ghost" onClick={onLoginClick}>Log In</Btn>
-            <Btn onClick={onLoginClick}>Get Started</Btn>
-          </>
+          <Btn onClick={onLoginClick}>Get Started</Btn>
         )}
       </div>
     </nav>
