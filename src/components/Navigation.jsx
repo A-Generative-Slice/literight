@@ -21,7 +21,7 @@ export const PublicNav = ({ onLoginClick }) => {
           <div style={{ position: 'relative' }}>
             <div onClick={() => setDrop(!drop)} style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '6px 10px', borderRadius: 8 }}>
               <Avatar user={user} size={34} />
-              <span style={{ fontWeight: 600, fontSize: 14 }}>{user.username}</span>
+              <span style={{ fontWeight: 600, fontSize: 14, maxWidth: 140, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block' }}>{user.username}</span>
               <Icon name="chevron-down" size={14} color={C.muted} />
             </div>
             {drop && (

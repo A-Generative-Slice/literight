@@ -87,7 +87,10 @@ const AuthPage = ({ onBack }) => {
   };
 
   return (
-    <div className="md-p-4" style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div className="md-p-4" style={{ position: 'relative', minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+      <div style={{ position: 'absolute', top: 24, right: 32, zIndex: 50 }}>
+        <Btn onClick={onBack} size="md">← Back to Academy</Btn>
+      </div>
       <div style={{ width: '100%', maxWidth: 480 }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <Logo size="lg" />
@@ -111,17 +114,14 @@ const AuthPage = ({ onBack }) => {
                   <Field label="Full Name" value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} icon="user" placeholder="Leonardo da Vinci" required />
                 )}
                 <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
-                <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="Create a strong password" required />
+                <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder={tab === 'signup' ? "Create a strong password" : "••••••••"} required />
                 
                 {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
                 
+
                 <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
                   {tab === 'login' ? 'Continue' : 'Sign Up'}
                 </Btn>
-                
-                <button type="button" onClick={onBack} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>
-                  ← Back to Academy
-                </button>
               </form>
             </>
           ) : (
