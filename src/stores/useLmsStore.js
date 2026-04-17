@@ -81,10 +81,10 @@ export const useLmsStore = create(
         try {
           await axios.post('/auth/forgot-password', { email });
           set({ isLoading: false });
-          return true;
+          return { success: true };
         } catch (error) {
           set({ isLoading: false });
-          return false;
+          return { success: false, error: error.response?.data?.message || 'Request failed' };
         }
       },
 

@@ -53,6 +53,23 @@ const OTPInput = ({ onChange, onComplete }) => {
     </div>
   );
 };
+const ErrorBanner = ({ message }) => {
+  if (!message) return null;
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'flex-start', gap: 10,
+      background: '#fff1f2', border: '1.5px solid #fca5a5',
+      borderLeft: '4px solid #e11d48', borderRadius: 10,
+      padding: '14px 16px', animation: 'slideInErr 0.25s ease'
+    }}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
+        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      <span style={{ fontSize: 13.5, fontWeight: 600, color: '#9f1239', lineHeight: 1.5 }}>{message}</span>
+    </div>
+  );
+};
+
 
 const AuthPage = ({ onBack }) => {
   const [tab, setTab] = useState('login');
@@ -93,14 +110,19 @@ const AuthPage = ({ onBack }) => {
     e.preventDefault();
     setErr('');
     if (!form.username) {
-      setErr('Please enter your email address first.');
+      setErr('Please enter your email address.');
       return;
     }
-    const success = await requestPasswordReset(form.username);
-    if (success) {
+    const result = await requestPasswordReset(form.username);
+    if (result.success) {
       setStep('forgot-reset');
     } else {
-      setErr('Account not found or request failed.');
+      const msg = result.error || '';
+      if (msg.toLowerCase().includes('not found')) {
+        setErr('No account found with this email. Please sign up first.');
+      } else {
+        setErr(msg || 'Something went wrong. Please try again.');
+      }
     }
   };
 
@@ -168,7 +190,7 @@ const AuthPage = ({ onBack }) => {
                   </div>
                 )}
                 
-                {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
+                <ErrorBanner message={err} />
                 
 
                 <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
@@ -195,7 +217,7 @@ const AuthPage = ({ onBack }) => {
               
               <OTPInput onChange={v => setForm({ ...form, otp: v })} onComplete={handleOtpVerify} />
               
-              {err && <div style={{ color: C.danger, fontSize: 13, marginBottom: 20 }}>{err}</div>}
+              <ErrorBanner message={err} />
               
               <Btn full size="lg" onClick={() => handleOtpVerify(form.otp)} style={{ height: 56, fontSize: 16, marginBottom: 20 }}>
                 Complete Registration & Start Learning
@@ -213,7 +235,7 @@ const AuthPage = ({ onBack }) => {
               </div>
               <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
               
-              {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
+              <ErrorBanner message={err} />
               
               <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
                 Send Recovery Code
@@ -235,7 +257,7 @@ const AuthPage = ({ onBack }) => {
                 <Field label="Confirm New Password" type="password" value={form.confirmPassword} onChange={e => setForm({ ...form, confirmPassword: e.target.value })} icon="shield-check" placeholder="Retype your new password" required />
               </div>
 
-              {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
+              <ErrorBanner message={err} />
               
               <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
                 Reset & Log In
