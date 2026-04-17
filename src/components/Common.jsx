@@ -2,11 +2,11 @@ import React from 'react';
 
 export const C = {
   bg: '#ffffff',
-  surface: '#f3f4f6', // Domestika-style light grey
+  surface: '#f3f4f6', // Light grey surface
   border: '#e5e7eb',
   text: '#111827', // Almost black
   muted: '#4b5563',
-  accent: '#e50914', // Domestika Vibrant Red
+  accent: '#e50914', // Litelab Ruby Red
   accentLight: '#fef2f2',
   success: '#059669',
   warning: '#d97706',
@@ -18,7 +18,7 @@ export const Logo = ({ size = 'md' }) => {
   return (
     <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800, fontSize: fs, letterSpacing: '-0.02em', userSelect: 'none', color: '#0f172a' }}>
       LITE<span style={{ color: C.accent }}>RIGHT</span>
-      <span style={{ fontSize: fs * 0.55, marginLeft: 6, fontWeight: 500, color: '#94a3b8' }}>ACADEMY</span>
+      <span style={{ fontSize: fs * 0.85, marginLeft: 8, fontWeight: 700, color: '#64748b', letterSpacing: '0.05em' }}>ACADEMY</span>
     </span>
   );
 };

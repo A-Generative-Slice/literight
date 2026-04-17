@@ -18,7 +18,7 @@ const CourseDashboard = () => {
         <HeroSection />
         
         <div className="container py-12">
-          {/* Progress Banner (Domestika Perk) */}
+          {/* Progress Banner */}
           <div className="bg-accent-light/30 border border-accent/20 rounded-2xl p-8 mb-12 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
             <div className="space-y-2 text-center md:text-left">
               <h3 className="text-xl font-bold text-accent-dark">Course progress</h3>

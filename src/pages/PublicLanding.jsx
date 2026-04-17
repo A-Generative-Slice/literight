@@ -40,7 +40,6 @@ const PublicLanding = ({ onCourse, courses }) => (
               <div style={{ position: 'absolute', bottom: 16, right: 16, background: 'rgba(0,0,0,0.7)', padding: '6px 12px', borderRadius: 8, fontSize: 12, color: '#fff', fontWeight: 700 }}>
                 {course.duration || '3h 20m'}
               </div>
-              <div style={{ position: 'absolute', top: 16, left: 16 }}><Badge label="Domestika Fresh" color="#e50914" /></div>
             </div>
 
             <div style={{ padding: 28 }}>
