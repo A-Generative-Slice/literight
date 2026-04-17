@@ -56,6 +56,7 @@ const PublicLanding = ({ onCourse, courses }) => (
             </div>
           </div>
         ))}
+      </div>
     </div>
 
     {/* Educational Mission & Career Path */}
