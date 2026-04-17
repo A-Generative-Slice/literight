@@ -23,32 +23,37 @@ export class AuthService {
     if (!username || !pass) throw new UnauthorizedException('Please provide both email and password.');
     
     let user = await this.userRepository.findOne({ where: { username } });
-    if (user && user.isVerified) {
-      throw new UnauthorizedException('Account already exists. Please log in.');
+    if (user) {
+      if (user.isVerified) {
+        throw new UnauthorizedException('Account already exists. Please log in.');
+      } else {
+        // Account exists but unverified — resend OTP, don't allow password change
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        user.otpCode = otp;
+        user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+        await this.userRepository.save(user);
+        await this.emailService.sendOtp(user.username, otp);
+        return { requiresVerification: true, email: user.username, context: 'resend' };
+      }
     }
     
-    if (!user) {
-      user = this.userRepository.create({ 
-        username, 
-        passwordHash: this.hashPassword(pass),
-        role: 'student', 
-        isVerified: false 
-      });
-    } else {
-      // Re-signing up an unverified account: update password hash just in case
-      user.passwordHash = this.hashPassword(pass);
-    }
-    
+    // New user
+    user = this.userRepository.create({ 
+      username, 
+      passwordHash: this.hashPassword(pass),
+      role: 'student', 
+      isVerified: false 
+    });
     await this.userRepository.save(user);
 
     // Generate and send OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     user.otpCode = otp;
-    user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+    user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
     await this.userRepository.save(user);
     await this.emailService.sendOtp(user.username, otp);
     
-    return { requiresVerification: true, email: user.username };
+    return { requiresVerification: true, email: user.username, context: 'signup' };
   }
 
   async login(username: string, pass: string) {
@@ -83,7 +88,7 @@ export class AuthService {
       await this.userRepository.save(user);
       await this.emailService.sendOtp(user.username, otp);
       
-      return { requiresVerification: true, email: user.username };
+      return { requiresVerification: true, email: user.username, context: 'login' };
     }
 
     return this.generateToken(user);

@@ -56,7 +56,8 @@ const OTPInput = ({ onChange, onComplete }) => {
 
 const AuthPage = ({ onBack }) => {
   const [tab, setTab] = useState('login');
-  const [step, setStep] = useState('auth'); // 'auth', 'otp', 'forgot-request', 'forgot-reset'
+  const [step, setStep] = useState('auth');
+  const [otpContext, setOtpContext] = useState('signup'); // 'signup' | 'resend' | 'login'
   const [form, setForm] = useState({ username: '', name: '', password: '', confirmPassword: '', otp: '' });
   const [err, setErr] = useState('');
   
@@ -79,6 +80,7 @@ const AuthPage = ({ onBack }) => {
     const result = await action(form.username, form.password); 
     
     if (result.requiresVerification) {
+      setOtpContext(result.context || 'signup');
       setStep('otp');
     } else if (result.success) {
       // Logic handled by App.jsx through store update
@@ -179,9 +181,16 @@ const AuthPage = ({ onBack }) => {
               <div style={{ width: 64, height: 64, background: C.accentLight, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
                 <Icon name="shield-check" size={32} color={C.accent} />
               </div>
-              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 8 }}>Check your inbox</h2>
-              <p style={{ color: C.muted, fontSize: 15, marginBottom: 32, lineHeight: 1.5 }}>
-                We've sent a 6-digit verification code to <br /><strong style={{ color: C.text }}>{form.username}</strong>
+              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 8 }}>
+                {otpContext === 'login' ? 'Verify Your Identity' : 'Check your inbox'}
+              </h2>
+              <p style={{ color: C.muted, fontSize: 15, marginBottom: 8, lineHeight: 1.5 }}>
+                {otpContext === 'resend'
+                  ? <>This email is registered but not yet verified. We've resent a code to <strong style={{ color: C.text }}>{form.username}</strong></>
+                  : otpContext === 'login'
+                  ? <>Your account isn't verified yet. Enter the code sent to <strong style={{ color: C.text }}>{form.username}</strong> to complete verification.</>
+                  : <>We've sent a 6-digit verification code to <strong style={{ color: C.text }}>{form.username}</strong></>
+                }
               </p>
               
               <OTPInput onChange={v => setForm({ ...form, otp: v })} onComplete={handleOtpVerify} />
