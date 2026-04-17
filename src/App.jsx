@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Routes, Route, useNavigate, Navigate, useParams } from 'react-router-dom';
 import './index.css';
 import { useLmsStore } from './stores/useLmsStore';
 
@@ -15,6 +16,16 @@ import { Toast, Modal } from './components/UIExtras';
 import { Btn } from './components/Inputs';
 import Icon from './components/Icon';
 
+const CourseRoute = ({ courses, handleEnroll, user }) => {
+  const { id } = useParams();
+  const course = (courses || []).find(c => c.id === parseInt(id));
+  
+  if (!courses || courses.length === 0) return null; 
+  if (!course) return <Navigate to="/" />;
+
+  return <CourseDetail course={course} onEnroll={handleEnroll} isLoggedIn={!!user} />;
+};
+
 export default function App() {
   const { 
     courses, 
@@ -25,8 +36,8 @@ export default function App() {
     init
   } = useLmsStore();
 
-  const [screen, setScreen] = useState('public'); // 'public', 'course', 'admin', 'auth'
-  const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const navigate = useNavigate();
+
   const [showPhoneModal, setShowPhoneModal] = useState(false);
   const [toast, setToast] = useState({ msg: '', visible: false, type: 'success' });
 
@@ -35,17 +46,6 @@ export default function App() {
     fetchCourses();
   }, [fetchCourses, init]);
 
-  // Handle routing logic (simplified for production v1)
-  useEffect(() => {
-    if (user?.role === 'admin' && screen === 'auth') {
-      setScreen('admin');
-    } else if (user?.role === 'student' && screen === 'auth') {
-      setScreen('public');
-    }
-  }, [user, screen]);
-
-  const activeCourse = (courses || []).find(c => c.id === selectedCourseId);
-
   const showMsg = (msg, type = 'success') => {
     setToast({ msg, visible: true, type });
     setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000);
@@ -53,7 +53,7 @@ export default function App() {
 
   const handleEnroll = () => {
     if (!user) {
-      setScreen('auth');
+      navigate('/sign-up');
     } else {
       setShowPhoneModal(true);
     }
@@ -64,37 +64,30 @@ export default function App() {
     showMsg('Enrollment successful! Redirecting to student dashboard...', 'success');
   };
 
-  // Render Logic
-  if (user?.role === 'admin' && screen === 'admin') {
-    return <AdminDashboard />;
-  }
-
-  if (screen === 'auth') {
-    return <AuthPage onBack={() => setScreen('public')} />;
-  }
-
   return (
     <>
-      <PublicNav 
-        onLoginClick={() => setScreen('auth')} 
-        setScreen={setScreen} 
-      />
+      <PublicNav onLoginClick={() => navigate('/sign-up')} />
 
-      {screen === 'course' && activeCourse ? (
-        <CourseDetail 
-          course={activeCourse} 
-          onEnroll={handleEnroll} 
-          isLoggedIn={!!user} 
-        />
-      ) : (
-        <PublicLanding 
-          courses={courses} 
-          onCourse={c => {
-            setSelectedCourseId(c.id);
-            setScreen('course');
-          }} 
-        />
-      )}
+      <Routes>
+        <Route path="/" element={<PublicLanding courses={courses} onCourse={c => navigate(`/course/${c.id}`)} />} />
+        
+        <Route path="/sign-up" element={
+          user ? (
+            user.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/" />
+          ) : (
+            <AuthPage onBack={() => navigate('/')} />
+          )
+        } />
+        
+        <Route path="/course/:id" element={<CourseRoute courses={courses} handleEnroll={handleEnroll} user={user} />} />
+        
+        <Route path="/admin" element={
+          user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/" />
+        } />
+
+        {/* Fallback route */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
 
       <Footer />
 
@@ -109,11 +102,7 @@ export default function App() {
         </div>
       </Modal>
 
-      <Toast 
-        message={toast.msg} 
-        visible={toast.visible} 
-        type={toast.type} 
-      />
+      <Toast message={toast.msg} visible={toast.visible} type={toast.type} />
 
       {isLoading && (
         <div style={{ position: 'fixed', bottom: 20, left: 20, zIndex: 9999 }}>

@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { C, Logo, Avatar } from './Common';
 import Icon from './Icon';
 import { Btn } from './Inputs';
 import { useLmsStore } from '../stores/useLmsStore';
 
-export const PublicNav = ({ onLoginClick, setScreen }) => {
+export const PublicNav = ({ onLoginClick }) => {
   const [drop, setDrop] = useState(false);
   const { user, logout } = useLmsStore();
   const role = user?.role;
+  const navigate = useNavigate();
 
   return (
     <nav style={{ background: C.bg, borderBottom: `1px solid ${C.border}`, padding: '0 32px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
-        <div onClick={() => setScreen('public')} style={{ cursor: 'pointer' }}><Logo /></div>
+        <div onClick={() => navigate('/')} style={{ cursor: 'pointer' }}><Logo /></div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         {user ? (
@@ -29,9 +31,9 @@ export const PublicNav = ({ onLoginClick, setScreen }) => {
                   <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{role === 'admin' ? 'Administrator' : 'Student'}</div>
                 </div>
                 {role === 'admin' && (
-                  <MenuItem icon="shield" label="Admin Panel" onClick={() => { setDrop(false); setScreen('admin'); }} />
+                  <MenuItem icon="shield" label="Admin Panel" onClick={() => { setDrop(false); navigate('/admin'); }} />
                 )}
-                <MenuItem icon="logout" label="Log Out" color={C.danger} onClick={() => { setDrop(false); logout(); }} />
+                <MenuItem icon="logout" label="Log Out" color={C.danger} onClick={() => { setDrop(false); navigate('/'); logout(); }} />
               </div>
             )}
           </div>
