@@ -17,8 +17,8 @@ const PublicLanding = ({ onCourse, courses }) => (
           Litelab is a specialist corporate consultancy delivering bespoke lighting solutions for global architectural projects. Through LiteRight Academy, we identify and train the next generation of industry leaders, providing elite certification and direct career placements.
         </p>
         <div className="md-flex-col md-w-full md-gap-4" style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
-          <Btn onClick={() => { document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>Explore Curriculum</Btn>
-          <Btn onClick={() => { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>View LiteLab</Btn>
+          <Btn onClick={() => { document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16, minWidth: 220 }}>Explore Curriculum</Btn>
+          <Btn onClick={() => { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16, minWidth: 220 }}>View LiteLab</Btn>
         </div>
       </div>
     </div>
