@@ -47,7 +47,7 @@ export class AuthService {
 
   async verifyOtp(email: string, code: string) {
     const user = await this.userRepository.findOne({ where: { username: email } });
-    if (!user || user.otpCode !== code || user.otpExpiry < new Date()) {
+    if (!user || user.otpCode !== code || !user.otpExpiry || user.otpExpiry < new Date()) {
       throw new UnauthorizedException('Invalid or expired OTP');
     }
 

@@ -141,7 +141,7 @@ const AuthPage = ({ onBack }) => {
               {err && <div style={{ color: C.danger, fontSize: 13, marginBottom: 20 }}>{err}</div>}
               
               <Btn full size="lg" onClick={() => handleOtpVerify(form.otp)} style={{ height: 56, fontSize: 16, marginBottom: 20 }}>
-                Verify & Enter Academy
+                Complete Registration & Start Learning
               </Btn>
 
               <button type="button" onClick={() => setStep('auth')} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>
