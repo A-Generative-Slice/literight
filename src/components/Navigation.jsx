@@ -12,8 +12,8 @@ export const PublicNav = ({ onLoginClick }) => {
   const navigate = useNavigate();
 
   return (
-    <nav style={{ background: C.bg, borderBottom: `1px solid ${C.border}`, padding: '0 32px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+    <nav className="md-px-4" style={{ background: C.bg, borderBottom: `1px solid ${C.border}`, padding: '0 32px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
+      <div className="md-gap-4" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
         <div onClick={() => navigate('/')} style={{ cursor: 'pointer' }}><Logo /></div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

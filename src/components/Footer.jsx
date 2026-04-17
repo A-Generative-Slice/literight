@@ -69,7 +69,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
+        <div className="md-flex-col md-gap-4 md-text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
           <p style={{ fontSize: 13, color: '#475569' }}>
             © {new Date().getFullYear()} Litelab Milano. All rights reserved. LiteRight Academy is a registered trademark.
           </p>

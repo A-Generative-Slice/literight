@@ -87,14 +87,14 @@ const AuthPage = ({ onBack }) => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div className="md-p-4" style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ width: '100%', maxWidth: 480 }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <Logo size="lg" />
           <p style={{ color: C.muted, marginTop: 12, fontWeight: 500 }}>The Gateway to Architectural Mastery</p>
         </div>
 
-        <Card padding="40px" style={{ border: 'none', boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
+        <Card padding="40px" className="md-p-4" style={{ border: 'none', boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
           {step === 'auth' ? (
             <>
               <div style={{ display: 'flex', background: C.surface, borderRadius: 14, padding: 6, marginBottom: 32 }}>

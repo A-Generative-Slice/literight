@@ -29,8 +29,8 @@ export const Badge = ({ label, color = C.accent }) => (
   </span>
 );
 
-export const Card = ({ children, style: ex = {}, padding = '24px' }) => (
-  <div style={{ background: '#fff', borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: '0 4px 20px rgba(15,23,42,0.04)', padding, transition: 'all 0.3s ease', ...ex }}>
+export const Card = ({ children, style: ex = {}, padding = '24px', className = '' }) => (
+  <div className={className} style={{ background: '#fff', borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: '0 4px 20px rgba(15,23,42,0.04)', padding, transition: 'all 0.3s ease', ...ex }}>
     {children}
   </div>
 );

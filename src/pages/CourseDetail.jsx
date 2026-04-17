@@ -32,7 +32,7 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
   return (
     <div style={{ background: C.bg, minHeight: '100vh' }}>
       {/* Hero Section */}
-      <div style={{ 
+      <div className="md-py-8" style={{ 
         background: course.thumbnail 
           ? `linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.7)), url(${course.thumbnail}) center/cover no-repeat`
           : `linear-gradient(135deg, ${C.text} 0%, #1e293b 100%)`, 
@@ -41,14 +41,14 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
         position: 'relative', 
         overflow: 'hidden' 
       }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60, alignItems: 'center', position: 'relative', zIndex: 10 }}>
+        <div className="md-grid-1 md-gap-4 md-pb-8" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60, alignItems: 'center', position: 'relative', zIndex: 10 }}>
           <div>
             <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
               {course?.tags?.map(t => <span key={t} style={{ background: 'rgba(255,255,255,0.1)', padding: '5px 12px', borderRadius: 99, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t}</span>)}
             </div>
-            <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 48, fontWeight: 800, lineHeight: 1.1, marginBottom: 24 }}>{course?.title || 'Course Details'}</h1>
+            <h1 className="md-text-h1" style={{ fontFamily: 'Outfit, sans-serif', fontSize: 48, fontWeight: 800, lineHeight: 1.1, marginBottom: 24 }}>{course?.title || 'Course Details'}</h1>
             <p style={{ fontSize: 18, color: '#94a3b8', lineHeight: 1.6, marginBottom: 32, maxWidth: 600 }}>{course?.description || 'No description available for this course yet.'}</p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+            <div className="md-flex-col md-align-start md-gap-4" style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <Avatar user={{ name: course?.instructor || 'Staff' }} size={48} />
                 <div>
@@ -56,7 +56,7 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
                   <div style={{ fontWeight: 700, fontSize: 15 }}>{course?.instructor || 'Literight Expert'}</div>
                 </div>
               </div>
-              <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.1)' }} />
+              <div className="md-hidden" style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.1)' }} />
               <div>
                 <div style={{ fontSize: 13, color: '#94a3b8' }}>Rating</div>
                 <div style={{ fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -67,7 +67,8 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
           </div>
 
           <div style={{ position: 'relative' }}>
-            <Card style={{ padding: 40, background: '#fff', color: C.text, boxShadow: '10px 30px 60px rgba(0,0,0,0.1)', transform: 'translateY(40px)' }}>
+            <div className="md-translate-y-0" style={{ transform: 'translateY(40px)' }}>
+              <Card className="md-p-4" style={{ padding: 40, background: '#fff', color: C.text, boxShadow: '10px 30px 60px rgba(0,0,0,0.1)' }}>
               <div style={{ marginBottom: 32 }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
                   <span style={{ fontSize: 36, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>${course?.price || '0'}</span>
@@ -81,13 +82,14 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
                   30-Day Money-Back Guarantee
                 </div>
               </div>
-            </Card>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div style={{ maxWidth: 1200, margin: '80px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60 }}>
+      <div className="md-grid-1 md-gap-4 md-py-8" style={{ maxWidth: 1200, margin: '80px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60 }}>
         <div>
           <section style={{ marginBottom: 60 }}>
             <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 24 }}>About this course</h2>
