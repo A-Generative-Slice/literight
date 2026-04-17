@@ -107,6 +107,9 @@ const AuthPage = ({ onBack }) => {
               </div>
 
               <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                {tab === 'signup' && (
+                  <Field label="Full Name" value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} icon="user" placeholder="Leonardo da Vinci" required />
+                )}
                 <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
                 {tab === 'login' && (
                   <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="••••••••" required />
