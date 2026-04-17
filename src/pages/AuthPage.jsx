@@ -98,7 +98,7 @@ const AuthPage = ({ onBack }) => {
           {step === 'auth' ? (
             <>
               <div style={{ display: 'flex', background: C.surface, borderRadius: 14, padding: 6, marginBottom: 32 }}>
-                {[['login', 'Log In'], ['signup', 'Verify Mail ID']].map(([t, l]) => (
+                {[['login', 'Log In'], ['signup', 'Sign Up']].map(([t, l]) => (
                   <button key={t} onClick={() => setTab(t)}
                     style={{ flex: 1, padding: '12px', border: 'none', cursor: 'pointer', borderRadius: 10, fontSize: 13, fontWeight: 800, background: tab === t ? '#fff' : 'transparent', color: tab === t ? C.accent : C.muted, transition: 'all 0.2s' }}>
                     {l.toUpperCase()}
@@ -118,7 +118,7 @@ const AuthPage = ({ onBack }) => {
                 {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
                 
                 <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
-                  {tab === 'login' ? 'Continue' : 'Send Verification Code'}
+                  {tab === 'login' ? 'Continue' : 'Sign Up'}
                 </Btn>
                 
                 <button type="button" onClick={onBack} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>

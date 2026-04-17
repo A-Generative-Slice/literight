@@ -10,6 +10,7 @@ import AuthPage from './pages/AuthPage';
 
 // Components
 import { PublicNav } from './components/Navigation';
+import Footer from './components/Footer';
 import { Toast, Modal } from './components/UIExtras';
 import { Btn } from './components/Inputs';
 import Icon from './components/Icon';
@@ -94,6 +95,8 @@ export default function App() {
           }} 
         />
       )}
+
+      <Footer />
 
       <Modal 
         open={showPhoneModal} 

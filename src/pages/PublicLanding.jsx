@@ -17,14 +17,14 @@ const PublicLanding = ({ onCourse, courses }) => (
           Litelab is a specialist corporate consultancy delivering bespoke lighting solutions for global architectural projects. Through LiteRight Academy, we identify and train the next generation of industry leaders, providing elite certification and direct career placements.
         </p>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
-          <Btn onClick={() => { window.scrollTo({ top: 800, behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>Explore Curriculum</Btn>
-          <Btn onClick={() => {}} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>View LiteLab</Btn>
+          <Btn onClick={() => { document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>Explore Curriculum</Btn>
+          <Btn onClick={() => { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>View LiteLab</Btn>
         </div>
       </div>
     </div>
 
     {/* Course Discovery - Domestika Grid Style */}
-    <div style={{ maxWidth: 1200, margin: '80px auto 120px', padding: '0 32px' }}>
+    <div id="curriculum" style={{ maxWidth: 1200, margin: '80px auto 120px', padding: '0 32px' }}>
       <div style={{ textAlign: 'center', marginBottom: 60 }}>
         <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 32, fontWeight: 800, color: C.text, marginBottom: 16 }}>Academy Curriculum</h2>
         <div style={{ width: 60, height: 4, background: C.accent, margin: '0 auto', borderRadius: 2 }} />
