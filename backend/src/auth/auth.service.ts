@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { EmailService } from './email.service';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,10 @@ export class AuthService {
     private userRepository: Repository<User>,
     private emailService: EmailService,
   ) {}
+
+  private hashPassword(password: string): string {
+    return crypto.createHash('sha256').update(password).digest('hex');
+  }
 
   async login(username: string, pass: string) {
     // 1. Maintain 'Admin/Admin' requirement
@@ -25,11 +30,28 @@ export class AuthService {
       return this.generateToken(admin);
     }
     
-    // 2. Persistent Student Login (Upsert)
+    // 2. Persistent Student Login & Password Validations
     let user = await this.userRepository.findOne({ where: { username } });
+    
     if (!user) {
-      user = this.userRepository.create({ username, role: 'student', isVerified: false });
+      // Create new student
+      user = this.userRepository.create({ 
+        username, 
+        passwordHash: this.hashPassword(pass),
+        role: 'student', 
+        isVerified: false 
+      });
       await this.userRepository.save(user);
+    } else {
+      // Verify existing student's password
+      if (user.passwordHash && user.passwordHash !== this.hashPassword(pass)) {
+        throw new UnauthorizedException('Invalid credentials provided.');
+      }
+      // If updating from an old account that lacks a hash, save the new one
+      if (!user.passwordHash) {
+        user.passwordHash = this.hashPassword(pass);
+        await this.userRepository.save(user);
+      }
     }
 
     if (!user.isVerified) {

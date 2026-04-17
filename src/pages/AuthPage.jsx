@@ -67,7 +67,7 @@ const AuthPage = ({ onBack }) => {
     e.preventDefault();
     setErr('');
     // For this academy, username IS the email for students
-    const result = await login(form.username, form.password || 'student123'); 
+    const result = await login(form.username, form.password); 
     
     if (result.requiresVerification) {
       setStep('otp');
@@ -111,9 +111,7 @@ const AuthPage = ({ onBack }) => {
                   <Field label="Full Name" value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} icon="user" placeholder="Leonardo da Vinci" required />
                 )}
                 <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
-                {tab === 'login' && (
-                  <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="••••••••" required />
-                )}
+                <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="Create a strong password" required />
                 
                 {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
                 
