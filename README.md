@@ -1,47 +1,120 @@
-# 🎓 LiteRight Academy
+# 🎓 LiteRight Academy — LMS Platform
 
-**LiteRight Academy** is a premium, security-first Learning Management System (LMS) designed to deliver a studio-grade educational experience. Built with a "Preview First" philosophy and inspired by the minimalist elegance of platforms like Domestika, it integrates Litelab’s professional heritage into a modern, high-performance web application.
+**LiteRight Academy** is a premium, security-first Learning Management System built for Litelab Milano — a specialist corporate lighting consultancy. The platform delivers a studio-grade educational experience with a "Preview First" philosophy inspired by the minimalist elegance of platforms like Domestika.
 
 ---
 
-## 🚀 Key Features
+## 🌐 Live Platform
 
-- **Premium UI/UX**: A dark-mode, obsidian and ruby design system optimized for focused learning and high-end visual appeal.
-- **Secure Registration**: Industry-standard student enrollment with mandatory **6-digit OTP email verification**.
-- **Curriculum Transparency**: A "Preview First" architecture allowing visitors to explore course structures before committing to enrollment.
-- **Enterprise-Grade Infrastructure**: Automated deployments to Azure with Nginx reverse-proxying and PM2 process management.
-- **Narrative Integration**: Custom sections detailing the Litelab Heritage and brand manifesto directly in the landing experience.
+**[literight.centralindia.cloudapp.azure.com](http://literight.centralindia.cloudapp.azure.com)**
+
+---
+
+## ✨ Key Features
+
+- **🔐 Secure Authentication**: SHA-256 password hashing, 6-digit OTP email verification, and JWT session management.
+- **📨 Transactional Emails**: Branded OTP verification and welcome emails delivered via Gmail SMTP (Nodemailer).
+- **🔑 Forgot Password**: Full OTP-based password recovery flow — request code → verify → set new password (confirmed twice).
+- **⚡ Smart Auth Routing**: Conflict modals for duplicate accounts and missing accounts with one-click tab switching between Sign Up and Log In.
+- **🎬 16:9 Video Player**: Mathematically perfect aspect ratio video playback with a blurred preview overlay for unauthenticated users.
+- **📱 Mobile-First UI**: Responsive layout using custom utility classes; no layout overflow bugs.
+- **🧭 SPA Routing**: Clean sub-URL navigation (`/`, `/sign-up`, `/course/:id`, `/admin`) powered by `react-router-dom`.
+- **🛡️ Role-Based Access**: Student and Admin roles with protected route guards.
+- **📊 Course Progress**: Lesson-level progress tracking persisted to SQLite.
+- **⚙️ Admin Dashboard**: Full course/chapter/lesson CRUD, enrollment management, and analytics.
+
+---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: React, Vite, TailwindCSS, Zustand (State Management)
-- **Backend**: NestJS, Node.js
-- **Database**: SQLite (Production-ready local instance)
-- **Server**: Nginx (Static Serving & Reverse Proxy)
-- **Monitoring**: PM2 (Process Manager)
+| Layer | Technology |
+|---|---|
+| **Frontend** | React 18, Vite, Zustand, react-router-dom |
+| **Styling** | Vanilla CSS with custom design system (Outfit + Inter fonts) |
+| **Backend** | NestJS (Node.js), TypeORM |
+| **Database** | SQLite (`backend/data/lms.db`) — persistent across restarts |
+| **Auth** | JWT, SHA-256 password hashing, OTP via Nodemailer + Gmail |
+| **Server** | Azure VM (Central India) — Nginx reverse proxy + PM2 |
 
 ---
-
-## 📡 Deployment & Synchronization
-
-The project includes a **Deep Clean** synchronization script designed to bypass local build caches and ensure the production server is always in perfect parity with the GitHub `main` branch.
-
-### Quick Deploy:
-```bash
-# Authorizes the production build on the Azure VM
-bash sync_to_azure.sh
-```
 
 ## 📂 Project Structure
 
-- `/src`: Frontend application and design system components.
-- `/backend`: NestJS application logic, auth services, and course controllers.
-- `/infrastructure`: Nginx configuration and deployment scripts.
+```
+lms.ags/
+├── src/                      # React frontend
+│   ├── pages/                # Route-level pages
+│   │   ├── PublicLanding.jsx # Home / landing
+│   │   ├── AuthPage.jsx      # Sign Up, Log In, Forgot Password
+│   │   ├── CourseDetail.jsx  # Course viewer + video player
+│   │   └── AdminPanel.jsx    # Admin dashboard
+│   ├── components/           # Shared UI components
+│   │   ├── Navigation.jsx    # Top nav (dynamic Get Started / Back to Academy)
+│   │   ├── Syllabus.jsx      # Course curriculum tree
+│   │   ├── QuizPlayer.jsx    # In-course quiz engine
+│   │   ├── Common.jsx        # Design tokens, Avatar, Card, Logo
+│   │   ├── Inputs.jsx        # Btn, Field components
+│   │   ├── Icon.jsx          # Lucide icon wrapper
+│   │   ├── Footer.jsx        # Global footer
+│   │   └── UIExtras.jsx      # Toast, Modal components
+│   ├── stores/
+│   │   └── useLmsStore.js    # Zustand global state (auth, courses, progress)
+│   └── hooks/
+│       └── useProgress.js    # Lesson progress hook
+│
+├── backend/                  # NestJS API
+│   └── src/
+│       ├── auth/             # JWT, OTP, password logic + email service
+│       ├── courses/          # Course, chapter, lesson CRUD
+│       ├── progress/         # Student progress tracking
+│       └── uploads/          # File/media uploads
+│
+└── infrastructure/
+    └── nginx.conf            # Nginx SPA + reverse proxy config
+```
 
 ---
 
-## 🛡️ Security
-Automated OTP-based identity verification prevents spam registrations and ensures that every student on the platform is verified and legitimate.
+## 🚀 Local Development
+
+```bash
+# Frontend
+npm install
+npm run dev          # starts on http://localhost:5173
+
+# Backend
+cd backend
+npm install
+npm run start:dev    # starts on http://localhost:3000
+```
 
 ---
-*Developed for LiteRight Academy by Litelab Professional Services.*
+
+## 📡 Deployment
+
+Deployments are automatic — push to `main` and the Azure server pulls, builds, and restarts via PM2.
+
+```bash
+# Manual deploy
+git push origin main
+# On Azure VM (auto-triggered or manual):
+git pull origin main && npm run build
+cd backend && npm run build && pm2 restart all
+```
+
+---
+
+## 🛡️ Auth Flow
+
+| Action | Behaviour |
+|---|---|
+| **Sign Up (new email)** | Creates account → sends OTP → verify → logged in → welcome email sent |
+| **Sign Up (existing email)** | Modal: "Account already exists" → one-click to Log In tab |
+| **Log In (correct password)** | Direct login — no OTP required for verified accounts |
+| **Log In (wrong password)** | Error banner: "Wrong password" |
+| **Log In (unknown email)** | Modal: "Account not found" → one-click to Sign Up tab |
+| **Forgot Password** | Email → OTP → new password (confirmed twice) → logged in |
+
+---
+
+*Developed for LiteRight Academy by Litelab Professional Services, Milano.*
