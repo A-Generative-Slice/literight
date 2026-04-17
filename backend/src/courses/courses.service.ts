@@ -115,6 +115,14 @@ export class CoursesService implements OnModuleInit {
   async getCourses() {
     return this.courseRepository.find({
       relations: ['chapters', 'chapters.lessons'],
+      order: {
+        chapters: {
+          id: 'ASC',
+          lessons: {
+            id: 'ASC'
+          }
+        }
+      }
     });
   }
 
