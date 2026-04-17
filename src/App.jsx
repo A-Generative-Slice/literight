@@ -16,6 +16,17 @@ import { Toast, Modal } from './components/UIExtras';
 import { Btn } from './components/Inputs';
 import Icon from './components/Icon';
 
+const ClearSession = () => {
+  const navigate = useNavigate();
+  const logout = useLmsStore(state => state.logout);
+  React.useEffect(() => {
+    logout();
+    localStorage.removeItem('lms-storage');
+    navigate('/', { replace: true });
+  }, []);
+  return null;
+};
+
 const CourseRoute = ({ courses, handleEnroll, user }) => {
   const { id } = useParams();
   const course = (courses || []).find(c => c.id === parseInt(id));
@@ -85,6 +96,8 @@ export default function App() {
           user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/" />
         } />
 
+        <Route path="/logout" element={<ClearSession />} />
+        
         {/* Fallback route */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
