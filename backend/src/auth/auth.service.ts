@@ -52,8 +52,8 @@ export class AuthService {
     }
 
     user.isVerified = true;
-    user.otpCode = null;
-    user.otpExpiry = null;
+    user.otpCode = undefined;
+    user.otpExpiry = undefined;
     await this.userRepository.save(user);
 
     return this.generateToken(user);
