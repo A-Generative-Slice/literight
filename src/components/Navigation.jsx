@@ -13,10 +13,6 @@ export const PublicNav = ({ onLoginClick, setScreen }) => {
     <nav style={{ background: C.bg, borderBottom: `1px solid ${C.border}`, padding: '0 32px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
         <div onClick={() => setScreen('public')} style={{ cursor: 'pointer' }}><Logo /></div>
-        {['Courses', 'About'].map(l => (
-          <button key={l} onClick={() => setScreen('public')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 500, color: C.muted, padding: '6px 10px', borderRadius: 6, fontFamily: 'Inter, sans-serif' }}
-            onMouseEnter={e => e.currentTarget.style.color = C.accent} onMouseLeave={e => e.currentTarget.style.color = C.muted}>{l}</button>
-        ))}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         {user ? (
