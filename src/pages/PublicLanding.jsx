@@ -18,7 +18,7 @@ const PublicLanding = ({ onCourse, courses }) => (
         </p>
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
           <Btn onClick={() => { window.scrollTo({ top: 800, behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>Explore Curriculum</Btn>
-          <Btn variant="ghost" size="lg" style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>Consultancy Solutions</Btn>
+          <Btn onClick={() => {}} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>View LiteLab</Btn>
         </div>
       </div>
     </div>
