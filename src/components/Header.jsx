@@ -14,24 +14,10 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Navigation - Desktop */}
-        <nav className="hidden lg:flex items-center gap-6 font-medium text-sm">
-          <div className="flex items-center gap-1 cursor-pointer hover:text-accent">
-            Courses <ChevronDown className="h-4 w-4" />
-          </div>
-          <a href="#" className="hover:text-accent">Projects</a>
-          <a href="#" className="hover:text-accent">Plus</a>
-        </nav>
+        {/* Navigation - Hidden for Corporate Focus */}
+        <div className="flex-1" />
 
-        {/* Search Bar */}
-        <div className="flex-1 max-w-md hidden md:flex items-center bg-secondary border border-border rounded-full px-4 py-2 gap-2 focus-within:ring-2 focus-within:ring-accent-light">
-          <Search className="h-4 w-4 text-text-secondary" />
-          <input 
-            type="text" 
-            placeholder="Search for courses..." 
-            className="bg-transparent border-none outline-none w-full text-sm"
-          />
-        </div>
+        {/* Profile / Actions only */}
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
