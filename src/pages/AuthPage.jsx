@@ -87,10 +87,7 @@ const AuthPage = ({ onBack }) => {
   };
 
   return (
-    <div className="md-p-4" style={{ position: 'relative', minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-      <div style={{ position: 'absolute', top: 24, right: 32, zIndex: 50 }}>
-        <Btn onClick={onBack} size="md">← Back to Academy</Btn>
-      </div>
+    <div className="md-p-4" style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ width: '100%', maxWidth: 480 }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <Logo size="lg" />

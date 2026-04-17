@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { C, Logo, Avatar } from './Common';
 import Icon from './Icon';
 import { Btn } from './Inputs';
@@ -10,6 +10,7 @@ export const PublicNav = ({ onLoginClick }) => {
   const { user, logout } = useLmsStore();
   const role = user?.role;
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <nav className="md-px-4" style={{ background: C.bg, borderBottom: `1px solid ${C.border}`, padding: '0 32px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100, boxShadow: '0 1px 8px rgba(0,0,0,0.05)' }}>
@@ -38,7 +39,11 @@ export const PublicNav = ({ onLoginClick }) => {
             )}
           </div>
         ) : (
-          <Btn onClick={onLoginClick}>Get Started</Btn>
+          location.pathname === '/sign-up' ? (
+            <Btn onClick={() => navigate('/')}>← Back to Academy</Btn>
+          ) : (
+            <Btn onClick={onLoginClick}>Get Started</Btn>
+          )
         )}
       </div>
     </nav>
