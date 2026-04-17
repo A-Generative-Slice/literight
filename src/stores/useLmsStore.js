@@ -31,6 +31,21 @@ export const useLmsStore = create(
       },
 
       // Authentication
+      signup: async (username, password) => {
+        set({ isLoading: true });
+        try {
+          const res = await axios.post('/auth/signup', { username, password });
+          if (res.data.requiresVerification) {
+            set({ isLoading: false });
+            return { requiresVerification: true, email: res.data.email };
+          }
+          return { success: true };
+        } catch (error) {
+          set({ isLoading: false });
+          return { success: false, error: error.response?.data?.message || 'Registration failed' };
+        }
+      },
+
       login: async (username, password) => {
         set({ isLoading: true });
         try {
@@ -54,6 +69,30 @@ export const useLmsStore = create(
           const res = await axios.post('/auth/verify-otp', { email, code });
           const { user, access_token } = res.data;
           set({ user, token: access_token, isLoading: false });
+          return true;
+        } catch (error) {
+          set({ isLoading: false });
+          return false;
+        }
+      },
+
+      requestPasswordReset: async (email) => {
+        set({ isLoading: true });
+        try {
+          await axios.post('/auth/forgot-password', { email });
+          set({ isLoading: false });
+          return true;
+        } catch (error) {
+          set({ isLoading: false });
+          return false;
+        }
+      },
+
+      submitPasswordReset: async (email, code, newPassword) => {
+        set({ isLoading: true });
+        try {
+          await axios.post('/auth/reset-password', { email, code, newPassword });
+          set({ isLoading: false });
           return true;
         } catch (error) {
           set({ isLoading: false });

@@ -19,7 +19,41 @@ export class AuthService {
     return crypto.createHash('sha256').update(password).digest('hex');
   }
 
+  async signup(username: string, pass: string) {
+    if (!username || !pass) throw new UnauthorizedException('Please provide both email and password.');
+    
+    let user = await this.userRepository.findOne({ where: { username } });
+    if (user && user.isVerified) {
+      throw new UnauthorizedException('Account already exists. Please log in.');
+    }
+    
+    if (!user) {
+      user = this.userRepository.create({ 
+        username, 
+        passwordHash: this.hashPassword(pass),
+        role: 'student', 
+        isVerified: false 
+      });
+    } else {
+      // Re-signing up an unverified account: update password hash just in case
+      user.passwordHash = this.hashPassword(pass);
+    }
+    
+    await this.userRepository.save(user);
+
+    // Generate and send OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otpCode = otp;
+    user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+    await this.userRepository.save(user);
+    await this.emailService.sendOtp(user.username, otp);
+    
+    return { requiresVerification: true, email: user.username };
+  }
+
   async login(username: string, pass: string) {
+    if (!username || !pass) throw new UnauthorizedException('Please provide both email and password.');
+
     // 1. Maintain 'Admin/Admin' requirement
     if (username === 'Admin' && pass === 'Admin') {
       let admin = await this.userRepository.findOne({ where: { username: 'Admin' } });
@@ -30,34 +64,22 @@ export class AuthService {
       return this.generateToken(admin);
     }
     
-    // 2. Persistent Student Login & Password Validations
+    // 2. Student Login
     let user = await this.userRepository.findOne({ where: { username } });
     
     if (!user) {
-      // Create new student
-      user = this.userRepository.create({ 
-        username, 
-        passwordHash: this.hashPassword(pass),
-        role: 'student', 
-        isVerified: false 
-      });
-      await this.userRepository.save(user);
-    } else {
-      // Verify existing student's password
-      if (user.passwordHash && user.passwordHash !== this.hashPassword(pass)) {
-        throw new UnauthorizedException('Invalid credentials provided.');
-      }
-      // If updating from an old account that lacks a hash, save the new one
-      if (!user.passwordHash) {
-        user.passwordHash = this.hashPassword(pass);
-        await this.userRepository.save(user);
-      }
+      throw new UnauthorizedException('Account not found. Please sign up for a new account.');
+    } 
+    
+    // Verify password
+    if (user.passwordHash && user.passwordHash !== this.hashPassword(pass)) {
+      throw new UnauthorizedException('Wrong password. Please try again or use Forgot Password.');
     }
 
     if (!user.isVerified) {
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
       user.otpCode = otp;
-      user.otpExpiry = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
+      user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
       await this.userRepository.save(user);
       await this.emailService.sendOtp(user.username, otp);
       
@@ -65,6 +87,36 @@ export class AuthService {
     }
 
     return this.generateToken(user);
+  }
+
+  async forgotPasswordRequest(email: string) {
+    const user = await this.userRepository.findOne({ where: { username: email } });
+    if (!user) {
+      throw new UnauthorizedException('Account not found.');
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otpCode = otp;
+    user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+    await this.userRepository.save(user);
+    await this.emailService.sendOtp(user.username, otp);
+
+    return { success: true, email: user.username };
+  }
+
+  async forgotPasswordReset(email: string, code: string, newPass: string) {
+    const user = await this.userRepository.findOne({ where: { username: email } });
+    if (!user || user.otpCode !== code || !user.otpExpiry || user.otpExpiry < new Date()) {
+      throw new UnauthorizedException('Invalid or expired reset code');
+    }
+
+    user.passwordHash = this.hashPassword(newPass);
+    user.isVerified = true; // implicit verification if resetting password via email
+    user.otpCode = undefined;
+    user.otpExpiry = undefined;
+    await this.userRepository.save(user);
+
+    return { success: true };
   }
 
   async verifyOtp(email: string, code: string) {

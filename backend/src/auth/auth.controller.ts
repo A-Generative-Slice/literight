@@ -5,6 +5,11 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Post('signup')
+  async signup(@Body() body: any) {
+    return this.authService.signup(body.username, body.password);
+  }
+
   @Post('login')
   async login(@Body() body: any) {
     return this.authService.login(body.username, body.password);
@@ -17,5 +22,15 @@ export class AuthController {
       throw new UnauthorizedException('Security code verification failed');
     }
     return result;
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() body: any) {
+    return this.authService.forgotPasswordRequest(body.email);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() body: any) {
+    return this.authService.forgotPasswordReset(body.email, body.code, body.newPassword);
   }
 }

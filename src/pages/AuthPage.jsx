@@ -56,25 +56,66 @@ const OTPInput = ({ onChange, onComplete }) => {
 
 const AuthPage = ({ onBack }) => {
   const [tab, setTab] = useState('login');
-  const [step, setStep] = useState('auth'); // 'auth', 'otp'
-  const [form, setForm] = useState({ username: '', password: '', otp: '' });
+  const [step, setStep] = useState('auth'); // 'auth', 'otp', 'forgot-request', 'forgot-reset'
+  const [form, setForm] = useState({ username: '', name: '', password: '', confirmPassword: '', otp: '' });
   const [err, setErr] = useState('');
   
   const login = useLmsStore(state => state.login);
+  const signup = useLmsStore(state => state.signup);
   const verifyOtp = useLmsStore(state => state.verifyOtp);
+  const requestPasswordReset = useLmsStore(state => state.requestPasswordReset);
+  const submitPasswordReset = useLmsStore(state => state.submitPasswordReset);
 
   const handleAuth = async (e) => {
     e.preventDefault();
     setErr('');
-    // For this academy, username IS the email for students
-    const result = await login(form.username, form.password); 
+
+    if (tab === 'signup' && form.password !== form.confirmPassword) {
+      setErr('Passwords do not match.');
+      return;
+    }
+
+    const action = tab === 'signup' ? signup : login;
+    const result = await action(form.username, form.password); 
     
     if (result.requiresVerification) {
       setStep('otp');
     } else if (result.success) {
       // Logic handled by App.jsx through store update
     } else {
-      setErr(result.error || 'Invalid credentials');
+      setErr(result.error || 'Authentication failed');
+    }
+  };
+
+  const handleForgotRequest = async (e) => {
+    e.preventDefault();
+    setErr('');
+    if (!form.username) {
+      setErr('Please enter your email address first.');
+      return;
+    }
+    const success = await requestPasswordReset(form.username);
+    if (success) {
+      setStep('forgot-reset');
+    } else {
+      setErr('Account not found or request failed.');
+    }
+  };
+
+  const handleForgotReset = async (e) => {
+    e.preventDefault();
+    setErr('');
+    if (form.password !== form.confirmPassword) {
+      setErr('New passwords do not match.');
+      return;
+    }
+    const success = await submitPasswordReset(form.username, form.otp, form.password);
+    if (success) {
+      setStep('auth');
+      setTab('login');
+      setForm({ ...form, password: '', confirmPassword: '', otp: '' });
+    } else {
+      setErr('Invalid security code. Please try again.');
     }
   };
 
@@ -113,6 +154,18 @@ const AuthPage = ({ onBack }) => {
                 <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
                 <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder={tab === 'signup' ? "Create a strong password" : "••••••••"} required />
                 
+                {tab === 'signup' && (
+                  <Field label="Confirm Password" type="password" value={form.confirmPassword} onChange={e => setForm({ ...form, confirmPassword: e.target.value })} icon="shield-check" placeholder="Retype your password" required />
+                )}
+
+                {tab === 'login' && (
+                  <div style={{ textAlign: 'right', marginTop: -14 }}>
+                    <button type="button" onClick={() => { setErr(''); setStep('forgot-request'); }} style={{ background: 'none', border: 'none', color: C.accent, fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>
+                      Forgot Password?
+                    </button>
+                  </div>
+                )}
+                
                 {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
                 
 
@@ -121,7 +174,7 @@ const AuthPage = ({ onBack }) => {
                 </Btn>
               </form>
             </>
-          ) : (
+          ) : step === 'otp' ? (
             <div style={{ textAlign: 'center' }}>
               <div style={{ width: 64, height: 64, background: C.accentLight, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
                 <Icon name="shield-check" size={32} color={C.accent} />
@@ -143,6 +196,42 @@ const AuthPage = ({ onBack }) => {
                 Didn't get a code? <span style={{ color: C.accent }}>Resend</span>
               </button>
             </div>
+          ) : step === 'forgot-request' ? (
+            <form onSubmit={handleForgotRequest} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 800, marginBottom: 8 }}>Reset Password</h2>
+                <p style={{ color: C.muted, fontSize: 14 }}>Enter your registered email to receive a recovery code.</p>
+              </div>
+              <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
+              
+              {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
+              
+              <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
+                Send Recovery Code
+              </Btn>
+              
+              <button type="button" onClick={() => setStep('auth')} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>
+                ← Back to Login
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleForgotReset} style={{ display: 'flex', flexDirection: 'column', gap: 24, textAlign: 'center' }}>
+              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 800 }}>Create New Password</h2>
+              <p style={{ color: C.muted, fontSize: 14, marginTop: -16 }}>Enter the 6-digit code sent to {form.username}</p>
+              
+              <OTPInput onChange={v => setForm({ ...form, otp: v })} onComplete={() => {}} />
+              
+              <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 24 }}>
+                <Field label="New Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="Create a strong password" required />
+                <Field label="Confirm New Password" type="password" value={form.confirmPassword} onChange={e => setForm({ ...form, confirmPassword: e.target.value })} icon="shield-check" placeholder="Retype your new password" required />
+              </div>
+
+              {err && <div style={{ color: C.danger, fontSize: 13, background: C.danger + '10', padding: '10px 14px', borderRadius: 8, borderLeft: `3px solid ${C.danger}` }}>{err}</div>}
+              
+              <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
+                Reset & Log In
+              </Btn>
+            </form>
           )}
         </Card>
       </div>
