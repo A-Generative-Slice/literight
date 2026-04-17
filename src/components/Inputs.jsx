@@ -21,7 +21,7 @@ export const Btn = ({ onClick, children, variant = 'primary', size = 'md', full 
       onMouseDown={() => setP(true)}
       onMouseUp={() => setP(false)}
       style={{ 
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: 'none', borderRadius: 10, cursor: disabled ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', fontWeight: 700, 
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, border: 'none', borderRadius: 10, cursor: disabled ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif', fontWeight: 700, whiteSpace: 'nowrap',
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 
         transform: disabled ? 'none' : p ? 'scale(0.96)' : h ? 'scale(1.02)' : 'scale(1)',
         boxShadow: h && !disabled ? '0 10px 20px rgba(225,29,72,0.15)' : 'none',
