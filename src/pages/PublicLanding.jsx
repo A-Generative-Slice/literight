@@ -2,7 +2,6 @@ import React from 'react';
 import { C, Badge, Avatar } from '../components/Common';
 import { Btn } from '../components/Inputs';
 import Icon from '../components/Icon';
-import { LitelabHeritage } from '../components/LitelabHeritage';
 
 const PublicLanding = ({ onCourse, courses }) => (
   <div style={{ background: '#fff' }}>
@@ -25,7 +24,12 @@ const PublicLanding = ({ onCourse, courses }) => (
     </div>
 
     {/* Course Discovery - Domestika Grid Style */}
-    <div style={{ maxWidth: 1200, margin: '-60px auto 100px', padding: '0 32px', position: 'relative', zIndex: 2 }}>
+    <div style={{ maxWidth: 1200, margin: '80px auto 120px', padding: '0 32px' }}>
+      <div style={{ textAlign: 'center', marginBottom: 60 }}>
+        <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 32, fontWeight: 800, color: C.text, marginBottom: 16 }}>Academy Curriculum</h2>
+        <div style={{ width: 60, height: 4, background: C.accent, margin: '0 auto', borderRadius: 2 }} />
+      </div>
+      
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(360px,1fr))', gap: 32 }}>
         {courses?.map(course => (
           <div key={course.id} onClick={() => onCourse(course)} style={{ background: '#fff', borderRadius: 24, border: `1px solid ${C.border}`, cursor: 'pointer', overflow: 'hidden', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
@@ -54,53 +58,6 @@ const PublicLanding = ({ onCourse, courses }) => (
                 <Btn size="sm" variant="ghost" style={{ border: 'none', color: C.muted }}>Preview Syllabus →</Btn>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    {/* Educational Mission & Career Path */}
-    <div style={{ padding: '80px 32px', background: C.surface, textAlign: 'center' }}>
-      <div style={{ maxWidth: 900, margin: '0 auto' }}>
-        <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 36, fontWeight: 800, color: C.text, marginBottom: 24 }}>The Professional Path</h2>
-        <p style={{ fontSize: 18, color: C.muted, lineHeight: 1.7, marginBottom: 48 }}>
-          We don't just provide courses; we identify the next generation of architectural leaders. Litelab Academy 
-          is a direct pipeline to professional opportunities. Our top graduates are prioritized for recruitment within 
-          our global consultancy network and partner firms.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
-          {[
-            { title: 'Global Certification', desc: 'Industry-recognized credentials upon completion of our elite paths.' },
-            { title: 'Portfolio Excellence', desc: 'Work on real-world consultancy briefs to build a professional-grade portfolio.' },
-            { title: 'Job Placement', desc: 'Direct recruitment opportunities for students in the top 5% of their cohort.' }
-          ].map(p => (
-            <div key={p.title} style={{ padding: 32, background: '#fff', borderRadius: 24, border: `1px solid ${C.border}`, textAlign: 'left' }}>
-              <div style={{ width: 40, height: 40, background: C.accent, borderRadius: 10, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-                <Icon name="award" size={20} />
-              </div>
-              <h4 style={{ fontSize: 18, fontWeight: 800, marginBottom: 12 }}>{p.title}</h4>
-              <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.5 }}>{p.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    {/* Heritage Section - The Litelab Story */}
-    <LitelabHeritage />
-
-    {/* Trust & Stats Section */}
-    <div style={{ padding: '80px 32px', textAlign: 'center', background: C.text, color: '#fff' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 40, maxWidth: 1000, margin: '0 auto' }}>
-        {[
-          ['100%', 'Career Placement Rate'],
-          ['250+', 'Corporate Partners'],
-          ['Level 4', 'Professional Certificate'],
-          ['Elite', 'Certification Path']
-        ].map(([v, l]) => (
-          <div key={l}>
-            <div style={{ fontSize: 36, fontWeight: 900, fontFamily: 'Outfit, sans-serif', color: C.accent }}>{v}</div>
-            <div style={{ fontSize: 14, color: '#94a3b8', marginTop: 4, fontWeight: 600 }}>{l}</div>
           </div>
         ))}
       </div>
