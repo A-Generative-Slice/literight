@@ -24,17 +24,7 @@ export class AuthService {
     
     let user = await this.userRepository.findOne({ where: { username } });
     if (user) {
-      if (user.isVerified) {
-        throw new UnauthorizedException('Account already exists. Please log in.');
-      } else {
-        // Account exists but unverified — resend OTP, don't allow password change
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        user.otpCode = otp;
-        user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
-        await this.userRepository.save(user);
-        await this.emailService.sendOtp(user.username, otp);
-        return { requiresVerification: true, email: user.username, context: 'resend' };
-      }
+      throw new UnauthorizedException('Account already exists. Please log in.');
     }
     
     // New user
