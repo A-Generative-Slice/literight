@@ -125,6 +125,9 @@ export class AuthService {
     user.otpExpiry = undefined;
     await this.userRepository.save(user);
 
+    // Fire welcome email async (don't await — don't block login)
+    this.emailService.sendWelcome(user.username).catch(() => {});
+
     return this.generateToken(user);
   }
 
