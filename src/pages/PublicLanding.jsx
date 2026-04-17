@@ -16,6 +16,10 @@ const PublicLanding = ({ onCourse, courses }) => (
         <p style={{ fontSize: 20, color: '#94a3b8', lineHeight: 1.6, marginBottom: 44, maxWidth: 660, margin: '0 auto 44px' }}>
           Litelab is a specialist corporate consultancy delivering bespoke lighting solutions for global architectural projects. Through LiteRight Academy, we identify and train the next generation of industry leaders, providing elite certification and direct career placements.
         </p>
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
+          <Btn onClick={() => { window.scrollTo({ top: 800, behavior: 'smooth' }) }} size="lg" style={{ padding: '16px 40px', fontSize: 16 }}>Explore Curriculum</Btn>
+          <Btn variant="ghost" size="lg" style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}>Consultancy Solutions</Btn>
+        </div>
       </div>
     </div>
 
