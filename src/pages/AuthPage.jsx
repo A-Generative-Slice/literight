@@ -74,9 +74,10 @@ const ErrorBanner = ({ message }) => {
 const AuthPage = ({ onBack }) => {
   const [tab, setTab] = useState('login');
   const [step, setStep] = useState('auth');
-  const [otpContext, setOtpContext] = useState('signup'); // 'signup' | 'resend' | 'login'
+  const [otpContext, setOtpContext] = useState('signup');
   const [form, setForm] = useState({ username: '', name: '', password: '', confirmPassword: '', otp: '' });
   const [err, setErr] = useState('');
+  const [conflictModal, setConflictModal] = useState(null); // null | 'already-exists' | 'not-found'
   
   const login = useLmsStore(state => state.login);
   const signup = useLmsStore(state => state.signup);
@@ -102,7 +103,16 @@ const AuthPage = ({ onBack }) => {
     } else if (result.success) {
       // Logic handled by App.jsx through store update
     } else {
-      setErr(result.error || 'Authentication failed');
+      const msg = result.error || '';
+      const isAlreadyExists = msg.toLowerCase().includes('already exists');
+      const isNotFound = msg.toLowerCase().includes('not found') || msg.toLowerCase().includes('sign up');
+      if (isAlreadyExists) {
+        setConflictModal('already-exists');
+      } else if (isNotFound) {
+        setConflictModal('not-found');
+      } else {
+        setErr(msg || 'Authentication failed');
+      }
     }
   };
 
@@ -153,6 +163,57 @@ const AuthPage = ({ onBack }) => {
 
   return (
     <div className="md-p-4" style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+
+      {/* Conflict Modal Overlay */}
+      {conflictModal && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.65)', zIndex: 1000,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+          animation: 'fadeIn 0.2s ease'
+        }}>
+          <div style={{
+            background: '#fff', borderRadius: 20, padding: 40, maxWidth: 400, width: '100%',
+            textAlign: 'center', boxShadow: '0 32px 80px rgba(0,0,0,0.2)',
+            animation: 'fadeUp 0.3s ease'
+          }}>
+            {conflictModal === 'already-exists' ? (
+              <>
+                <div style={{ width: 64, height: 64, background: '#fff1f2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e11d48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 800, color: '#0f172a', marginBottom: 10 }}>Account Already Exists</h3>
+                <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.6, marginBottom: 28 }}>
+                  An account with <strong style={{ color: '#0f172a' }}>{form.username}</strong> is already registered.<br/>Please log in to continue.
+                </p>
+                <button
+                  onClick={() => { setConflictModal(null); setTab('login'); setErr(''); }}
+                  style={{ width: '100%', background: '#e11d48', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 0', fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 12 }}
+                >
+                  Go to Log In
+                </button>
+                <button onClick={() => setConflictModal(null)} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>Dismiss</button>
+              </>
+            ) : (
+              <>
+                <div style={{ width: 64, height: 64, background: '#fff1f2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e11d48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 800, color: '#0f172a', marginBottom: 10 }}>Account Not Found</h3>
+                <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.6, marginBottom: 28 }}>
+                  No account exists for <strong style={{ color: '#0f172a' }}>{form.username}</strong>.<br/>Create a new account to get started.
+                </p>
+                <button
+                  onClick={() => { setConflictModal(null); setTab('signup'); setErr(''); }}
+                  style={{ width: '100%', background: '#e11d48', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 0', fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 12 }}
+                >
+                  Create an Account
+                </button>
+                <button onClick={() => setConflictModal(null)} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>Dismiss</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
       <div style={{ width: '100%', maxWidth: 480 }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <Logo size="lg" />

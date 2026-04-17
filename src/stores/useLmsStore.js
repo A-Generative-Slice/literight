@@ -21,7 +21,10 @@ export const useLmsStore = create(
         axios.interceptors.response.use(
           (response) => response,
           (error) => {
-            if (error.response?.status === 401) {
+            // Only auto-logout on 401 for protected API routes, NOT for auth endpoints
+            const url = error.config?.url || '';
+            const isAuthEndpoint = url.includes('/auth/');
+            if (error.response?.status === 401 && !isAuthEndpoint) {
               get().logout();
               window.location.reload();
             }
