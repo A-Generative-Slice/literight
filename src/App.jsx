@@ -62,9 +62,9 @@ export default function App() {
     setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000);
   };
 
-  const handleEnroll = () => {
+  const handleEnroll = (tab = 'signup') => {
     if (!user) {
-      navigate('/sign-up');
+      navigate(`/sign-up?tab=${tab}`);
     } else {
       setShowPhoneModal(true);
     }

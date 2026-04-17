@@ -115,9 +115,22 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
                   <div className="md-hidden" style={{ width: 80, height: 80, background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, border: '2px solid rgba(255,255,255,0.2)' }}>
                     <Icon name="lock" size={32} color="#fff" />
                   </div>
-                  <h3 className="md-text-h2 md-mb-4" style={{ color: '#fff', fontSize: 24, fontWeight: 800, marginBottom: 12, textAlign: 'center' }}>Unlock this Lesson</h3>
-                  <p className="md-hidden" style={{ color: '#94a3b8', fontSize: 16, marginBottom: 32, textAlign: 'center', maxWidth: 360 }}>Join the academy and verify your account to access all professional curriculum content.</p>
-                  <Btn onClick={onEnroll} size="md">Verify & Enroll Now</Btn>
+                  <h3 className="md-text-h2 md-mb-4" style={{ color: '#fff', fontSize: 24, fontWeight: 800, marginBottom: 12, textAlign: 'center' }}>Unlock the Introduction Video</h3>
+                  <p className="md-hidden" style={{ color: '#94a3b8', fontSize: 15, marginBottom: 32, textAlign: 'center', maxWidth: 340, lineHeight: 1.6 }}>Create a free account or log in to access all professional curriculum content.</p>
+                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <button
+                      onClick={() => onEnroll('signup')}
+                      style={{ background: '#e11d48', color: '#fff', border: 'none', borderRadius: 10, padding: '13px 28px', fontSize: 15, fontWeight: 700, cursor: 'pointer', letterSpacing: '0.02em' }}
+                    >
+                      Sign Up — It's Free
+                    </button>
+                    <button
+                      onClick={() => onEnroll('login')}
+                      style={{ background: 'rgba(255,255,255,0.12)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.3)', borderRadius: 10, padding: '13px 28px', fontSize: 15, fontWeight: 700, cursor: 'pointer', backdropFilter: 'blur(4px)' }}
+                    >
+                      Log In
+                    </button>
+                  </div>
                 </div>
                 <img src={course.thumbnail} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }} />
               </div>

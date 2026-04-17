@@ -3,6 +3,7 @@ import { C, Logo, Card } from '../components/Common';
 import { Btn, Field } from '../components/Inputs';
 import Icon from '../components/Icon';
 import { useLmsStore } from '../stores/useLmsStore';
+import { useSearchParams } from 'react-router-dom';
 
 const OTPInput = ({ onChange, onComplete }) => {
   const len = 6;
@@ -72,7 +73,8 @@ const ErrorBanner = ({ message }) => {
 
 
 const AuthPage = ({ onBack }) => {
-  const [tab, setTab] = useState('login');
+  const [searchParams] = useSearchParams();
+  const [tab, setTab] = useState(searchParams.get('tab') === 'login' ? 'login' : 'signup');
   const [step, setStep] = useState('auth');
   const [otpContext, setOtpContext] = useState('signup');
   const [form, setForm] = useState({ username: '', name: '', password: '', confirmPassword: '', otp: '' });
