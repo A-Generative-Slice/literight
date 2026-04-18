@@ -8,6 +8,7 @@ import PublicLanding from './pages/PublicLanding';
 import CourseDetail from './pages/CourseDetail';
 import AdminDashboard from './pages/AdminPanel';
 import AuthPage from './pages/AuthPage';
+import ProfilePage from './pages/ProfilePage';
 
 // Components
 import { PublicNav } from './components/Navigation';
@@ -94,6 +95,10 @@ export default function App() {
         
         <Route path="/admin" element={
           user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/" />
+        } />
+
+        <Route path="/profile" element={
+          user ? <ProfilePage /> : <Navigate to="/sign-up" />
         } />
 
         <Route path="/logout" element={<ClearSession />} />

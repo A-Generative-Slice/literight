@@ -131,11 +131,29 @@ export class AuthService {
     return this.generateToken(user);
   }
 
+  async updateProfile(userId: number, body: any) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) throw new UnauthorizedException('User not found');
+    
+    if (body.name !== undefined) user.name = body.name;
+    if (body.dp !== undefined) user.dp = body.dp;
+
+    await this.userRepository.save(user);
+    return this.generateToken(user); // Send refresh token payload
+  }
+
   private generateToken(user: User) {
     const payload = { username: user.username, sub: user.id, role: user.role };
     return {
       access_token: this.jwtService.sign(payload),
-      user: { username: user.username, role: user.role }
+      user: { 
+        id: user.id,
+        username: user.username, 
+        role: user.role,
+        name: user.name,
+        dp: user.dp,
+        isPremium: user.isPremium
+      }
     };
   }
 }

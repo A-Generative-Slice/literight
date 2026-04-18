@@ -1,20 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { C, Badge, Card, Avatar } from '../components/Common';
 import { Btn } from '../components/Inputs';
 import Icon from '../components/Icon';
 import Syllabus from '../components/Syllabus';
 import QuizPlayer from '../components/QuizPlayer';
 import { useProgress } from '../hooks/useProgress';
+import { useLmsStore } from '../stores/useLmsStore';
 
 const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
+  const location = useLocation();
+  const { user } = useLmsStore();
   const [activeLesson, setActiveLesson] = useState(null);
+  
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const lessonId = parseInt(params.get('lessonId'));
+    if (lessonId && course?.chapters) {
+      for (const ch of course.chapters) {
+        const found = ch.lessons?.find(l => l.id === lessonId);
+        if (found) {
+          setActiveLesson({ ...found, chId: ch.id });
+          return;
+        }
+      }
+    }
+  }, [location.search, course]);
+
   const { progress, updateLessonProgress } = useProgress(course.id);
 
   const handlePassQuiz = (chId, score) => {
     updateLessonProgress(`quiz_${chId}`, 0, true);
   };
 
-  const currentContent = activeLesson?.type === 'quiz' ? (
+  const isPremiumLocked = isLoggedIn && !user?.isPremium && activeLesson && activeLesson.chId > 1;
+
+  const currentContent = isPremiumLocked ? (
+    <div className="video-wrapper" style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', background: '#0f172a', border: `1px solid ${C.border}`, boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}>
+      <div style={{ position: 'relative', paddingTop: '56.25%', width: '100%', background: '#0f172a' }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: "linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.98))", backdropFilter: 'blur(10px)', zIndex: 10 }}>
+           <div style={{ width: 64, height: 64, background: 'rgba(225,29,72,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, border: '1px solid rgba(225,29,72,0.3)' }}>
+              <Icon name="lock" size={28} color="#e11d48" />
+           </div>
+           <h3 style={{ color: 'white', fontSize: 24, fontWeight: 800, marginBottom: 8, textAlign: 'center' }}>Premium Module</h3>
+           <p style={{ color: '#94a3b8', fontSize: 15, marginBottom: 24, textAlign: 'center', maxWidth: 320 }}>This lesson is locked. Upgrade your account to Premium to access the full masterclass.</p>
+           <button onClick={() => alert('Premium Upgrade Flow Pending')} style={{ background: '#e11d48', color: '#fff', border: 'none', borderRadius: 10, padding: '12px 24px', fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+             Upgrade to Premium
+           </button>
+        </div>
+      </div>
+    </div>
+  ) : activeLesson?.type === 'quiz' ? (
     <div style={{ padding: '40px 0' }}>
       <QuizPlayer 
         quiz={activeLesson.quizData} 

@@ -23,6 +23,15 @@ export class User {
   @Column({ type: 'datetime', nullable: true })
   otpExpiry?: Date;
 
+  @Column({ nullable: true })
+  name?: string;
+
+  @Column({ nullable: true })
+  dp?: string;
+
+  @Column({ default: false })
+  isPremium: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 }
