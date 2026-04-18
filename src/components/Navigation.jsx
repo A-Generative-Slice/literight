@@ -8,6 +8,7 @@ import { useLmsStore } from '../stores/useLmsStore';
 export const PublicNav = ({ onLoginClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [drop, setDrop] = useState(false);
   const { user, logout, courses } = useLmsStore();
   const role = user?.role;
   const navigate = useNavigate();
