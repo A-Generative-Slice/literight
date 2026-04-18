@@ -88,7 +88,6 @@ export const PublicNav = ({ onLoginClick }) => {
               <div style={{ position: 'absolute', right: 0, top: '110%', background: '#fff', border: `1px solid ${C.border}`, borderRadius: 10, width: 210, boxShadow: '0 8px 24px rgba(0,0,0,0.08)', zIndex: 200, overflow: 'hidden' }}>
                 <div style={{ padding: '12px 16px', borderBottom: `1px solid ${C.border}` }}>
                   <div style={{ fontWeight: 700, fontSize: 13, color: C.text }}>{user.name || user.username}</div>
-                  <div style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>{role === 'admin' ? 'Administrator' : (user.isPremium ? 'Premium Student' : 'Student (Free)')}</div>
                 </div>
                 {role === 'admin' && (
                   <MenuItem icon="shield" label="Admin Panel" onClick={() => { setDrop(false); navigate('/admin'); }} />

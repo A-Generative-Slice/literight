@@ -145,7 +145,7 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
                 <div style={{ color: C.success, fontSize: 13, fontWeight: 700 }}>Exclusive Early Bird Offer</div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <Btn full size="lg" onClick={onEnroll}>Enroll Now — Lifetime Access</Btn>
+                <Btn full size="lg" onClick={() => onEnroll(course.id)}>Enroll Now — Lifetime Access</Btn>
                 <div style={{ textAlign: 'center', fontSize: 12, color: C.muted, marginTop: 12 }}>
                   30-Day Money-Back Guarantee
                 </div>

@@ -51,7 +51,10 @@ export default function App() {
   const navigate = useNavigate();
 
   const [showPhoneModal, setShowPhoneModal] = useState(false);
+  const [enrollCourseId, setEnrollCourseId] = useState(null);
   const [toast, setToast] = useState({ msg: '', visible: false, type: 'success' });
+
+  const { enrollInCourse } = useLmsStore();
 
   useEffect(() => {
     init();
@@ -63,17 +66,26 @@ export default function App() {
     setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000);
   };
 
-  const handleEnroll = (tab = 'signup') => {
+  const handleEnroll = (courseId, tab = 'signup') => {
     if (!user) {
       navigate(`/sign-up?tab=${tab}`);
     } else {
+      setEnrollCourseId(courseId);
       setShowPhoneModal(true);
     }
   };
 
-  const handlePhoneVerified = () => {
-    setShowPhoneModal(false);
-    showMsg('Enrollment successful! Redirecting to student dashboard...', 'success');
+  const handlePhoneVerified = async () => {
+    if (enrollCourseId) {
+      const res = await enrollInCourse(enrollCourseId);
+      if (res.success) {
+        showMsg('Enrollment successful! Redirecting to student dashboard...', 'success');
+        setShowPhoneModal(false);
+        setEnrollCourseId(null);
+      } else {
+        showMsg('Enrollment failed. Please try again.', 'danger');
+      }
+    }
   };
 
   return (

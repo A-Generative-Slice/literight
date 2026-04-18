@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param, UseGuards, Req } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CoursesService } from './courses.service';
 import { UpsertCourseDto } from './dto/upsert-course.dto';
 
@@ -19,5 +20,11 @@ export class CoursesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.coursesService.deleteCourse(+id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':id/enroll')
+  enroll(@Param('id') id: string, @Req() req: any) {
+    return this.coursesService.enrollUser(req.user.sub, +id);
   }
 }

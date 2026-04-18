@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Course } from '../../courses/entities/course.entity';
 
 @Entity()
 export class User {
@@ -31,6 +32,10 @@ export class User {
 
   @Column({ default: false })
   isPremium: boolean;
+
+  @ManyToMany(() => Course)
+  @JoinTable()
+  enrolledCourses: Course[];
 
   @CreateDateColumn()
   createdAt: Date;

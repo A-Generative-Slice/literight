@@ -6,6 +6,7 @@ import * as path from 'node:path';
 import { Course } from './entities/course.entity';
 import { Chapter } from './entities/chapter.entity';
 import { Lesson } from './entities/lesson.entity';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class CoursesService implements OnModuleInit {
@@ -18,6 +19,8 @@ export class CoursesService implements OnModuleInit {
     private chapterRepository: Repository<Chapter>,
     @InjectRepository(Lesson)
     private lessonRepository: Repository<Lesson>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async onModuleInit() {
@@ -142,5 +145,23 @@ export class CoursesService implements OnModuleInit {
 
   async deleteCourse(id: number) {
     return await this.courseRepository.delete(id);
+  }
+
+  async enrollUser(userId: number, courseId: number) {
+    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['enrolledCourses'] });
+    if (!user) throw new Error('User not found');
+    
+    const course = await this.courseRepository.findOne({ where: { id: courseId } });
+    if (!course) throw new Error('Course not found');
+    
+    if (!user.enrolledCourses) user.enrolledCourses = [];
+    
+    // Check if already enrolled
+    if (!user.enrolledCourses.find(c => c.id === courseId)) {
+      user.enrolledCourses.push(course);
+      await this.userRepository.save(user);
+    }
+    
+    return { success: true };
   }
 }

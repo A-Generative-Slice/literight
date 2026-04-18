@@ -60,7 +60,7 @@ export class AuthService {
     }
     
     // 2. Student Login
-    let user = await this.userRepository.findOne({ where: { username } });
+    let user = await this.userRepository.findOne({ where: { username }, relations: ['enrolledCourses'] });
     
     if (!user) {
       throw new UnauthorizedException('Account not found. Please sign up for a new account.');
@@ -115,7 +115,7 @@ export class AuthService {
   }
 
   async verifyOtp(email: string, code: string) {
-    const user = await this.userRepository.findOne({ where: { username: email } });
+    const user = await this.userRepository.findOne({ where: { username: email }, relations: ['enrolledCourses'] });
     if (!user || user.otpCode !== code || !user.otpExpiry || user.otpExpiry < new Date()) {
       throw new UnauthorizedException('Invalid or expired OTP');
     }
@@ -132,7 +132,7 @@ export class AuthService {
   }
 
   async updateProfile(userId: number, body: any) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['enrolledCourses'] });
     if (!user) throw new UnauthorizedException('User not found');
     
     if (body.name !== undefined) user.name = body.name;
@@ -152,7 +152,8 @@ export class AuthService {
         role: user.role,
         name: user.name,
         dp: user.dp,
-        isPremium: user.isPremium
+        isPremium: user.isPremium,
+        enrolledCourseIds: user.enrolledCourses?.map(c => c.id) || []
       }
     };
   }

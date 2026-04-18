@@ -107,6 +107,62 @@ export const useLmsStore = create(
         set({ user: null, token: null });
       },
 
+      updateProfile: async (name, dp) => {
+        set({ isLoading: true });
+        try {
+          const { token } = get();
+          const res = await axios.patch('/auth/profile', { name, dp }, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          set({ user: res.data.user, token: res.data.access_token, isLoading: false });
+          return { success: true };
+        } catch (error) {
+          set({ isLoading: false });
+          return { success: false, error: error.response?.data?.message || 'Failed to update profile' };
+        }
+      },
+
+      uploadFile: async (file) => {
+        set({ isLoading: true });
+        try {
+          const { token } = get();
+          const formData = new FormData();
+          formData.append('file', file);
+          const res = await axios.post('/uploads', formData, {
+            headers: { 
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          set({ isLoading: false });
+          return { success: true, url: res.data.url };
+        } catch (error) {
+          set({ isLoading: false });
+          return { success: false, error: 'File upload failed' };
+        }
+      },
+
+      enrollInCourse: async (courseId) => {
+        set({ isLoading: true });
+        try {
+          const { token } = get();
+          const res = await axios.post(`/courses/${courseId}/enroll`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          // After enrollment, we should probably refresh the user profile to get new enrolledCourseIds
+          // For now, let's manually update the local user object if success
+          if (res.data.success) {
+            const user = get().user;
+            const enrolledCourseIds = [...(user.enrolledCourseIds || []), courseId];
+            set({ user: { ...user, enrolledCourseIds }, isLoading: false });
+          }
+          return { success: true };
+        } catch (error) {
+          set({ isLoading: false });
+          return { success: false, error: 'Enrollment failed' };
+        }
+      },
+
       // Course Management
       fetchCourses: async () => {
         if (!get().courses.length) set({ isLoading: true });
