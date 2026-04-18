@@ -150,7 +150,7 @@ export class AuthService {
         id: user.id,
         username: user.username, 
         role: user.role,
-        name: user.name,
+        name: user.name || user.username.split('@')[0],
         dp: user.dp,
         isPremium: user.isPremium,
         enrolledCourseIds: user.enrolledCourses?.map(c => c.id) || []
