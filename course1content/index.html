@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lighting Design for Interior Spaces — Complete Course Package</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-sidebar: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --accent: #d97706;
+  --accent2: #b45309;
+  --accent-glow: rgba(217, 119, 6, 0.15);
+  --accent-blue: #2563eb;
+  --accent-green: #16a34a;
+  --accent-purple: #9333ea;
+  --accent-red: #dc2626;
+  --border: #e2e8f0;
+  --border-light: #cbd5e1;
+  --sidebar-width: 300px;
+  --topbar-height: 64px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Top Bar ─── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--topbar-height);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 24px;
+  z-index: 1000;
+}
+.topbar-brand {
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 700; font-size: 16px;
+  color: var(--accent);
+}
+.topbar-brand span { font-size: 22px; }
+.topbar-title {
+  margin-left: auto;
+  font-size: 13px; color: var(--text-muted);
+  font-weight: 400;
+}
+.menu-toggle {
+  display: none;
+  background: none; border: none; color: var(--text-primary);
+  font-size: 24px; cursor: pointer; padding: 4px 8px;
+  margin-right: 12px;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+  position: fixed; top: var(--topbar-height); left: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--topbar-height));
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 16px 0;
+  z-index: 900;
+  transition: transform 0.3s ease;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.nav-section {
+  padding: 8px 20px 4px;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+.nav-section:first-child { margin-top: 0; }
+.nav-link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 20px;
+  font-size: 13px; color: var(--text-secondary);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.nav-link:hover {
+  color: var(--text-primary);
+  background: rgba(0,0,0,0.03);
+  border-left-color: var(--border-light);
+}
+.nav-link.active {
+  color: var(--accent);
+  background: var(--accent-glow);
+  border-left-color: var(--accent);
+  font-weight: 500;
+}
+.nav-link .nav-badge {
+  margin-left: auto;
+  font-size: 10px; font-weight: 600;
+  padding: 2px 6px; border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+}
+.nav-link .nav-icon { font-size: 16px; flex-shrink: 0; }
+
+/* ─── Main Content ─── */
+.main {
+  margin-left: var(--sidebar-width);
+  margin-top: var(--topbar-height);
+  min-height: calc(100vh - var(--topbar-height));
+}
+.content {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* ─── Sections ─── */
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ─── Typography ─── */
+h1 {
+  font-size: 32px; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 8px; line-height: 1.2;
+}
+h2 {
+  font-size: 24px; font-weight: 700;
+  color: var(--text-primary);
+  margin: 40px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  font-size: 18px; font-weight: 600;
+  color: var(--accent);
+  margin: 28px 0 12px;
+}
+h4 {
+  font-size: 15px; font-weight: 600;
+  color: var(--text-primary);
+  margin: 20px 0 8px;
+}
+.subtitle {
+  font-size: 16px; color: var(--text-secondary);
+  margin-bottom: 32px; font-weight: 400;
+}
+p { margin: 12px 0; color: var(--text-secondary); }
+strong { color: var(--text-primary); font-weight: 600; }
+em { color: var(--accent); font-style: italic; }
+
+/* ─── Lists ─── */
+ul, ol { margin: 12px 0 12px 24px; color: var(--text-secondary); }
+li { margin: 6px 0; }
+li::marker { color: var(--accent); }
+
+/* ─── Tables ─── */
+table {
+  width: 100%; border-collapse: collapse;
+  margin: 16px 0; font-size: 14px;
+}
+th {
+  text-align: left; padding: 10px 14px;
+  background: var(--bg-card);
+  color: var(--accent); font-weight: 600;
+  border: 1px solid var(--border);
+  font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+td {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+tr:hover td { background: rgba(0,0,0,0.02); }
+
+/* ─── Code / Tree ─── */
+pre {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 16px 0;
+  line-height: 1.6;
+}
+code {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-card);
+  padding: 2px 6px; border-radius: 4px;
+  font-size: 13px; color: var(--accent);
+}
+
+/* ─── Callout Boxes ─── */
+.callout {
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  border-left: 4px solid;
+  font-size: 14px;
+}
+.callout-tip {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: var(--accent-green);
+  color: var(--text-secondary);
+}
+.callout-tip strong { color: var(--accent-green); }
+.callout-note {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: var(--accent-blue);
+}
+.callout-note strong { color: var(--accent-blue); }
+.callout-warning {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: var(--accent);
+}
+.callout-warning strong { color: var(--accent); }
+.callout-scene {
+  background: rgba(168, 85, 247, 0.06);
+  border-color: var(--accent-purple);
+}
+.callout-scene strong { color: var(--accent-purple); }
+
+/* ─── Script Scene Cards ─── */
+.scene-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  margin: 20px 0;
+  transition: border-color 0.2s;
+}
+.scene-card:hover { border-color: var(--border-light); }
+.scene-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.scene-num {
+  background: var(--accent);
+  color: #000; font-weight: 700;
+  font-size: 11px;
+  padding: 3px 8px; border-radius: 4px;
+}
+.scene-title {
+  font-size: 16px; font-weight: 600;
+  color: var(--text-primary);
+}
+.scene-time {
+  margin-left: auto;
+  font-size: 12px; color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+.visual-tag {
+  display: inline-block;
+  background: rgba(168, 85, 247, 0.12);
+  color: var(--accent-purple);
+  font-size: 12px; font-weight: 500;
+  padding: 4px 10px; border-radius: 4px;
+  margin-bottom: 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.scene-body { color: var(--text-secondary); line-height: 1.8; }
+.scene-body p { margin: 10px 0; }
+
+/* ─── Hero Section ─── */
+.hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+}
+.hero h1 { font-size: 38px; margin-bottom: 12px; }
+.hero .subtitle { font-size: 18px; max-width: 600px; margin: 0 auto 24px; }
+.hero-stats {
+  display: flex; justify-content: center; gap: 32px;
+  flex-wrap: wrap; margin-top: 24px;
+}
+.stat {
+  text-align: center;
+}
+.stat-num {
+  font-size: 28px; font-weight: 800;
+  color: var(--accent);
+}
+.stat-label {
+  font-size: 12px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* ─── Unit Header Cards ─── */
+.unit-header {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-card-hover));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+}
+.unit-tag {
+  display: inline-block;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  padding: 4px 10px; border-radius: 4px;
+  margin-bottom: 8px;
+}
+.tag-u1 { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+.tag-u2 { background: rgba(34,197,94,0.15); color: var(--accent-green); }
+.tag-u3 { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
+.tag-u4 { background: rgba(245,158,11,0.15); color: var(--accent); }
+
+/* ─── Checklist ─── */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding: 4px 0; }
+.checklist li::before {
+  content: '☐'; margin-right: 8px;
+  color: var(--accent); font-size: 14px;
+}
+
+/* ─── Divider ─── */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+
+/* ─── Print ─── */
+.print-btn {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--accent);
+  color: #fff; border: none;
+  padding: 14px 24px; border-radius: 50px;
+  font-weight: 600; font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(217,119,6,0.3);
+  z-index: 1100;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.print-btn:hover { transform: scale(1.05); box-shadow: 0 12px 28px rgba(217,119,6,0.4); }
+
+/* ─── Back to Top ─── */
+.back-top {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: none;
+}
+.back-top:hover { text-decoration: underline; }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .menu-toggle { display: block; }
+  .content { padding: 24px 16px 80px; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 20px; }
+  .hero h1 { font-size: 28px; }
+  .hero-stats { gap: 20px; }
+  table { font-size: 12px; }
+  th, td { padding: 8px 10px; }
+}
+@media (max-width: 500px) {
+  .hero-stats { flex-direction: column; gap: 12px; }
+  .scene-header { flex-wrap: wrap; }
+  .scene-time { margin-left: 0; margin-top: 4px; width: 100%; }
+}
+
+@media print {
+  @page { margin: 20mm; }
+  .sidebar, .topbar, .menu-toggle, .print-btn { display: none !important; }
+  
+  body { 
+    background: #fff !important; 
+    color: #000 !important; 
+    font-size: 11pt !important; 
+    line-height: 1.5 !important;
+  }
+  
+  .main { margin-left: 0 !important; margin-top: 0 !important; }
+  .content { padding: 0 !important; max-width: 100% !important; }
+  
+  .section { 
+    display: none !important; 
+  }
+  .section.active { display: block !important; page-break-before: auto; }
+  .section#home { page-break-before: avoid; }
+  
+  h1, h2, h3, h4, h5, h6 { 
+    color: #000 !important; 
+    page-break-after: avoid; 
+    page-break-inside: avoid;
+  }
+  h1 {
+    font-size: 24pt !important;
+    background: none !important;
+    -webkit-text-fill-color: #000 !important;
+    border-bottom: 2px solid #000 !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 16px !important;
+  }
+  h2 { font-size: 18pt !important; border-bottom: 1px solid #ccc !important; }
+  h3 { font-size: 14pt !important; margin-top: 16px !important; }
+  
+  p, li, td, th { color: #222 !important; orphans: 3; widows: 3; }
+  
+  table, pre, .callout, .scene-card, .unit-header { 
+    page-break-inside: avoid !important; 
+    border: 1px solid #aaa !important; 
+    background: #fff !important;
+  }
+  
+  .unit-header {
+    padding: 16px !important;
+    margin: 16px 0 !important;
+  }
+
+  .scene-card { 
+    padding: 16px !important; 
+    margin: 16px 0 !important; 
+    border-radius: 4px !important;
+  }
+  
+  .scene-header { border-bottom: 1px solid #ccc !important; padding-bottom: 8px !important; margin-bottom: 12px !important; }
+  
+  .scene-num, .visual-tag, .tag-u1, .tag-u2, .tag-u3, .tag-u4 {
+    background: #eee !important;
+    color: #333 !important;
+    border: 1px solid #ccc !important;
+  }
+  
+  th { background: #f5f5f5 !important; color: #000 !important; border: 1px solid #aaa !important; }
+  td { border: 1px solid #aaa !important; }
+  
+  a { text-decoration: none !important; color: #000 !important; }
+  .back-top { display: none !important; }
+  
+  .hero { padding: 0 !important; text-align: left !important; page-break-after: avoid; }
+  .hero-stats { justify-content: flex-start !important; }
+  .stat { text-align: left !important; }
+}
+
+/* ─── Video Space ─── */
+.video-wrapper {
+  margin: 32px 0 40px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-card);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  border: 1px solid var(--border);
+  position: relative;
+}
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  width: 100%;
+  background: #0f172a;
+}
+.video-placeholder {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(15,23,42,0.85), rgba(30,41,59,0.95)), url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop') center/cover;
+  background-blend-mode: overlay;
+}
+.play-icon {
+  width: 72px; height: 72px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 30px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 20px;
+  padding-left: 6px;
+}
+.play-icon:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.1);
+  box-shadow: 0 0 30px var(--accent-glow);
+  color: white;
+}
+.video-info {
+  color: white;
+  text-align: center;
+  z-index: 10;
+}
+.video-info h3 { margin: 0 0 8px; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 20px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.video-info h3 span { background: var(--accent); color: white; font-size: 11px; padding: 4px 8px; border-radius: 6px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-shadow: none; box-shadow: 0 4px 10px rgba(217,119,6,0.3); }
+.video-info p { margin: 0; color: #cbd5e1; font-size: 14px; font-weight: 500; }
+
+</style>
+</head>
+<body>
+
+<!-- ─── Top Bar ─── -->
+<header class="topbar">
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+  <div class="topbar-brand">
+    <span>💡</span> LiteRight Academy
+  </div>
+  <div class="topbar-title">Lighting Design — Complete Course Package</div>
+</header>
+
+<!-- ─── Sidebar Navigation ─── -->
+<nav class="sidebar" id="sidebar">
+  <div class="nav-section">Overview</div>
+  <a class="nav-link active" onclick="showSection('home')">
+    <span class="nav-icon">🏠</span> Course Home
+  </a>
+  <a class="nav-link" onclick="showSection('tree')">
+    <span class="nav-icon">🌳</span> Course Tree
+  </a>
+
+  <div class="nav-section">Full Course</div>
+  <a class="nav-link" onclick="showSection('course-m1')">
+    <span class="nav-icon">1️⃣</span> Module 1: Introduction
+    <span class="nav-badge">30m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('course-m2')">
+    <span class="nav-icon">2️⃣</span> Module 2: Light & Perception
+    <span class="nav-badge">45m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('course-m3')">
+    <span class="nav-icon">3️⃣</span> Module 3: Spatial Analysis
+    <span class="nav-badge">45m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('course-m4')">
+    <span class="nav-icon">4️⃣</span> Module 4: Conceptualization
+    <span class="nav-badge">60m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('course-m5')">
+    <span class="nav-icon">5️⃣</span> Module 5: Technique
+    <span class="nav-badge">60m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('course-m6')">
+    <span class="nav-icon">6️⃣</span> Module 6: Documentation
+    <span class="nav-badge">60m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('course-final')">
+    <span class="nav-icon">🎓</span> Final Project
+  </a>
+  <a class="nav-link" onclick="showSection('course-appendix')">
+    <span class="nav-icon">📖</span> Appendix & Glossary
+  </a>
+
+  <div class="nav-section">Synthesia Scripts — Unit 1</div>
+  <a class="nav-link" onclick="showSection('s01')">
+    <span class="nav-icon">🎬</span> 1.1 Presentation
+    <span class="nav-badge">14m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s02')">
+    <span class="nav-icon">🎬</span> 1.2 Influences
+    <span class="nav-badge">13m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s03')">
+    <span class="nav-icon">🎬</span> 1.3 Course Overview
+    <span class="nav-badge">3m</span>
+  </a>
+
+  <div class="nav-section">Synthesia Scripts — Unit 2</div>
+  <a class="nav-link" onclick="showSection('s04')">
+    <span class="nav-icon">🎬</span> 2.1 What Is Light?
+    <span class="nav-badge">11m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s05')">
+    <span class="nav-icon">🎬</span> 2.2 The Observer
+    <span class="nav-badge">8m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s06')">
+    <span class="nav-icon">🎬</span> 2.3 Materials & Objects
+    <span class="nav-badge">11m</span>
+  </a>
+
+  <div class="nav-section">Synthesia Scripts — Unit 3</div>
+  <a class="nav-link" onclick="showSection('s07')">
+    <span class="nav-icon">🎬</span> 3.1 The Concept
+    <span class="nav-badge">11m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s08')">
+    <span class="nav-icon">🎬</span> 3.2 Composition
+    <span class="nav-badge">10m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s09')">
+    <span class="nav-icon">🎬</span> 3.3 Layers & Hierarchies
+    <span class="nav-badge">6m</span>
+  </a>
+
+  <div class="nav-section">Synthesia Scripts — Unit 4</div>
+  <a class="nav-link" onclick="showSection('s10')">
+    <span class="nav-icon">🎬</span> 4.1 Light Sources
+    <span class="nav-badge">12m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s11')">
+    <span class="nav-icon">🎬</span> 4.2 Choose Source (1)
+    <span class="nav-badge">13m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s12')">
+    <span class="nav-icon">🎬</span> 4.3 Choose Source (2)
+    <span class="nav-badge">8m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s13')">
+    <span class="nav-icon">🎬</span> 4.4 Drawing the Light
+    <span class="nav-badge">17m</span>
+  </a>
+  <a class="nav-link" onclick="showSection('s14')">
+    <span class="nav-icon">🎬</span> 4.5 Representation
+    <span class="nav-badge">8m</span>
+  </a>
+</nav>
+
+<!-- ─── Main Content ─── -->
+<div class="main">
+<div class="content">
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║        HOME / LANDING PAGE          ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section active" id="home">
+  <div class="hero">
+    <h1>🔦 Lighting Design for Interior Spaces</h1>
+    <p class="subtitle">The Art &amp; Science of Lighting Design — Complete Course Package with Synthesia Video Scripts</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Modules</div></div>
+      <div class="stat"><div class="stat-num">14</div><div class="stat-label">Video Scripts</div></div>
+      <div class="stat"><div class="stat-num">4–5h</div><div class="stat-label">Course Length</div></div>
+      <div class="stat"><div class="stat-num">~2h 10m</div><div class="stat-label">Video Runtime</div></div>
+    </div>
+  </div>
+
+  <h2>What's Inside This Document</h2>
+  <p>This single HTML file contains <strong>everything</strong> for the Lighting Design course — open it in any browser on any device.</p>
+
+  <div class="unit-header">
+    <span class="unit-tag tag-u1">📋 Course Tree</span>
+    <p style="margin-top:8px">Complete structure of all 4 units, 14 videos, exact durations, and supplementary PDF resources mapped to each lesson.</p>
+  </div>
+  <div class="unit-header">
+    <span class="unit-tag tag-u2">📚 Full Course Content</span>
+    <p style="margin-top:8px">6 comprehensive modules with detailed lesson content, practical exercises, assessment activities, case studies, glossary, and a capstone final project.</p>
+  </div>
+  <div class="unit-header">
+    <span class="unit-tag tag-u3">🎬 14 Synthesia Scripts</span>
+    <p style="margin-top:8px">Scene-by-scene scripts with timecodes, [VISUAL] tags for Synthesia backgrounds, and word-for-word narration ready to paste into any AI video generator.</p>
+  </div>
+
+  <hr>
+  <h2>Quick Navigation</h2>
+  <p>Use the <strong>sidebar</strong> (☰ on mobile) to jump to any section. You can also click the rows below.</p>
+
+  <h3>Course Modules</h3>
+  <table class="nav-table">
+    <tr><th>Module</th><th>Title</th><th>Duration</th></tr>
+    <tr style="cursor:pointer;" onclick="showSection('course-m1')"><td>1</td><td>Introduction to the World of Lighting Design</td><td>30 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('course-m2')"><td>2</td><td>Understanding Light &amp; Perception</td><td>45 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('course-m3')"><td>3</td><td>Spatial Analysis — Reading a Space</td><td>45 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('course-m4')"><td>4</td><td>Conceptualization — Designing with Light</td><td>60 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('course-m5')"><td>5</td><td>Technique — Selecting &amp; Specifying Light Sources</td><td>60 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('course-m6')"><td>6</td><td>Documentation — Drawing &amp; Presenting Light</td><td>60 min</td></tr>
+  </table>
+
+  <h3>Video Scripts for Synthesia</h3>
+  <table class="nav-table">
+    <tr><th>#</th><th>Video Title</th><th>Unit</th><th>Duration</th></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s01')"><td>01</td><td>Presentation</td><td>U1</td><td>~14 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s02')"><td>02</td><td>Influences</td><td>U1</td><td>~13 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s03')"><td>03</td><td>What Will We Do on the Course?</td><td>U1</td><td>~3 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s04')"><td>04</td><td>What Is Light?</td><td>U2</td><td>~11 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s05')"><td>05</td><td>The Subject, Observer</td><td>U2</td><td>~8 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s06')"><td>06</td><td>Light, Materials, Objects</td><td>U2</td><td>~11 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s07')"><td>07</td><td>The Concept</td><td>U3</td><td>~11 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s08')"><td>08</td><td>Composition</td><td>U3</td><td>~10 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s09')"><td>09</td><td>Layers and Hierarchies</td><td>U3</td><td>~6 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s10')"><td>10</td><td>Light Sources</td><td>U4</td><td>~12 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s11')"><td>11</td><td>How to Choose a Light Source (Part 1)</td><td>U4</td><td>~13 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s12')"><td>12</td><td>How to Choose a Light Source (Part 2)</td><td>U4</td><td>~8 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s13')"><td>13</td><td>Drawing the Light</td><td>U4</td><td>~17 min</td></tr>
+    <tr style="cursor:pointer;" onclick="showSection('s14')"><td>14</td><td>Representation of Light Sources</td><td>U4</td><td>~8 min</td></tr>
+  </table>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║          COURSE TREE                ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="tree">
+  <h1>🌳 Complete Course Tree</h1>
+  <p class="subtitle">All 14 videos across 4 units with exact durations and supplementary materials</p>
+
+<pre>
+📚 <a style="cursor:pointer; color:var(--accent);" onclick="showSection('home')">LIGHTING DESIGN FOR INTERIOR SPACES</a>
+│   Total Videos: 14
+│   Total Runtime: ~2 hrs 10 mins
+│
+├── 📦 <a style="cursor:pointer; color:var(--accent-blue);" onclick="showSection('course-m1')">UNIT 1 — INTRODUCTION</a> (3 videos · ~29 min)
+│   ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s01')">1.1  Presentation</a>                         ~14 min
+│   ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s02')">1.2  Influences</a>                            ~13 min
+│   └── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s03')">1.3  What Will We Do on the Course?</a>         ~3 min
+│
+├── 📦 <a style="cursor:pointer; color:var(--accent-green);" onclick="showSection('course-m2')">UNIT 2 — THE LIGHT</a> (3 videos · ~31 min)
+│   ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s04')">2.1  What Is Light?</a>                        ~11 min
+│   ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s05')">2.2  The Subject, Observer</a>                  ~8 min
+│   └── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s06')">2.3  Light, Materials, Objects</a>             ~11 min
+│
+├── 📦 <a style="cursor:pointer; color:var(--accent-purple);" onclick="showSection('course-m3')">UNIT 3 — CONCEPTUALIZATION</a> (3 videos · ~26 min)
+│   ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s07')">3.1  The Concept</a>                           ~11 min
+│   ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s08')">3.2  Composition</a>                           ~10 min
+│   └── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s09')">3.3  Layers and Hierarchies</a>                 ~6 min
+│
+└── 📦 <a style="cursor:pointer; color:var(--accent);" onclick="showSection('course-m4')">UNIT 4 — TECHNIQUE &amp; DOCUMENTATION</a> (5 videos · ~58 min)
+    ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s10')">4.1  Light Sources</a>                         ~12 min
+    ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s11')">4.2  How to Choose a Light Source (Part 1)</a>  ~13 min
+    ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s12')">4.3  How to Choose a Light Source (Part 2)</a>   ~8 min
+    ├── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s13')">4.4  Drawing the Light</a>                     ~17 min
+    └── 📹 <a style="cursor:pointer; text-decoration:underline;" onclick="showSection('s14')">4.5  Representation of Light Sources</a>        ~8 min
+</pre>
+
+  <h2>Supplementary PDF Resources</h2>
+<pre>
+├── 📑 U2.1 → "Identify the Needs of a Space and User"
+├── 📑 U2.3 → "The Materials in the Space"
+├── 📑 U2   → "Glossary of Lighting Terms"
+├── 📑 U3.1 → "Concepts by Richard Kelly"
+├── 📑 U3.2 → "Identify Ambient Luminescence, Focal Glow, and Play of Brilliants"
+├── 📑 U3.3 → "Identify Hierarchies and Layers"
+├── 📑 U4.1 → "Describe a Light Source"
+├── 📑 U4.4 → "Drawing Light" + "How to Draw Light"
+├── 📑 U4.4 → "Example of a Conceptual Presentation for a Café"
+└── 📑 U4.5 → "Plans for Your Project"
+</pre>
+
+  <h2>Synthesia Production Notes</h2>
+  <ul>
+    <li>Use a <strong>professional, approachable avatar</strong> — consistent across all 14 videos</li>
+    <li>Break long scripts into <strong>scenes under 2 minutes each</strong> for best results</li>
+    <li>Use the <code>[VISUAL]</code> tags as <strong>slide backgrounds</strong></li>
+    <li>Synthesia avatars speak at ~<strong>150 words/minute</strong></li>
+    <li>Export at <strong>1080p minimum</strong> for LMS quality</li>
+  </ul>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║    COURSE MODULE 1                  ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="course-m1">
+  <div class="unit-header">
+    <span class="unit-tag tag-u1">Module 1</span>
+    <h1>Introduction to the World of Lighting Design</h1>
+    <p style="margin-top:4px"><strong>Duration:</strong> 30 minutes &nbsp;|&nbsp; <strong>Objective:</strong> Understand what lighting design is, why it matters, and the methodology you'll follow.</p>
+  </div>
+
+  <h2>Lesson 1.1 — What Is Lighting Design? (10 mins)</h2>
+  <p>Lighting design is the deliberate art and science of shaping how light falls within a space. It goes far beyond choosing light fixtures — it's about crafting an <strong>experience</strong>.</p>
+  <ul>
+    <li>Lighting design sits at the intersection of architecture, interior design, physics, and psychology</li>
+    <li>A lighting designer's job is to <strong>support the message of the interior architecture</strong></li>
+    <li>Professional lighting design involves three phases:
+      <ol>
+        <li><strong>Conceptualization</strong> — defining the idea, the rules, the mood</li>
+        <li><strong>Technique</strong> — choosing the right light sources and fixtures</li>
+        <li><strong>Documentation</strong> — communicating through drawings, plans, and presentations</li>
+      </ol>
+    </li>
+  </ul>
+  <div class="callout callout-tip">
+    <strong>💡 Core Principle:</strong> "We always start by conceptualizing our spaces as a black box, to which we subsequently add light."
+  </div>
+
+  <h2>Lesson 1.2 — The LumLum Methodology (10 mins)</h2>
+  <table>
+    <tr><th>Step</th><th>What You Do</th><th>Deliverable</th></tr>
+    <tr><td><strong>1. Conceptualize</strong></td><td>Define your core idea, set of rules, and the sensation you want to provoke</td><td>Mood board, concept statement, rule set</td></tr>
+    <tr><td><strong>2. Technique</strong></td><td>Select luminaires, specify their properties, understand installation</td><td>Fixture schedule, technical specifications</td></tr>
+    <tr><td><strong>3. Document</strong></td><td>Draw the light in plan, section, elevation; present to client</td><td>Drawings, conceptual presentation, plans</td></tr>
+  </table>
+
+  <h2>Lesson 1.3 — Case Study Preview: Madre Café (10 mins)</h2>
+  <p>Throughout this course, we'll reference the <strong>Madre Café</strong> project — a café in a Mexican Porfiriato-era mansion.</p>
+  <ul>
+    <li>Warm color temperature (3000K) throughout</li>
+    <li>Concept of <strong>asymmetry</strong> — balanced light from non-identical sources</li>
+    <li>Perimeter lighting to reveal wall texture</li>
+    <li>Dramatic light arch as the primary focal element</li>
+    <li>Three artificial layers + one natural layer (skylight)</li>
+    <li>LAMP Awards finalist project</li>
+  </ul>
+  <div class="callout callout-note">
+    <strong>📝 Assignment:</strong> Identify a space you'll use as your personal project. Take photos from multiple angles.
+  </div>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║    COURSE MODULE 2                  ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="course-m2">
+  <div class="unit-header">
+    <span class="unit-tag tag-u2">Module 2</span>
+    <h1>Understanding Light &amp; Perception</h1>
+    <p style="margin-top:4px"><strong>Duration:</strong> 45 minutes &nbsp;|&nbsp; <strong>Objective:</strong> Grasp the physics of light, human perception, and fundamental metrics.</p>
+  </div>
+
+  <h2>Lesson 2.1 — What Is Light? (15 mins)</h2>
+  <p>Light is electromagnetic radiation visible to the human eye (380–780 nm).</p>
+  <h4>Four Behaviors of Light on Surfaces</h4>
+  <table>
+    <tr><th>Behavior</th><th>Description</th><th>Example</th></tr>
+    <tr><td><strong>Reflection</strong></td><td>Light bounces off a surface</td><td>Mirror, polished marble</td></tr>
+    <tr><td><strong>Absorption</strong></td><td>Surface absorbs light energy</td><td>Dark matte walls</td></tr>
+    <tr><td><strong>Transmission</strong></td><td>Light passes through</td><td>Clear glass</td></tr>
+    <tr><td><strong>Refraction</strong></td><td>Light bends between materials</td><td>Prism, water surface</td></tr>
+  </table>
+  <div class="callout callout-tip">
+    <strong>💡 Key Insight:</strong> The same light source can produce completely different effects depending on the material it hits. Light design is inseparable from material design.
+  </div>
+
+  <h2>Lesson 2.2 — The Observer (15 mins)</h2>
+  <ul>
+    <li><strong>Rods</strong> — sensitive to brightness, active in low-light (scotopic vision)</li>
+    <li><strong>Cones</strong> — sensitive to color, active in well-lit conditions (photopic vision)</li>
+    <li><strong>Mesopic vision</strong> — the transition zone (dusk, dimmed interiors)</li>
+  </ul>
+  <h4>Three Types of Visual Adaptation</h4>
+  <ol>
+    <li><strong>Light adaptation</strong> — dark to bright (~5 seconds)</li>
+    <li><strong>Dark adaptation</strong> — bright to dark (up to 30 minutes)</li>
+    <li><strong>Chromatic adaptation</strong> — adjusting to different color temperatures</li>
+  </ol>
+
+  <h2>Lesson 2.3 — Scientific Metrics (15 mins)</h2>
+  <table>
+    <tr><th>Metric</th><th>Unit</th><th>What It Measures</th></tr>
+    <tr><td>Luminous Flux</td><td>Lumens (lm)</td><td>Total light output</td></tr>
+    <tr><td>Luminous Intensity</td><td>Candela (cd)</td><td>Light in a specific direction</td></tr>
+    <tr><td>Illuminance</td><td>Lux (lx)</td><td>Light landing on a surface</td></tr>
+    <tr><td>Luminance</td><td>cd/m²</td><td>Brightness as perceived</td></tr>
+    <tr><td>Watts</td><td>W</td><td>Power consumption</td></tr>
+  </table>
+  <table>
+    <tr><th>Property</th><th>What It Describes</th><th>Scale</th></tr>
+    <tr><td>CCT</td><td>How warm/cool light appears</td><td>Kelvin: 2700K=warm, 6500K=daylight</td></tr>
+    <tr><td>CRI</td><td>Color accuracy under the light</td><td>0–100 (>80 good, >90 excellent)</td></tr>
+    <tr><td>IP Rating</td><td>Dust/water resistance</td><td>IP67 > IP54</td></tr>
+    <tr><td>IK Rating</td><td>Impact resistance</td><td>Higher = tougher</td></tr>
+  </table>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║    COURSE MODULE 3                  ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="course-m3">
+  <div class="unit-header">
+    <span class="unit-tag tag-u2">Module 3</span>
+    <h1>Spatial Analysis — Reading a Space</h1>
+    <p style="margin-top:4px"><strong>Duration:</strong> 45 minutes &nbsp;|&nbsp; <strong>Objective:</strong> Systematically analyze any space and its users to establish lighting requirements.</p>
+  </div>
+
+  <h2>Lesson 3.1 — Identifying Needs of Space &amp; User (20 mins)</h2>
+  <h4>The Space Audit Checklist</h4>
+  <pre>
+SPACE PROFILE
+├── Dimensions (length × width × height, total m²)
+├── Openings (windows, doors, skylights)
+│   ├── Orientation (N/S/E/W)
+│   ├── Size and height
+│   └── Existing treatments (curtains, blinds)
+├── Existing light sources
+│   ├── Natural light patterns throughout the day
+│   └── Artificial fixtures currently installed
+├── Architectural features
+│   ├── Ceiling type (flat, vaulted, beams)
+│   ├── Wall treatments and textures
+│   └── Notable details (arches, columns, niches)
+└── Furniture layout and activity zones</pre>
+
+  <h4>The User Profile Example</h4>
+  <table>
+    <tr><th>Field</th><th>Example</th></tr>
+    <tr><td>Name</td><td>Ana Flores</td></tr>
+    <tr><td>Age</td><td>32</td></tr>
+    <tr><td>Occupation</td><td>Freelancer</td></tr>
+    <tr><td>Essential activities</td><td>Sleeping, resting</td></tr>
+    <tr><td>Work activities</td><td>Computer work at desk</td></tr>
+    <tr><td>Leisure</td><td>Reading, embroidery, watercolor, meditation</td></tr>
+  </table>
+
+  <h2>Lesson 3.2 — Materials and Light Interactions (15 mins)</h2>
+  <table>
+    <tr><th>Material</th><th>Behavior</th><th>Design Implication</th></tr>
+    <tr><td>Matte black laminate</td><td>Absorbs most light; reflects at direct angles</td><td>Needs dedicated task light</td></tr>
+    <tr><td>White blackout curtains</td><td>Blocks exterior, reflects interior light</td><td>Turns window into reflective surface</td></tr>
+    <tr><td>Dark vinyl paint</td><td>Low reflectance during day</td><td>Cloudy days need ceiling light compensation</td></tr>
+    <tr><td>Chukum plaster</td><td>Textured, enhanced by directional light</td><td>Use wall-washing; avoid flat overhead</td></tr>
+  </table>
+
+  <h2>Lesson 3.3 — Natural Light Analysis (10 mins)</h2>
+  <ul>
+    <li><strong>Solar path</strong> — how sunlight moves across your space</li>
+    <li><strong>Window orientation</strong> — North: diffuse / South: warm, direct / East: morning / West: glare</li>
+    <li><strong>Skylights</strong> — dramatic zenith source, angle changes seasonally</li>
+    <li><strong>Never design artificial lighting in isolation</strong> — start with natural light</li>
+  </ul>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║    COURSE MODULE 4                  ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="course-m4">
+  <div class="unit-header">
+    <span class="unit-tag tag-u3">Module 4</span>
+    <h1>Conceptualization — Designing with Light</h1>
+    <p style="margin-top:4px"><strong>Duration:</strong> 60 minutes &nbsp;|&nbsp; <strong>Objective:</strong> Master Richard Kelly's concepts, layers, hierarchies, and build your core concept.</p>
+  </div>
+
+  <h2>Lesson 4.1 — Richard Kelly's Three Concepts (20 mins)</h2>
+  <h3>1. Ambient Luminescence</h3>
+  <p>General, uniform background illumination. Non-directional, soft, low contrast. Makes a space feel safe and open.</p>
+  <h3>2. Focal Glow</h3>
+  <p>Directed, concentrated light on a specific area. Creates hierarchy and draws attention. Track lights, pendants, desk lamps.</p>
+  <h3>3. Play of Brilliants</h3>
+  <p>Sparkle, glitter, decorative points of light. Adds visual interest and luxury. Chandeliers, candles, neon signs.</p>
+
+  <h2>Lesson 4.2 — Layers and Hierarchies (20 mins)</h2>
+  <h4>Madre Café — 4 Layers</h4>
+  <table>
+    <tr><th>Layer</th><th>Function</th><th>Type</th></tr>
+    <tr><td>1</td><td>Light arch (primary detail)</td><td>Diffuse, warm, wall-washing</td></tr>
+    <tr><td>2</td><td>Table lighting (task)</td><td>Focal, downward, warm</td></tr>
+    <tr><td>3</td><td>Perimeter wall lighting</td><td>Indirect, texture-revealing</td></tr>
+    <tr><td>4</td><td>Skylight (natural)</td><td>Daylight, dynamic, zenith</td></tr>
+  </table>
+
+  <h2>Lesson 4.3 — Developing Your Core Concept (20 mins)</h2>
+  <p>Answer two questions: <strong>"What do I want the lighting to achieve?"</strong> and <strong>"What sensation do I want to provoke?"</strong></p>
+  <h4>Example Design Rules (Café CDMX)</h4>
+  <table>
+    <tr><th>Rule</th><th>Rationale</th></tr>
+    <tr><td>All lighting ≤ 3000K in public spaces</td><td>Intimate, textured atmosphere</td></tr>
+    <tr><td>Recessed fixtures in single-height spaces</td><td>Clean architecture</td></tr>
+    <tr><td>Suspended decorative in double/triple height</td><td>Scale and drama</td></tr>
+    <tr><td>Transition spaces use graze lighting</td><td>Wayfinding without clutter</td></tr>
+    <tr><td>Kitchen at 4000K with low glare</td><td>Functional visibility</td></tr>
+    <tr><td>Indirect wall lighting for chukum texture</td><td>Material is the hero</td></tr>
+  </table>
+  <div class="callout callout-note">
+    <strong>📝 Major Assignment:</strong> Create a concept document with: core idea (1 sentence), set of rules (5–8), mood board (8–12 images), and layer plan sketch.
+  </div>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║    COURSE MODULE 5                  ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="course-m5">
+  <div class="unit-header">
+    <span class="unit-tag tag-u4">Module 5</span>
+    <h1>Technique — Selecting &amp; Specifying Light Sources</h1>
+    <p style="margin-top:4px"><strong>Duration:</strong> 60 minutes &nbsp;|&nbsp; <strong>Objective:</strong> Select the right fixtures, understand specifications, and build a fixture schedule.</p>
+  </div>
+
+  <h2>Lesson 5.1 — Describing a Light Source (20 mins)</h2>
+  <h4>Light Source Description Framework</h4>
+  <table>
+    <tr><th>Property</th><th>Example</th></tr>
+    <tr><td>Brand &amp; Model</td><td>Tecnolite</td></tr>
+    <tr><td>Type</td><td>Recessed LED round flat panel</td></tr>
+    <tr><td>Power</td><td>10W</td></tr>
+    <tr><td>Lumens</td><td>970 lm</td></tr>
+    <tr><td>Efficacy</td><td>97 lm/W</td></tr>
+    <tr><td>CCT</td><td>3000K (soft warm)</td></tr>
+    <tr><td>CRI</td><td>82</td></tr>
+    <tr><td>Beam Angle</td><td>120°</td></tr>
+    <tr><td>Lifespan</td><td>25,000 hours</td></tr>
+    <tr><td>IP / IK Rating</td><td>IP30 / IK4</td></tr>
+  </table>
+
+  <h2>Lesson 5.2 — Fixture Types (20 mins)</h2>
+  <table>
+    <tr><th>Category</th><th>Best For</th></tr>
+    <tr><td>Recessed</td><td>Clean lines, architectural spaces</td></tr>
+    <tr><td>Surface-mounted</td><td>Renovations, solid ceilings</td></tr>
+    <tr><td>Suspended</td><td>Double-height spaces, over tables</td></tr>
+    <tr><td>Track-mounted</td><td>Galleries, retail, flexible spaces</td></tr>
+    <tr><td>Wall-mounted</td><td>Texture highlighting, corridors</td></tr>
+    <tr><td>Floor/Table</td><td>Task, decorative accents</td></tr>
+    <tr><td>LED Strip</td><td>Coves, under cabinets, architectural details</td></tr>
+  </table>
+
+  <h2>Lesson 5.3 — Color Temperature in Practice (20 mins)</h2>
+  <table>
+    <tr><th>Temperature</th><th>Feel</th><th>Use</th></tr>
+    <tr><td>2000–2200K</td><td>Candlelight</td><td>Restaurants, lounges</td></tr>
+    <tr><td>2700K</td><td>Cozy, residential</td><td>Homes, boutique hotels</td></tr>
+    <tr><td>3000K</td><td>Welcoming</td><td>Most hospitality</td></tr>
+    <tr><td>3500K</td><td>Neutral warm</td><td>Retail, galleries</td></tr>
+    <tr><td>4000K</td><td>Clean, alert</td><td>Offices, kitchens</td></tr>
+    <tr><td>5000K+</td><td>Daylight/clinical</td><td>Studios, workshops</td></tr>
+  </table>
+  <h4>Drawing Color Code</h4>
+  <table>
+    <tr><th>Color</th><th>Represents</th></tr>
+    <tr><td style="color:#4488ff">🔵 Blue</td><td>Very cold light (convenience stores)</td></tr>
+    <tr><td style="color:#ddd">⚪ White</td><td>Neutral/daylight tone (offices)</td></tr>
+    <tr><td style="color:#ffcc00">🟡 Yellow</td><td>Warm light ~3000K (restaurants)</td></tr>
+    <tr><td style="color:#ff8800">🟠 Amber</td><td>Very warm (candlelight, fire)</td></tr>
+  </table>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║    COURSE MODULE 6                  ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="course-m6">
+  <div class="unit-header">
+    <span class="unit-tag tag-u4">Module 6</span>
+    <h1>Documentation — Drawing &amp; Presenting Light</h1>
+    <p style="margin-top:4px"><strong>Duration:</strong> 60 minutes &nbsp;|&nbsp; <strong>Objective:</strong> Communicate your lighting design through drawings, diagrams, and professional presentations.</p>
+  </div>
+
+  <h2>Lesson 6.1 — The Art of Drawing Light (25 mins)</h2>
+  <h4>Light Drawing Representation Guide</h4>
+  <table>
+    <tr><th>Element</th><th>How to Represent</th></tr>
+    <tr><td>Beam (downward)</td><td>Triangular cone from fixture to surface</td></tr>
+    <tr><td>Beam (wide)</td><td>Broader triangle, fading at edges</td></tr>
+    <tr><td>Wall washing</td><td>Gradient from top to bottom on wall</td></tr>
+    <tr><td>Indirect (upward)</td><td>Cone from fixture upward, diffusing on ceiling</td></tr>
+    <tr><td>LED strip/cove</td><td>Linear gradient along architectural edge</td></tr>
+    <tr><td>Omnidirectional</td><td>Radiating circles or soft glow</td></tr>
+    <tr><td>Decorative</td><td>Small star or circle with radiating lines</td></tr>
+    <tr><td>Natural light</td><td>Wide, soft shading from window/skylight</td></tr>
+  </table>
+  <div class="callout callout-warning">
+    <strong>💡 Remember:</strong> You are drawing the <em>light</em>, not the objects. Furniture and walls are context. Light beams and glows are your actual design.
+  </div>
+
+  <h2>Lesson 6.2 — From Sketches to Plans (20 mins)</h2>
+  <h4>Three Essential Drawing Types</h4>
+  <ol>
+    <li><strong>Plan View (Top Down)</strong> — fixture locations, beam projections as circles, composition</li>
+    <li><strong>Section/Elevation (Side View)</strong> — vertical distribution, beam directions, installation heights</li>
+    <li><strong>Perspective (3D View)</strong> — atmosphere, color, how the space actually feels</li>
+  </ol>
+
+  <h2>Lesson 6.3 — Conceptual Presentation (15 mins)</h2>
+  <h4>Presentation Structure</h4>
+  <table>
+    <tr><th>Section</th><th>Content</th></tr>
+    <tr><td>Title Page</td><td>Project name, date, studio branding</td></tr>
+    <tr><td>Design Intent</td><td>Overarching goal statement</td></tr>
+    <tr><td>Core Concept</td><td>What the lighting achieves, sensation to provoke</td></tr>
+    <tr><td>Elements</td><td>Complete set of design rules</td></tr>
+    <tr><td>General Conditions</td><td>Max CCT, fixture concealment rules, etc.</td></tr>
+    <tr><td>Space-by-Space</td><td>Annotated plans + elevations + perspectives</td></tr>
+    <tr><td>Fixture References</td><td>Images of proposed fixtures</td></tr>
+    <tr><td>Materiality</td><td>Fixture-to-interior finish coordination</td></tr>
+    <tr><td>Contact</td><td>Professional contact info</td></tr>
+  </table>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║    FINAL PROJECT                    ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="course-final">
+  <h1>🎓 Final Project: Complete Lighting Design</h1>
+  <p class="subtitle">Capstone project demonstrating all skills from the course</p>
+
+  <h2>Part 1: Conceptualization (30%)</h2>
+  <ul class="checklist">
+    <li>Space &amp; User Audit</li>
+    <li>Material Catalog</li>
+    <li>Natural Light Analysis</li>
+    <li>Core Idea statement (1 sentence)</li>
+    <li>Set of Rules (5–8 rules)</li>
+    <li>Mood Board (8–12 reference images)</li>
+    <li>Richard Kelly concept identification</li>
+    <li>Layer and hierarchy plan (min 3 layers)</li>
+  </ul>
+
+  <h2>Part 2: Technique (30%)</h2>
+  <ul class="checklist">
+    <li>Fixture selection for each layer (full specs)</li>
+    <li>Color temperature plan</li>
+    <li>Justification for each fixture (linked to concept)</li>
+  </ul>
+
+  <h2>Part 3: Documentation (40%)</h2>
+  <ul class="checklist">
+    <li>Floor plan with fixture locations and symbols</li>
+    <li>2+ sections/elevations with beam distributions</li>
+    <li>1+ perspective drawing with color-coded light</li>
+    <li>Cross-section details for 2+ fixtures</li>
+    <li>Assembled conceptual presentation</li>
+  </ul>
+
+  <h2>Evaluation Criteria</h2>
+  <table>
+    <tr><th>Criterion</th><th>Weight</th><th>Description</th></tr>
+    <tr><td>Concept Coherence</td><td>25%</td><td>Does the core idea drive every decision?</td></tr>
+    <tr><td>Technical Accuracy</td><td>20%</td><td>Properly specified fixtures? Appropriate levels?</td></tr>
+    <tr><td>Communication Quality</td><td>25%</td><td>Clear, labeled, understandable drawings?</td></tr>
+    <tr><td>Creativity</td><td>15%</td><td>Original thinking and sensitivity?</td></tr>
+    <tr><td>Completeness</td><td>15%</td><td>All deliverables present and thorough?</td></tr>
+  </table>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║    APPENDIX                         ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div class="section" id="course-appendix">
+  <h1>📖 Appendix &amp; Glossary</h1>
+
+  <h2>Quick Reference Glossary</h2>
+  <table>
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td>Ambient luminescence</td><td>General, uniform background illumination</td></tr>
+    <tr><td>Beam angle</td><td>The cone of light emitted by a directional fixture</td></tr>
+    <tr><td>Candela (cd)</td><td>Unit of luminous intensity in a direction</td></tr>
+    <tr><td>CCT</td><td>Correlated Color Temperature — Kelvin scale</td></tr>
+    <tr><td>CRI</td><td>Color Rendering Index — accuracy of color appearance</td></tr>
+    <tr><td>Focal glow</td><td>Directed, concentrated light on a specific area</td></tr>
+    <tr><td>Glare</td><td>Excessive brightness causing discomfort</td></tr>
+    <tr><td>Grazing</td><td>Light aimed parallel to surface to reveal texture</td></tr>
+    <tr><td>IP Rating</td><td>Ingress Protection — resistance to dust/water</td></tr>
+    <tr><td>IK Rating</td><td>Impact protection for enclosures</td></tr>
+    <tr><td>LED</td><td>Light Emitting Diode</td></tr>
+    <tr><td>Lumen (lm)</td><td>Unit of total light output</td></tr>
+    <tr><td>Luminaire</td><td>Complete light fixture (housing + lamp + optics)</td></tr>
+    <tr><td>Luminance</td><td>Brightness as perceived by the eye (cd/m²)</td></tr>
+    <tr><td>Lux (lx)</td><td>Unit of illuminance (1 lumen per m²)</td></tr>
+    <tr><td>OLED</td><td>Organic LED (thin-film, diffuse panel)</td></tr>
+    <tr><td>Play of brilliants</td><td>Sparkle and decorative points of light</td></tr>
+    <tr><td>UGR</td><td>Unified Glare Rating</td></tr>
+    <tr><td>Wall-washing</td><td>Uniform illumination of a wall surface</td></tr>
+    <tr><td>Watts (W)</td><td>Unit of electric power consumption</td></tr>
+  </table>
+
+  <h2>Recommended Study References</h2>
+  <ul>
+    <li><strong>Designers:</strong> Licht Kunst Licht, LD Studio, L'Observatoire International, LumLum</li>
+    <li><strong>Projects:</strong> The Vessel (NYC), Museu Do Amanha (Rio), Madre Café (CDMX)</li>
+    <li><strong>Awards:</strong> LAMP Awards, IES Awards, iGuzzini Awards</li>
+    <li><strong>Standards:</strong> ANSI/IES LS-1-20, IDA Dark Sky guidelines</li>
+    <li><strong>Glossary Sources:</strong> ERCO, FLOS, IDA, IES, Lighting Research Center</li>
+  </ul>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════╗ -->
+<!-- ║     SYNTHESIA SCRIPTS — ALL 14 VIDEOS           ║ -->
+<!-- ╚══════════════════════════════════════════════════╝ -->
+
+<!-- SCRIPT 01 -->
+<div class="section" id="s01">
+  <div class="unit-header"><span class="unit-tag tag-u1">Unit 1 · Video 1.1</span><h1>🎬 Presentation</h1><p style="margin-top:4px">Duration: ~14 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 1.1</span> Presentation</h3>
+          <p>~14 min</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Welcome</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Avatar in warmly lit studio. Title card]</div><div class="scene-body"><p>Welcome to "Lighting Design for Interior Spaces." I'm thrilled to have you here. In this course, you'll learn to see light not as something you take for granted, but as a powerful design material — one that can transform any space from ordinary to extraordinary.</p><p>I'm a lighting designer and the founder of a lighting design studio. At my studio, we create spaces of light. We design lighting for restaurants, offices, residences, galleries, and public buildings. But more than that, we craft experiences. Because every space tells a story, and light is the narrator.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">My Journey into Lighting</span><span class="scene-time">0:30–3:00</span></div><div class="visual-tag">[VISUAL: Architectural spaces, universities, design studios]</div><div class="scene-body"><p>Let me share how I got here. I studied architecture, but during my studies, I discovered that light was what truly fascinated me. I realized that a beautiful building without thoughtful lighting is only half-finished. Light gives architecture its voice.</p><p>After graduating, I started exploring lighting professionally. In Mexico, the field of lighting design wasn't as established as in Europe or Japan — there weren't many dedicated lighting design firms. So I had to carve my own path.</p><p>I began writing about light. One of my earliest works focused on light pollution in Mexico City — a topic very few were addressing at the time. That paper actually won me a prize: an opportunity to present at a conference in Germany.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">The World of Light Opens Up</span><span class="scene-time">3:00–5:30</span></div><div class="visual-tag">[VISUAL: Conference halls, lighting exhibitions, scientific diagrams]</div><div class="scene-body"><p>That trip to Germany was a turning point. At the conference, I discovered the incredible breadth of the lighting world. It's not just about architecture — it involves scientists studying the human eye and how we perceive light. There are experts in perception, psychology, luminaire development, laser technology. There are so many ways to study and work with light.</p><p>That's when I knew: this was my world. I was going to dedicate my career to lighting design. When I returned, I founded my studio with a clear mission: to bring the culture of light to every project we touched.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Self-Managed Projects</span><span class="scene-time">5:30–9:00</span></div><div class="visual-tag">[VISUAL: Gallery spaces, light installations, sun paths]</div><div class="scene-body"><p>One of the most important things I've learned is the power of self-managed projects. I created a project called "There's No Place Like Home" — an on-site intervention in an empty architectural space, essentially a bare gray shell.</p><p>My goal was to channel natural light into this space and explore how sunlight interacted with the environment. We built structures specifically to trap and redirect sunlight. We painted surfaces in specific colors that altered how the interior perceived sunlight. We also added one artificial light source to create contrast and observe the difference between static artificial light and the ever-moving natural light.</p><p>This was a self-funded project. Part of the budget came from my own pocket, part from a sponsoring mentor who saw the intention behind the work, and part from the gallery. The investment paid off in ways money can't measure.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Documentation &amp; Awards</span><span class="scene-time">9:00–12:00</span></div><div class="visual-tag">[VISUAL: LAMP Awards ceremony, European cities, project photos]</div><div class="scene-body"><p>When we finished the project, we documented everything. Documentation is crucial. We took photographs, invited guests, organized tours. During some tours, I explained how sunlight moved through the space — because most people see sunlight every day but never stop to understand what's happening.</p><p>I submitted this project to the LAMP Awards, one of the most prestigious lighting design competitions in the world. And we became finalists. When I arrived in Spain, I discovered my competition wasn't just individual designers — these were entire companies with 50, even 200 employees. We were the only Latin Americans among the finalists.</p><p>We didn't win the grand prize. But the experience taught me that the intention of the light is what truly matters, not the size of your company or budget.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">What We Do &amp; Transition</span><span class="scene-time">12:00–14:00</span></div><div class="visual-tag">[VISUAL: Studio portfolio — restaurants, offices, public spaces]</div><div class="scene-body"><p>If you want to achieve success in this field, you must invest in your work. Document everything. Enter competitions. Push boundaries. No one is going to demand this work from you except yourself.</p><p>At my studio, I have the freedom to do everything I enjoy: lighting design, crafting spaces with light, and creating custom luminaires. The journey hasn't always been straightforward — at the beginning, the path wasn't clear. But now I am very happy with what we do.</p><p>Now that you know who I am and what I'm dedicated to, join me in the next lesson where I'll talk about my influences — the designers and artists who have shaped my approach to light.</p></div></div>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+<!-- SCRIPT 02 -->
+<div class="section" id="s02">
+  <div class="unit-header"><span class="unit-tag tag-u1">Unit 1 · Video 1.2</span><h1>🎬 Influences</h1><p style="margin-top:4px">Duration: ~13 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 1.2</span> Influences</h3>
+          <p>~13 min</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Introduction</span><span class="scene-time">0:00–1:00</span></div><div class="visual-tag">[VISUAL: Avatar in studio. Title card: "My Influences"]</div><div class="scene-body"><p>Every designer is shaped by the people who inspire them. In this lesson, I want to share the artists, designers, and thinkers who have profoundly influenced my approach to lighting design. I've selected five key influences — some are lighting designers, some are artists, and some work at the intersection of light, color, and perception.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">James Turrell</span><span class="scene-time">1:00–3:30</span></div><div class="visual-tag">[VISUAL: Turrell's installations — Roden Crater, sky spaces]</div><div class="scene-body"><p>First, James Turrell. Turrell is an American artist who works directly with light and space. His work doesn't just use light as illumination — light IS the medium. He creates installations where you literally cannot tell where the light begins and the wall ends.</p><p>In his sky spaces, the sky becomes a canvas of changing light. You sit watching the sky shift from blue to purple to deep orange, and your entire understanding of light changes. Turrell teaches us that light is not just a tool for visibility — it's a material as powerful as concrete, glass, or steel.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Olafur Eliasson</span><span class="scene-time">3:30–5:30</span></div><div class="visual-tag">[VISUAL: Weather Project, Your Rainbow Panorama]</div><div class="scene-body"><p>Next, Olafur Eliasson — a Danish-Icelandic artist who creates large-scale public installations. His most famous work, "The Weather Project" at the Tate Modern, created an artificial sun inside a massive turbine hall. Thousands of visitors lay on the floor gazing upward.</p><p>What I admire most is the public nature of his work. His art is accessible to everyone. He takes the conversation about light out of galleries and into civic spaces. This idea — that good lighting should serve everyone — deeply influences my approach.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Hella Jongerius</span><span class="scene-time">5:30–8:30</span></div><div class="visual-tag">[VISUAL: Color Catchers, Breathing Colors exhibition]</div><div class="scene-body"><p>Hella Jongerius is a Dutch designer and director of color research at Vitra. Her project "Breathing Colors" includes "Color Catchers" — large faceted vessels that reveal different colors depending on the angle of light.</p><p>The color doesn't change. The surface doesn't change. What changes is the angle of the light. This demonstrates: color is not constant, light is not constant, observers are not constant. When we delve into color, we're inherently discussing light. Every surface is a partnership between material and light.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Kaoru Mende</span><span class="scene-time">8:30–12:30</span></div><div class="visual-tag">[VISUAL: LPA projects, Light Detectives, nighttime cities]</div><div class="scene-body"><p>Kaoru Mende is a Japanese lighting designer and director of Lighting Planners Associates. He runs "Light Detectives" — a project where they tour cities at night, photograph, and analyze the quality of light. They explore how culture affects the image of a city after dark.</p><p>From Mende, I learned the concept of <strong>heroes and villains of light</strong>. A "hero" might be a subtle candle creating intimacy. A "villain" is harsh light that blinds you, or prevents you from feeling anonymous in a bar that should feel mysterious. This concept is one of the most practical tools I use when evaluating any space.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Resources &amp; Transition</span><span class="scene-time">12:30–13:00</span></div><div class="visual-tag">[VISUAL: Avatar with resource links]</div><div class="scene-body"><p>I've added links to all of these designers in the resources area. Spend time studying their work — it will transform how you see the world. Now join me in the next lesson where we'll discuss our roadmap, methodology, and final project.</p></div></div>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+<!-- SCRIPT 03 -->
+<div class="section" id="s03">
+  <div class="unit-header"><span class="unit-tag tag-u1">Unit 1 · Video 1.3</span><h1>🎬 What Will We Do on the Course?</h1><p style="margin-top:4px">Duration: ~3 min · 3 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 1.3</span> What Will We Do on the Course?</h3>
+          <p>~3 min</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Course Roadmap</span><span class="scene-time">0:00–1:00</span></div><div class="visual-tag">[VISUAL: Animated roadmap showing 3 pillars]</div><div class="scene-body"><p>Taking this course brings you closer to the culture of light. First, you'll learn what light is and how we perceive it, along with basic architectural lighting techniques. I'll share how we solve our projects using three parts: conceptualization, technique, and documentation.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">The Three Parts</span><span class="scene-time">1:00–2:00</span></div><div class="visual-tag">[VISUAL: Animated icons for each part]</div><div class="scene-body"><p>In <strong>conceptualization</strong>, you'll define your lighting project — your core idea, set of rules, and the sensation you want to provoke. You'll observe material properties and use them for your design.</p><p>In <strong>technique</strong>, you'll learn what a luminaire is, how to select one, and sometimes how to create your own custom fixtures.</p><p>In <strong>documentation</strong>, you'll learn to draw luminaires in plan and section, explain hierarchies and layers to clients, and graphically communicate your core idea.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Case Study &amp; Final Project</span><span class="scene-time">2:00–3:00</span></div><div class="visual-tag">[VISUAL: Madre Café images, floor plans]</div><div class="scene-body"><p>Throughout this course, I'll discuss the <strong>Madre Café</strong> project — situated in a mansion from the Mexican Porfiriato era. For your final project, you'll enhance a space layout with your lighting concepts, following all three steps.</p><p>One important principle: we always start by conceptualizing our spaces as a black box, to which we subsequently add light. Now join me in the next unit where I'll explain what light is.</p></div></div>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+<!-- SCRIPT 04 -->
+<div class="section" id="s04">
+  <div class="unit-header"><span class="unit-tag tag-u2">Unit 2 · Video 2.1</span><h1>🎬 What Is Light?</h1><p style="margin-top:4px">Duration: ~11 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 2.1</span> What Is Light?</h3>
+          <p>~11 min</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Electromagnetic spectrum graphic]</div><div class="scene-body"><p>Welcome to Unit 2. Before we can design with light, we need to understand what it is, how it behaves, and how we measure it.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">The Nature of Light</span><span class="scene-time">0:30–2:30</span></div><div class="visual-tag">[VISUAL: Wave animations, prism dispersing white light]</div><div class="scene-body"><p>Light is electromagnetic radiation — the narrow band our eyes can detect, from 380 nanometers (violet) to 780 nanometers (red). Different light sources emit different spectral distributions. A warm incandescent emphasizes red and yellow wavelengths. A cool LED emphasizes blue. This spectral content affects how colors appear in our spaces.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Units of Measurement</span><span class="scene-time">2:30–6:00</span></div><div class="visual-tag">[VISUAL: Animated measurement diagrams]</div><div class="scene-body"><p><strong>Luminous intensity</strong> (candelas) — light in a particular direction. <strong>Luminous flux</strong> (lumens) — total light output in all directions. Think of lumens as miles traveled, watts as fuel consumption.</p><p><strong>Illuminance</strong> (lux) — light landing on a surface. One lux = one lumen per square meter. This is what regulations specify. <strong>Luminance</strong> (candelas per m²) — light perceived by the eye. This is subjective — each observer perceives it differently.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Two Currents of Design</span><span class="scene-time">6:00–9:00</span></div><div class="visual-tag">[VISUAL: Split screen — regulatory vs. perceptual]</div><div class="scene-body"><p>There are two currents in lighting design. <strong>The regulatory current</strong> — meeting lux standards, calculations, compliance. <strong>The perceptual current</strong> — how the space actually feels. You can meet every regulation perfectly and still create a terrible space. Regulations deal with illuminance (what hits the surface). Perception deals with luminance (what the eye experiences).</p><p>We use both tools: technical calculations for compliance, plus on-site tests for perception. Measurements are made for regulations; perception is made for humans.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">The Importance of Testing</span><span class="scene-time">9:00–10:30</span></div><div class="visual-tag">[VISUAL: On-site testing, comparing renders to reality]</div><div class="scene-body"><p>You cannot design light entirely from behind a screen. Renders can be adjusted — levels tweaked, luminaires added. But that's not genuine light. Before installing any fixture, we request samples, test on-site, and show clients how fixtures will actually look. The sensation matters more than the specification.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Transition</span><span class="scene-time">10:30–11:00</span></div><div class="visual-tag">[VISUAL: Avatar on screen]</div><div class="scene-body"><p>Join me next where we'll explore how the human observer sees and interprets light — the subject and the observer.</p></div></div>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+<!-- SCRIPT 05-14: Using a compact format for the remaining scripts -->
+<div class="section" id="s05">
+  <div class="unit-header"><span class="unit-tag tag-u2">Unit 2 · Video 2.2</span><h1>🎬 The Subject, Observer</h1><p style="margin-top:4px">Duration: ~8 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 2.2</span> The Subject, Observer</h3>
+          <p>~8 min</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Eye diagram]</div><div class="scene-body"><p>We've talked about what light is. But there's a critical piece: the person experiencing it. The observer is just as important as the light source.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">The Human Eye</span><span class="scene-time">0:30–2:30</span></div><div class="visual-tag">[VISUAL: Anatomical eye diagram, rods and cones]</div><div class="scene-body"><p><strong>Rods</strong> — sensitive to brightness, active in low-light (scotopic vision, night vision). <strong>Cones</strong> — sensitive to color, active in well-lit conditions (photopic vision, full color). Between them: <strong>mesopic vision</strong> — the transitional state at dusk, in dimmed restaurants. Most interior environments operate here, where perception is most complex and interesting.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Visual Adaptation</span><span class="scene-time">2:30–4:30</span></div><div class="visual-tag">[VISUAL: Dark to bright transitions animated]</div><div class="scene-body"><p><strong>Light adaptation</strong> (dark to bright) — fast, ~5 seconds. <strong>Dark adaptation</strong> (bright to dark) — slow, up to 30 minutes. <strong>Chromatic adaptation</strong> — adjusting to different color temperatures. The transition from a bright lobby to a dim restaurant isn't accidental — it's designed. The moment of dark adaptation becomes part of the experience.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">The Active Interpreter</span><span class="scene-time">4:30–6:30</span></div><div class="visual-tag">[VISUAL: Same room, different people, different activities]</div><div class="scene-body"><p>The observer is not passive. The same room lit identically can feel different to a 25-year-old and a 70-year-old — the lens yellows with age, requiring more light. A designer designing only for their own eyes designs for one person.</p><p>Consider a bedroom: desk work needs high-quality directional light. Reading needs warm, focused light. Meditation may require near-darkness. Each activity demands different lighting.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Perception vs. Measurement</span><span class="scene-time">6:30–7:30</span></div><div class="visual-tag">[VISUAL: Two rooms, identical lux, different feelings]</div><div class="scene-body"><p>Two rooms with identical 500 lux readings can feel completely different. Warm indirect light on wood feels cozy. Cool direct light on white feels clinical. Illuminance = quantity. Perception = quality. We design for quality.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Transition</span><span class="scene-time">7:30–8:00</span></div><div class="visual-tag">[VISUAL: Avatar]</div><div class="scene-body"><p>Next: what happens when light meets materials and objects — how surfaces react to light and why material selection is inseparable from lighting design.</p></div></div>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+<div class="section" id="s06">
+  <div class="unit-header"><span class="unit-tag tag-u2">Unit 2 · Video 2.3</span><h1>🎬 Light, Materials, Objects</h1><p style="margin-top:4px">Duration: ~11 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 2.3</span> Light, Materials, Objects</h3>
+          <p>~11 min</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Material samples]</div><div class="scene-body"><p>Now comes the crucial third element: the surfaces and materials that light interacts with. Understanding material-light interactions is the foundation of every design decision.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">How Light Behaves on Surfaces</span><span class="scene-time">0:30–2:30</span></div><div class="visual-tag">[VISUAL: Animated reflection, absorption, transmission, refraction]</div><div class="scene-body"><p><strong>Reflection</strong> — specular (mirror), diffuse (matte), spread (satin). <strong>Absorption</strong> — dark materials absorb more. <strong>Transmission</strong> — clear glass vs. frosted glass. <strong>Refraction</strong> — light bends between materials. Every surface does some combination simultaneously. Your job is to predict and orchestrate these interactions.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Material Properties Matter</span><span class="scene-time">2:30–5:00</span></div><div class="visual-tag">[VISUAL: Same light on different materials]</div><div class="scene-body"><p>A <strong>matte black desk</strong> photographed from two angles shows completely different results — reflecting from above, absorbing from the side. <strong>White blackout curtains</strong> block exterior light but bounce interior light. <strong>Dark vinyl paint</strong> absorbs excess on sunny days but feels somber on cloudy days. You must visit your space at different times of day.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Texture and Directionality</span><span class="scene-time">5:00–7:30</span></div><div class="visual-tag">[VISUAL: Wall-washing vs. flat light on textured surfaces]</div><div class="scene-body"><p>Directional light reveals texture. Diffuse light hides it. <strong>Chukum plaster</strong> lit from the front looks plain. Graze it — aim light parallel to the wall — and every grain casts a tiny shadow. The surface comes alive. At Madre Café, our chukum walls were the hero, lit with warm indirect wall-washing.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Your Material Audit</span><span class="scene-time">7:30–9:30</span></div><div class="visual-tag">[VISUAL: Material audit worksheet]</div><div class="scene-body"><p>For your project space, document: What is the material? What is the finish? What color? How does it react to light? Photograph under morning, afternoon, and evening light. This catalog becomes essential for fixture selection.</p></div></div>
+  <div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Transition</span><span class="scene-time">9:30–11:00</span></div><div class="visual-tag">[VISUAL: Avatar]</div><div class="scene-body"><p>We've covered light, the observer, and materials. In the next unit, we begin conceptualization — shaping everything into a design concept.</p></div></div>
+  <a class="back-top" onclick="showSection('home')">← Back to Home</a>
+</div>
+
+<div class="section" id="s07"><div class="unit-header"><span class="unit-tag tag-u3">Unit 3 · Video 3.1</span><h1>🎬 The Concept</h1><p style="margin-top:4px">Duration: ~11 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 3.1</span> The Concept</h3>
+          <p>~11 min</p>
+        </div>
+      </div>
+    </div>
+  </div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Atmospheric background]</div><div class="scene-body"><p>Welcome to Unit 3: Conceptualization. This is where the real design begins. You'll learn Richard Kelly's foundational concepts and how to translate client needs into the language of light.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">Richard Kelly's Three Categories</span><span class="scene-time">0:30–4:00</span></div><div class="visual-tag">[VISUAL: Photos illustrating each category]</div><div class="scene-body"><p><strong>1. Ambient Luminescence</strong> — general, uniform background. Safe, navigable, open. Cove lighting, indirect LED strips.</p><p><strong>2. Focal Glow</strong> — directed, concentrated. Creates hierarchy. Track lights, pendants, desk lamps.</p><p><strong>3. Play of Brilliants</strong> — sparkle, glitter, decorative. Luxury and energy. Chandeliers, candles, neon.</p><p>Every well-lit space uses all three. A cozy restaurant: high ambient, medium focal, high brilliants. A modern office: high ambient, high focal, low brilliants.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Translating Client Needs</span><span class="scene-time">4:00–7:00</span></div><div class="visual-tag">[VISUAL: Client conversation scenario]</div><div class="scene-body"><p>When a client says "cozy," you must understand their definition. Translate sensations into lighting language. For Madre Café: directed beams, warm temperatures between 2,700 and 3,000 Kelvin, playing between day and night light.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Color Temperature as Concept Tool</span><span class="scene-time">7:00–9:30</span></div><div class="visual-tag">[VISUAL: Kelvin scale with spaces]</div><div class="scene-body"><p>2,000K: candlelight. 2,700K: residential. 3,000K: hospitality. 4,000K: offices. Consider materials: 5,000K on gray concrete looks clean. 3,000K on gray concrete looks brownish and dirty. Material and temperature must work together.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Automation</span><span class="scene-time">9:30–10:30</span></div><div class="visual-tag">[VISUAL: Smart control systems]</div><div class="scene-body"><p>Lighting concepts aren't static. At Madre Café, lights auto-on at 8 AM at low level, increase as sun intensifies, dim to 30% at sunset. Your concept should account for how lighting will be operated.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Transition</span><span class="scene-time">10:30–11:00</span></div><div class="visual-tag">[VISUAL: Avatar]</div><div class="scene-body"><p>Next: composition — arranging light elements for visual harmony, drama, and meaning.</p></div></div><a class="back-top" onclick="showSection('home')">← Back to Home</a></div>
+
+<div class="section" id="s08"><div class="unit-header"><span class="unit-tag tag-u3">Unit 3 · Video 3.2</span><h1>🎬 Composition</h1><p style="margin-top:4px">Duration: ~10 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 3.2</span> Composition</h3>
+          <p>~10 min</p>
+        </div>
+      </div>
+    </div>
+  </div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Beautifully lit interiors]</div><div class="scene-body"><p>Now we learn to compose light — arranging elements for rhythm, balance, drama, and coherence.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">What Is Composition?</span><span class="scene-time">0:30–2:30</span></div><div class="visual-tag">[VISUAL: Well-composed vs. poorly composed spaces]</div><div class="scene-body"><p>Like photography or music, it's arranging elements into a unified whole. But light is invisible until it hits something. The space between light and shadow is where composition lives. Too much = flat. Too little = confusing. The magic is in the balance.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Principles</span><span class="scene-time">2:30–5:30</span></div><div class="visual-tag">[VISUAL: Animated diagrams of each principle]</div><div class="scene-body"><p><strong>Scale &amp; Proportion</strong> — match fixtures to space size. <strong>Rhythm &amp; Repetition</strong> — repeating elements guide the eye. <strong>Contrast</strong> — your most powerful tool; light needs shadow. <strong>Balance</strong> — doesn't mean symmetry; Madre Café was all about asymmetry. <strong>Direction</strong> — top-down feels natural; up-lighting dramatic; side-lighting reveals texture.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">The Black Box Approach</span><span class="scene-time">5:30–7:30</span></div><div class="visual-tag">[VISUAL: Black room with lights added one by one]</div><div class="scene-body"><p>Start with complete darkness. Add your first element — natural light from a window. Then a pendant. Then an LED strip. Always asking: does this support my concept? This subtractive thinking — building from darkness — is the opposite of most people's approach.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Madre Café Composition</span><span class="scene-time">7:30–9:30</span></div><div class="visual-tag">[VISUAL: Floor plans with lighting annotations]</div><div class="scene-body"><p>First: natural light from skylight and pivoting door. Second: the light arch (primary detail). Third: downlighting on tables. Fourth: perimeter wall-washing. Four layers, each with clear function and hierarchy. The arch draws the eye first.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Transition</span><span class="scene-time">9:30–10:00</span></div><div class="visual-tag">[VISUAL: Avatar]</div><div class="scene-body"><p>Next: formalizing layers and hierarchies — the structural framework that makes composition repeatable.</p></div></div><a class="back-top" onclick="showSection('home')">← Back to Home</a></div>
+
+<div class="section" id="s09"><div class="unit-header"><span class="unit-tag tag-u3">Unit 3 · Video 3.3</span><h1>🎬 Layers and Hierarchies</h1><p style="margin-top:4px">Duration: ~6 min · 5 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 3.3</span> Layers and Hierarchies</h3>
+          <p>~6 min</p>
+        </div>
+      </div>
+    </div>
+  </div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Layered lighting diagram]</div><div class="scene-body"><p>If composition is the art, layers and hierarchies are the engineering. Two of the most practical tools in your toolkit.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">What Are Layers?</span><span class="scene-time">0:30–2:00</span></div><div class="visual-tag">[VISUAL: Separate layers stacked]</div><div class="scene-body"><p>Layers are independent groups of light, each controllable separately. Like tracks in music. Ambient, Task, Accent, Decorative, Natural. Not every space needs five — a bedroom might need three, a museum six.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">What Are Hierarchies?</span><span class="scene-time">2:00–3:30</span></div><div class="visual-tag">[VISUAL: Same space with different lights emphasized]</div><div class="scene-body"><p>Hierarchy determines where the eye goes first. Established through contrast. A candle in a dark room has enormous hierarchy. The same candle in sunlight has zero. Context creates hierarchy.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Madre Café Layers</span><span class="scene-time">3:30–5:00</span></div><div class="visual-tag">[VISUAL: Color-coded layer diagram]</div><div class="scene-body"><p>Layer 1: Light arch (primary). Layer 2: Table downlights (secondary). Layer 3: Wall washing (tertiary). Layer 4: Skylight (dynamic natural). During bright afternoon, Layers 1–3 at 30%. After sunset, 100%.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Assignment &amp; Transition</span><span class="scene-time">5:00–6:00</span></div><div class="visual-tag">[VISUAL: Assignment checklist]</div><div class="scene-body"><p>Define your layers (minimum 3). Identify primary, secondary, tertiary. Document as a color-coded diagram. Next unit: technique — fixtures, light sources, and practical tools.</p></div></div><a class="back-top" onclick="showSection('home')">← Back to Home</a></div>
+
+<div class="section" id="s10"><div class="unit-header"><span class="unit-tag tag-u4">Unit 4 · Video 4.1</span><h1>🎬 Light Sources</h1><p style="margin-top:4px">Duration: ~12 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 4.1</span> Light Sources</h3>
+          <p>~12 min</p>
+        </div>
+      </div>
+    </div>
+  </div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Various fixtures]</div><div class="scene-body"><p>Welcome to Unit 4. We've conceptualized our design. Now let's get practical with light source technologies.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">Technologies</span><span class="scene-time">0:30–3:30</span></div><div class="visual-tag">[VISUAL: Animated comparisons]</div><div class="scene-body"><p><strong>Incandescent</strong> — heated filament, warm, 90% energy becomes heat. <strong>Halogen</strong> — improved incandescent, 25% more efficient. <strong>Fluorescent</strong> — UV converted to visible light, efficient. <strong>LED</strong> — semiconductor, dominant technology, 25,000–50,000 hours. <strong>OLED</strong> — thin-film panels, soft diffuse light, emerging tech.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Luminaire Components</span><span class="scene-time">3:30–6:00</span></div><div class="visual-tag">[VISUAL: Exploded luminaire diagram]</div><div class="scene-body"><p>The lamp/module (light source), housing (enclosure + heat management), optics (lenses, reflectors, diffusers that shape the beam), driver (converts voltage for LEDs, enables dimming), and mounting system (recessed, surface, suspended, track, free-standing).</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Key Specifications</span><span class="scene-time">6:00–9:00</span></div><div class="visual-tag">[VISUAL: Spec sheet walkthrough]</div><div class="scene-body"><p>Watts (power), Lumens (output), Efficacy (lm/W), CCT (Kelvin), CRI (0–100, aim >80), Beam angle (15° spot to 120° flood), IP rating (dust/water), IK rating (impact), Lifespan (hours).</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Matching Tech to Concept</span><span class="scene-time">9:00–11:30</span></div><div class="visual-tag">[VISUAL: Scenario-technology grid]</div><div class="scene-body"><p>Residential: 2700K, CRI 90+, recessed + decorative. Hospitality: 2700–3000K, dimmable, automation. Offices: 4000K panels, UGR &lt;19. Galleries: track spots, CRI 95+, 3500–4000K. Outdoor: IP65+, IK10 for public areas.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Transition</span><span class="scene-time">11:30–12:00</span></div><div class="visual-tag">[VISUAL: Avatar]</div><div class="scene-body"><p>Next: how to choose the right light source for your project, step by step.</p></div></div><a class="back-top" onclick="showSection('home')">← Back to Home</a></div>
+
+<div class="section" id="s11"><div class="unit-header"><span class="unit-tag tag-u4">Unit 4 · Video 4.2</span><h1>🎬 How to Choose a Light Source (Part 1)</h1><p style="margin-top:4px">Duration: ~13 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 4.2</span> How to Choose a Light Source (Part 1)</h3>
+          <p>~13 min</p>
+        </div>
+      </div>
+    </div>
+  </div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Fixture selection board]</div><div class="scene-body"><p>Knowing technologies is half the battle. The real skill is selection — matching the right fixture to the right application.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">The Selection Framework</span><span class="scene-time">0:30–3:00</span></div><div class="visual-tag">[VISUAL: Flowchart animation]</div><div class="scene-body"><p>Step 1: Start with your concept. Step 2: Identify the function (ambient/focal/brilliants). Step 3: Define practical requirements (location, IP, voltage). Step 4: Set performance targets (CCT, CRI, beam angle, lumens). Step 5: Consider aesthetics (visible or hidden?). Step 6: Evaluate budget (fixture + driver + installation + maintenance).</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Fixture Categories</span><span class="scene-time">3:00–6:30</span></div><div class="visual-tag">[VISUAL: 3D room with fixtures installed]</div><div class="scene-body"><p><strong>Recessed</strong> — clean lines, needs ceiling cavity. <strong>Surface-mounted</strong> — when recessing isn't possible. <strong>Suspended</strong> — double-height spaces, decorative. <strong>Track-mounted</strong> — galleries, retail, flexible. <strong>Wall-mounted</strong> — texture and corridors. <strong>Floor/Table</strong> — task and personal. <strong>LED strips</strong> — ambient and accent workhorse.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Professional Description</span><span class="scene-time">6:30–10:00</span></div><div class="visual-tag">[VISUAL: Template walkthrough]</div><div class="scene-body"><p>Example: Tecnolite recessed panel — 10W, 970lm, 97 lm/W, 3000K, CRI 82, 120°, 25,000hrs, IP30, IK4, ABS housing, 125mm cut, 0.42kg. Example LED strip: SIECLED — 2700K, CRI 95, 730lm/m, 7.5W/m, 115°, cuts every 2.1cm.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Design Questions</span><span class="scene-time">10:00–12:30</span></div><div class="visual-tag">[VISUAL: Checklist appearing]</div><div class="scene-body"><p>Does it do its job? Is it appropriate for the activities? Is the lamp exposed or concealed? How does it emit light — omni or directional? Does its aesthetic match your concept?</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Transition</span><span class="scene-time">12:30–13:00</span></div><div class="visual-tag">[VISUAL: Avatar]</div><div class="scene-body"><p>In Part 2: architectural vs decorative, color consistency, and building your complete fixture schedule.</p></div></div><a class="back-top" onclick="showSection('home')">← Back to Home</a></div>
+
+<div class="section" id="s12"><div class="unit-header"><span class="unit-tag tag-u4">Unit 4 · Video 4.3</span><h1>🎬 How to Choose a Light Source (Part 2)</h1><p style="margin-top:4px">Duration: ~8 min · 5 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 4.3</span> How to Choose a Light Source (Part 2)</h3>
+          <p>~8 min</p>
+        </div>
+      </div>
+    </div>
+  </div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Architectural vs Decorative</span><span class="scene-time">0:30–3:00</span></div><div class="visual-tag">[VISUAL: Split-screen examples]</div><div class="scene-body"><p><strong>Architectural</strong> — invisible fixtures, light is the point. Efficiency, beam control, minimal presence. <strong>Decorative</strong> — visible fixtures, part of the design statement. Aesthetic alignment, scale, character. Most spaces need both.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">Color Consistency</span><span class="scene-time">3:00–5:00</span></div><div class="visual-tag">[VISUAL: Matched vs mismatched temps]</div><div class="scene-body"><p>Even fixtures rated at the same Kelvin can vary between manufacturers. Source from the same family when possible. When mixing is intentional, make the difference substantial (1500K+ apart). When uniform, stay within 300K range.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Building Your Fixture Schedule</span><span class="scene-time">5:00–7:00</span></div><div class="visual-tag">[VISUAL: Spreadsheet template]</div><div class="scene-body"><p>Your master document: Type Code, Description, Brand/Model, Watts, Lumens, CCT, CRI, Beam Angle, IP/IK, Finish, Quantity, Location, Driver, Dimming protocol, Notes. Contractors use it to source. Electricians use it for wiring. Clients use it for budget.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Final Tips</span><span class="scene-time">7:00–7:30</span></div><div class="visual-tag">[VISUAL: Quick-fire tips]</div><div class="scene-body"><p>Always request physical samples. Test in actual space. Check appearance when turned off. Verify lead times. Budget 5–10% spares.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Transition</span><span class="scene-time">7:30–8:00</span></div><div class="visual-tag">[VISUAL: Avatar]</div><div class="scene-body"><p>Next: documentation — I'll teach you how to draw light. This is where your ideas become visual, communicable, and real.</p></div></div><a class="back-top" onclick="showSection('home')">← Back to Home</a></div>
+
+<div class="section" id="s13"><div class="unit-header"><span class="unit-tag tag-u4">Unit 4 · Video 4.4</span><h1>🎬 Drawing the Light</h1><p style="margin-top:4px">Duration: ~17 min · 8 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 4.4</span> Drawing the Light</h3>
+          <p>~17 min</p>
+        </div>
+      </div>
+    </div>
+  </div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Drawing desk with markers]</div><div class="scene-body"><p>This is one of the most important lessons. Drawing light is how you communicate your vision. It's not about artistic perfection — it's about clarity of intention.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">Color Palette Setup</span><span class="scene-time">0:30–3:00</span></div><div class="visual-tag">[VISUAL: Marker colors with CCT labels]</div><div class="scene-body"><p><strong>Blue</strong> = very cold (5000K+). <strong>White</strong> = neutral (4000K) and unlighted surfaces. <strong>Yellow</strong> = warm (3000K). <strong>Amber</strong> = very warm (candlelight, 2000K). For neon: use the actual color. Be consistent throughout ALL drawings.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Drawing the Fixture</span><span class="scene-time">3:00–5:30</span></div><div class="visual-tag">[VISUAL: Step-by-step drawing demo]</div><div class="scene-body"><p>Pay attention to: Is it flush, suspended, or surface-mounted? Is the lamp exposed? Has it a diffuser (how opaque)? Does it emit omni or directional? Observe real fixtures, then sketch them simply but accurately.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Installation Details</span><span class="scene-time">5:30–7:30</span></div><div class="visual-tag">[VISUAL: Cross-sections]</div><div class="scene-body"><p>Recessed: fixture inside ceiling cavity, only diffuser visible. Surface-mounted: entire housing visible below ceiling. These details help clients make aesthetic decisions and guide contractors.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Drawing Beams</span><span class="scene-time">7:30–10:00</span></div><div class="visual-tag">[VISUAL: Various beam types drawn]</div><div class="scene-body"><p>Narrow beam: tight triangle, small projected circle. Wide beam: broad cone, soft fading edges. Linear source (LED strip): gradient from cove. Omnidirectional: soft radiating glow. Same fixture model in different beam angles — show the client the options.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Adding Direction</span><span class="scene-time">10:00–11:30</span></div><div class="visual-tag">[VISUAL: Directional arrows]</div><div class="scene-body"><p>For directional fixtures, show where they should aim. Without direction drawings, the electrician might aim at the wrong wall. Add arrows from fixture toward target.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 7</span><span class="scene-title">Madre Café Walkthrough</span><span class="scene-time">11:30–15:00</span></div><div class="visual-tag">[VISUAL: Full plan + elevation + perspective walkthrough]</div><div class="scene-body"><p><strong>Plan:</strong> Natural light from door and skylight. Perimeter dotted line for wall-washing. Bold arch element. Small circles for table downlights.</p><p><strong>Elevation:</strong> Arch light bottom-to-top. Ceiling downlights top-to-bottom. Wall light bottom-to-top. Asymmetry explained: "Imagine light going up from here, down from there, sideways from over there."</p><p><strong>Layers labeled:</strong> 1=arch, 2=tables, 3=walls, 4=skylight.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 8</span><span class="scene-title">Key Takeaway</span><span class="scene-time">15:00–17:00</span></div><div class="visual-tag">[VISUAL: Avatar with examples]</div><div class="scene-body"><p><strong>Draw the light, not the objects.</strong> Draw in plan, elevation, AND perspective — each reveals different information. Practice constantly. Every well-lit space you enter, mentally sketch the light.</p></div></div><a class="back-top" onclick="showSection('home')">← Back to Home</a></div>
+
+<div class="section" id="s14"><div class="unit-header"><span class="unit-tag tag-u4">Unit 4 · Video 4.5</span><h1>🎬 Representation of Light Sources</h1><p style="margin-top:4px">Duration: ~8 min · 6 scenes</p></div>
+  <div class="video-wrapper">
+    <div class="video-container">
+      <div class="video-placeholder">
+        <div class="play-icon">▶</div>
+        <div class="video-info">
+          <h3><span>Video 4.5</span> Representation of Light Sources</h3>
+          <p>~8 min</p>
+        </div>
+      </div>
+    </div>
+  </div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 1</span><span class="scene-title">Opening</span><span class="scene-time">0:00–0:30</span></div><div class="visual-tag">[VISUAL: Professional presentation materials]</div><div class="scene-body"><p>This is the final lesson. Everything comes together here — presenting your lighting design as a professional conceptual presentation for a client.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 2</span><span class="scene-title">Presentation Structure</span><span class="scene-time">0:30–2:30</span></div><div class="visual-tag">[VISUAL: Template built slide by slide]</div><div class="scene-body"><p>Title Page → Design Intent → Core Concept → Elements (rules) → General Conditions → Space-by-Space Drawings → Fixture References → Materiality → Contact. Each page serves a specific communication purpose.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 3</span><span class="scene-title">Annotating Drawings</span><span class="scene-time">2:30–4:30</span></div><div class="visual-tag">[VISUAL: Annotated plans and elevations]</div><div class="scene-body"><p>Label every fixture: type, function, strategy. "Wall-mounted fixture. Highlights the texture." "Indirect lighting towards walls. Task lighting towards useful areas." Use consistent color coding throughout.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 4</span><span class="scene-title">Café CDMX Example</span><span class="scene-time">4:30–6:30</span></div><div class="visual-tag">[VISUAL: Complete presentation walkthrough]</div><div class="scene-body"><p>Ground floor retail: directional recessed on rails. Ground floor walls: indirect + direct lighting. Stairs: graze lighting for wayfinding. Main patio: suspended decorative fixtures. Materiality page: antique brass, architectural white, chukum plaster — proving the fixtures belong in this space.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 5</span><span class="scene-title">Drawings to Reality</span><span class="scene-time">6:30–7:30</span></div><div class="visual-tag">[VISUAL: Before/after comparisons]</div><div class="scene-body"><p>Conceptual gradient drawings become real recessed linear fixtures. Sconce sketches become wall-mounted warmth. LED strip details become concealed cove installations. Every drawing is a promise to the client — the better your drawings, the more trust you build.</p></div></div><div class="scene-card"><div class="scene-header"><span class="scene-num">SCENE 6</span><span class="scene-title">Course Conclusion</span><span class="scene-time">7:30–8:00</span></div><div class="visual-tag">[VISUAL: Warm lighting, course title card]</div><div class="scene-body"><p>Congratulations. You've learned to see, conceptualize, select, draw, and present light. But this is the beginning, not the end. Continue observing, studying, experimenting. Enter competitions. Document your work. Push yourself.</p><p><strong>Start your final project. Apply every technique you've learned. I wish you beautiful light in every space you touch.</strong></p></div></div><a class="back-top" onclick="showSection('home')">← Back to Home</a></div>
+
+</div><!-- end .content -->
+</div><!-- end .main -->
+
+<button class="print-btn" onclick="window.print()">🖨️ Print</button>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  event.target.closest('.nav-link')?.classList.add('active');
+  document.querySelector('.main').scrollTop = 0;
+  window.scrollTo(0, 0);
+  // Close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Close sidebar on outside click (mobile)
+document.querySelector('.main')?.addEventListener('click', () => {
+  document.getElementById('sidebar').classList.remove('open');
+});
+</script>
+</body>
+</html>
