@@ -24,8 +24,40 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
       />
     </div>
   ) : (
-    <div style={{ position: 'relative', paddingTop: '56.25%', background: '#000', borderRadius: 16, overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
-      <video src={activeLesson ? activeLesson.video : (course.trailer || '/trailer.mp4')} controls style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+    <div className="video-wrapper" style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', background: '#0f172a', boxShadow: '0 20px 40px rgba(0,0,0,0.15)', border: `1px solid ${C.border}` }}>
+      <style>{`
+        .play-icon-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .play-icon-btn:hover { background: #e11d48 !important; border-color: #e11d48 !important; transform: scale(1.1); box-shadow: 0 0 30px rgba(225,29,72,0.6); color: white; }
+      `}</style>
+      <div style={{ position: 'relative', paddingTop: '56.25%', width: '100%', background: '#0f172a' }}>
+        <div style={{
+          position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          background: "linear-gradient(135deg, rgba(15,23,42,0.85), rgba(30,41,59,0.95)), url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop') center/cover",
+          backgroundBlendMode: 'overlay'
+        }}>
+          <div 
+            className="play-icon-btn"
+            style={{
+              width: 72, height: 72, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)',
+              border: '2px solid rgba(255,255,255,0.3)', borderRadius: '50%', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', color: 'white', fontSize: 30, cursor: 'pointer', marginBottom: 20, paddingLeft: 6
+            }}
+          >
+            ▶
+          </div>
+          <div style={{ color: 'white', textAlign: 'center', zIndex: 10 }}>
+            <h3 style={{ margin: '0 0 8px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: 20, fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+              <span style={{ background: '#e11d48', color: 'white', fontSize: 11, padding: '4px 8px', borderRadius: 6, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', boxShadow: '0 4px 10px rgba(225,29,72,0.3)' }}>
+                {activeLesson ? activeLesson.title.split(' ')[0] : 'VIDEO'} 
+              </span>
+              {activeLesson ? activeLesson.title.split(' ').slice(1).join(' ') : 'Welcome to the Course'}
+            </h3>
+            <p style={{ margin: 0, color: '#cbd5e1', fontSize: 14, fontWeight: 500 }}>
+              Duration: {activeLesson?.duration || '~14 mins'}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 

@@ -56,39 +56,41 @@ export class CoursesService implements OnModuleInit {
             tags: ['Architecture', 'Professional', 'Lighting'],
             chapters: [
               { 
-                title: 'Module 1: The Foundations of Light & Vision', 
-                objective: 'Understand the physics of light, how the human eye perceives it, and the scientific metrics used to measure it.',
+                title: 'Module 1: Introduction to the World of Lighting Design', 
+                objective: 'Welcome to the masterclass, introduction to the instructor, and an overview of the curriculum and influences.',
                 lessons: [
-                  { title: '1.1 The Nature of Light', duration: '10 mins', description: 'The electromagnetic spectrum, visible light, and behaviors like reflection and refraction.' },
-                  { title: '1.2 Human Vision & Perception', duration: '15 mins', description: 'Structure of the eye, visual modes, and color perception.' },
-                  { title: '1.3 Scientific Metrics & Photometry', duration: '20 mins', description: 'Lumen, lux, candela, CRI, and TM-30 measurement tools.' }
+                  { title: '1.1 Presentation', duration: '14 mins', description: 'Welcome to Lighting Design for Interior Spaces, career journey, and the culture of light.' },
+                  { title: '1.2 Influences', duration: '13 mins', description: 'Exploring artists and designers working with light (James Turrell, Olafur Eliasson, etc.)' },
+                  { title: '1.3 What Will We Do on the Course?', duration: '3 mins', description: 'Overview of conceptualization, technique, documentation, and the final project.' }
                 ] 
               },
               { 
-                title: 'Module 2: Architectural Lighting & Visual Comfort', 
-                objective: 'Learn the core principles of lighting design, layers of light, and how to ensure spaces are visually comfortable.',
+                title: 'Module 2: Understanding Light & Perception', 
+                objective: 'Delve into the physics of light, how the human eye perceives it, and its interaction with materials.',
                 lessons: [
-                  { title: '2.1 Principles of Lighting Design', duration: '15 mins', description: 'Richard Kelly’s three elements of light and layering techniques.' },
-                  { title: '2.2 Visual Comfort & Ergonomics', duration: '15 mins', description: 'Understanding glare (UGR), contrast ratios, and surface reflectance.' },
-                  { title: '2.3 Spatial Perspectives', duration: '15 mins', description: 'Natural vs. artificial light and biophilic design integration.' }
+                  { title: '2.1 What Is Light?', duration: '11 mins', description: 'The electromagnetic spectrum, visible light, and photopic vs. scotopic vision.' },
+                  { title: '2.2 The Subject, Observer', duration: '8 mins', description: 'How age, culture, and ocular health affect our perception of light and darkness.' },
+                  { title: '2.3 Light, Materials, Objects', duration: '11 mins', description: 'Reflection, refraction, transmission, and the perception of color and volume.' }
                 ] 
               },
               { 
-                title: 'Module 3: Human Centric Lighting (HCL) & Psychology', 
-                objective: 'Explore how light biologically and psychologically impacts human health, mood, and productivity.',
+                title: 'Module 3: Conceptualization & Methodology', 
+                objective: 'Learn to construct lighting narratives, identify hierarchies, and apply structured methodologies.',
                 lessons: [
-                  { title: '3.1 Biological Impact of Light', duration: '15 mins', description: 'Circadian rhythms and non-visual effects of light.' },
-                  { title: '3.2 The Psychology of Light and Color', duration: '15 mins', description: 'Environmental cognition and emotional responses to colors.' },
-                  { title: '3.3 Implementing HCL', duration: '15 mins', description: 'Translating biological needs into dynamic lighting design.' }
+                  { title: '3.1 The Concept', duration: '11 mins', description: 'The "black box" methodology, sensory concepts, and functional requirements.' },
+                  { title: '3.2 Composition', duration: '10 mins', description: 'Richard Kelly’s three types of playing with light (ambient, focal, brilliants).' },
+                  { title: '3.3 Layers and Hierarchies', duration: '6 mins', description: 'Ordering light layers based on the functional and aesthetic needs of the space.' }
                 ] 
               },
               { 
-                title: 'Module 4: The Environmental Lighting Framework', 
-                objective: 'Apply foundational and psychological principles to real-world environments using a space-by-space framework.',
+                title: 'Module 4: Light Sources & Documentation', 
+                objective: 'Technical implementation, selecting the right fixtures, and correctly defining and communicating specifications.',
                 lessons: [
-                  { title: '4.1 Framework for Residential Spaces', duration: '20 mins', description: 'Maximizing space in apartments and creating drama in luxury villas.' },
-                  { title: '4.2 Framework for Outdoor & Transitional Spaces', duration: '10 mins', description: 'Terraces, balconies, and landscape facade textures.' },
-                  { title: '4.3 Framework for Commercial Workspaces', duration: '15 mins', description: 'Designing for productivity, glare-free task lighting, and business scene-setting.' }
+                  { title: '4.1 Light Sources', duration: '12 mins', description: 'History of light sources, from fire to LEDs, and understanding how they work.' },
+                  { title: '4.2 How to Choose a Light Source (Part 1)', duration: '13 mins', description: 'Power, flux, efficacy, and defining the qualitative aspects of light (CCT & CRI).' },
+                  { title: '4.3 How to Choose a Light Source (Part 2)', duration: '8 mins', description: 'Optics, beam angles, IP ratings, and the anatomical parts of a luminaire.' },
+                  { title: '4.4 Drawing the Light', duration: '17 mins', description: 'Architectural documentation, creating RCPs, drawing symbols, and control channels.' },
+                  { title: '4.5 Representation of Light Sources', duration: '8 mins', description: 'Graphical execution and creating the final presentation deliverables for the client.' }
                 ] 
               }
             ],
