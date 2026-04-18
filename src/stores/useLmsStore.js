@@ -23,7 +23,7 @@ export const useLmsStore = create(
           (error) => {
             // Only auto-logout on 401 for protected API routes, NOT for auth endpoints
             const url = error.config?.url || '';
-            const isAuthEndpoint = url.includes('/auth/');
+            const isAuthEndpoint = url.includes('/auth/') && !url.includes('/auth/profile');
             if (error.response?.status === 401 && !isAuthEndpoint) {
               get().logout();
               window.location.reload();

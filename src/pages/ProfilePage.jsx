@@ -69,7 +69,7 @@ const ProfilePage = () => {
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
                 <Avatar user={user} size={80} />
               </div>
-              <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px', color: C.text }}>{user.name || user.username}</h2>
+              <h2 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 4px', color: C.text }}>{user.name || user.username.split('@')[0]}</h2>
               <p style={{ fontSize: 13, color: C.muted, margin: '0 0 16px' }}>{user.username}</p>
             </Card>
 
