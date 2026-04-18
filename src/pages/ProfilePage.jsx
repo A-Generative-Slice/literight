@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { C, Avatar, Card } from '../components/Common';
-import { Btn, Input } from '../components/Inputs';
+import { Btn, Field } from '../components/Inputs';
 import Icon from '../components/Icon';
 import { useLmsStore } from '../stores/useLmsStore';
 
@@ -85,14 +85,14 @@ const ProfilePage = () => {
                   )}
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 400 }}>
-                    <Input 
+                    <Field 
                       label="Full Name" 
                       value={name} 
                       onChange={e => setName(e.target.value)} 
                       placeholder="Jane Doe" 
                     />
                     
-                    <Input 
+                    <Field 
                       label="Profile Picture URL" 
                       value={dp} 
                       onChange={e => setDp(e.target.value)} 
