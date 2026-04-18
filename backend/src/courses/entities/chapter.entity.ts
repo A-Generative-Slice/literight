@@ -8,6 +8,9 @@ export class Chapter {
   id: number;
 
   @Column({ nullable: true })
+  title: string;
+
+  @Column({ nullable: true })
   objective: string;
 
   @Column({ type: 'simple-json', nullable: true })
