@@ -25,8 +25,8 @@ run_remote "cd $REMOTE_DIR && git fetch origin && git reset --hard origin/main"
 echo "🏗️  Purging old build and rebuilding (this takes 2 mins)..."
 run_remote "cd $REMOTE_DIR && rm -rf dist && npm run build"
 
-echo "🛡️  Refreshing LiteRight Academy Services..."
-run_remote "cd $REMOTE_DIR && pm2 restart lms-backend && sudo systemctl reload nginx"
+echo "🛡️  Refreshing LiteRight Academy Services & Syllabus..."
+run_remote "cd $REMOTE_DIR && rm -f backend/data/lms.db && pm2 restart lms-backend && sudo systemctl reload nginx"
 
 echo "------------------------------------------------"
 echo "✨ SUCCESS! The Academy is now 100% Finalized."
