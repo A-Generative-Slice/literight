@@ -46,8 +46,16 @@ export const Card = ({ children, style: ex = {}, padding = '24px', className = '
   </div>
 );
 
-export const Avatar = ({ user, size = 40 }) => (
-  <div style={{ width: size, height: size, borderRadius: 16, background: '#f1f5f9', color: C.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 800, border: `2px solid #fff`, boxShadow: '0 8px 16px -4px rgba(0,0,0,0.1)', overflow: 'hidden', flexShrink: 0 }}>
-    {(user.dp || user.photo) ? <img src={user.dp || user.photo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (user.name || user.username || 'A')[0].toUpperCase()}
-  </div>
-);
+export const Avatar = ({ user, size = 40 }) => {
+  if (!user) return <div style={{ width: size, height: size, borderRadius: 16, background: '#f1f5f9', flexShrink: 0 }} />;
+  const initial = (user.name || user.username || 'U')[0].toUpperCase();
+  const dp = user.dp || user.photo;
+  
+  return (
+    <div style={{ width: size, height: size, borderRadius: 16, background: 'linear-gradient(135deg, #f1f5f9, #e2e8f0)', color: C.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 800, border: `2px solid #fff`, boxShadow: '0 8px 16px -4px rgba(0,0,0,0.1)', overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
+      {dp ? (
+        <img src={dp} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" onError={(e) => e.target.style.display = 'none'} />
+      ) : initial}
+    </div>
+  );
+};

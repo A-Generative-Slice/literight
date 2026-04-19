@@ -1,82 +1,112 @@
 import React from 'react';
-import { C, Badge, Avatar } from '../components/Common';
+import { C, Badge, Card, Avatar } from '../components/Common';
 import { Btn } from '../components/Inputs';
 import Icon from '../components/Icon';
 
-const PublicLanding = ({ onCourse, courses }) => (
-  <div style={{ background: C.bg }}>
-    {/* Hero Section - Elite Professional Look */}
-    <div className="md-px-4 reveal" style={{ 
-      padding: 'clamp(80px, 15vh, 120px) 32px clamp(120px, 20vh, 160px)', 
-      background: '#0f172a', 
-      color: '#fff', 
-      textAlign: 'center', 
-      position: 'relative', 
-      overflow: 'hidden',
-      borderBottomLeftRadius: 'clamp(40px, 10vw, 100px)',
-      borderBottomRightRadius: 'clamp(40px, 10vw, 100px)',
-    }}>
-      {/* Dynamic Mesh Background */}
-      <div style={{ position: 'absolute', inset: 0, opacity: 0.3, background: 'radial-gradient(circle at 20% 30%, #BE123C 0%, transparent 40%), radial-gradient(circle at 80% 70%, #1e293b 0%, transparent 40%)' }} />
-      <div style={{ position: 'absolute', inset: 0, opacity: 0.15, background: 'url("https://images.unsplash.com/photo-1542744095-2ad48e00b36a?q=80&w=1470&auto=format&fit=crop") center/cover no-repeat', mixBlendMode: 'overlay' }} />
-      
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto' }}>
-        <Badge label="Elite Certification Program" color="#fff" />
-        <h1 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, marginTop: 32, marginBottom: 24, lineHeight: 1.05 }}>
-          Mastering Light.<br /><span style={{ color: C.accent }}>Architecting Careers.</span>
-        </h1>
-        <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: '#94a3b8', lineHeight: 1.7, marginBottom: 48, maxWidth: 640, margin: '0 auto 48px', fontWeight: 500 }}>
-          Litelab delivers bespoke lighting solutions for global architectural landmarks. 
-          Through LiteRight Academy, we identify and train the next generation of 
-          industry leaders with elite certification.
-        </p>
-        <div className="md-flex-col md-w-full md-gap-4" style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
-          <Btn onClick={() => { document.getElementById('curriculum')?.scrollIntoView({ behavior: 'smooth' }) }} size="lg" style={{ minWidth: 220, borderRadius: 16 }} className="md-w-full">Explore Curriculum</Btn>
-          <Btn variant="secondary" onClick={() => { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }} size="lg" style={{ minWidth: 220, borderRadius: 16, background: 'rgba(255,255,255,0.05)', color: '#fff', borderColor: 'rgba(255,255,255,0.1)' }} className="md-w-full">Our Portfolio</Btn>
-        </div>
-      </div>
-    </div>
+const PublicLanding = ({ courses, onCourse }) => {
+  return (
+    <div style={{ background: 'var(--bg)', minHeight: '100vh' }}>
+      {/* Architectural Hero */}
+      <section style={{ 
+        position: 'relative', 
+        padding: 'clamp(80px, 15vh, 160px) 0', 
+        overflow: 'hidden',
+        background: 'radial-gradient(circle at 50% 50%, #1e1b4b 0%, #030712 100%)'
+      }}>
+        {/* Abstract Background Elements */}
+        <div style={{ position: 'absolute', top: '10%', right: '-10%', width: '60vw', height: '60vw', background: 'radial-gradient(circle, rgba(190,18,60,0.1) 0%, transparent 60%)', filter: 'blur(60px)' }} />
+        <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '80vw', height: '80vw', background: 'radial-gradient(circle, rgba(30,58,138,0.1) 0%, transparent 60%)', filter: 'blur(80px)' }} />
 
-    {/* Course Discovery - Domestika Grid Style */}
-    <div id="curriculum" className="md-pt-8 reveal" style={{ maxWidth: 1240, margin: '-60px auto 120px', padding: '0 var(--container-px)', position: 'relative', zIndex: 5 }}>
-      <Card style={{ padding: 'clamp(32px, 5vw, 60px) clamp(20px, 4vw, 48px)' }} className="md-p-6">
-        <div style={{ textAlign: 'center', marginBottom: 60 }}>
-          <Badge label="Professional Modules" />
-          <h2 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, color: C.text, margin: '16px 0' }}>Academy Curriculum</h2>
-          <div style={{ width: 80, height: 4, background: C.accent, margin: '0 auto', borderRadius: 99 }} />
-        </div>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(280px, 100%, 320px), 1fr))', gap: 'clamp(20px, 4vw, 40px)' }}>
-          {courses?.map(course => (
-            <div key={course.id} className="hover-lift" onClick={() => onCourse(course)} style={{ background: '#fff', borderRadius: 32, border: `1px solid ${C.border}`, cursor: 'pointer', overflow: 'hidden', boxShadow: C.shadow }}>
-              <div style={{ height: 260, background: course.thumbnail ? `url(${course.thumbnail}) center/cover no-repeat` : '#f1f5f9', position: 'relative' }}>
-                <div className="glass" style={{ position: 'absolute', bottom: 16, left: 16, right: 16, padding: '8px 16px', borderRadius: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                   <div style={{ fontSize: 13, color: C.text, fontWeight: 800 }}>{course.duration || '3h 20m'}</div>
-                   <div style={{ padding: '4px 10px', background: C.accent, color: '#fff', borderRadius: 8, fontSize: 12, fontWeight: 900 }}>${course.price || 0}</div>
-                </div>
-              </div>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', position: 'relative', zIndex: 1, textAlign: 'center' }}>
+          <div className="reveal" style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '8px 16px', borderRadius: 99, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', marginBottom: 32 }}>
+            <span style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#fb7185' }}>New Masterclass Release</span>
+            <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8' }}>Architectural Lighting 2.0</span>
+          </div>
 
-              <div style={{ padding: 'clamp(20px, 4vw, 32px)' }}>
-                <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 900, marginBottom: 16, lineHeight: 1.3, color: C.text }}>{course.title}</h3>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-                  <Avatar user={{ name: course.instructor }} size={32} />
-                  <div style={{ fontSize: 14, color: C.muted }}>By <strong style={{ color: C.text }}>{course.instructor}</strong></div>
-                </div>
-                
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 20, borderTop: `1px solid ${C.border}` }}>
-                  <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                    <div style={{ height: 8, width: 8, borderRadius: '50%', background: C.success }} />
-                    <span style={{ fontSize: 12, fontWeight: 700, color: C.muted }}>Enrollment Open</span>
-                  </div>
-                  <Btn size="sm" variant="ghost" style={{ fontWeight: 800, padding: '4px 8px' }}>Syllabus →</Btn>
-                </div>
-              </div>
+          <h1 className="reveal" style={{ fontSize: 'clamp(40px, 8vw, 84px)', fontWeight: 900, lineHeight: 0.9, marginBottom: 32, letterSpacing: '-0.04em' }}>
+            The Gateway to <br />
+            <span style={{ 
+              background: 'linear-gradient(to right, #fff 30%, #fb7185 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              display: 'inline-block'
+            }}>Architectural Mastery.</span>
+          </h1>
+
+          <p className="reveal" style={{ fontSize: 'clamp(16px, 2vw, 20px)', color: '#94a3b8', maxWidth: 700, margin: '0 auto 48px', lineHeight: 1.6, fontWeight: 500 }}>
+            Master the art and science of premium lighting design with world-class practitioners. Join an elite vanguard of architects and designers globally.
+          </p>
+
+          <div className="reveal" style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Btn size="lg" onClick={() => window.scrollTo({ top: window.innerHeight * 0.8, behavior: 'smooth' })}>
+              Explore Curriculum
+            </Btn>
+            <Btn size="lg" variant="secondary" style={{ background: 'transparent', color: '#fff' }}>
+              Watch Preview
+            </Btn>
+          </div>
+        </div>
+      </section>
+
+      {/* Curriculum Grid */}
+      <section style={{ padding: '100px 0', position: 'relative' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)' }}>
+          <div style={{ marginBottom: 64, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24 }}>
+            <div>
+              <h2 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 900, marginBottom: 16 }}>Elite Curriculum</h2>
+              <p style={{ color: '#64748b', fontSize: 16, maxWidth: 480 }}>Curated masterclasses designed to transition your career from standard to surgical precision lighting.</p>
             </div>
-          ))}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'clamp(24px, 4vw, 40px)' }}>
+            {(courses || []).map((c, i) => (
+              <div key={i} className="reveal hover-lift" style={{ animationDelay: `${i * 0.1}s` }}>
+                <Card 
+                  onClick={() => onCourse(c)}
+                  padding="0"
+                  style={{ overflow: 'hidden', background: '#0f172a', border: '1px solid rgba(255,255,255,0.05)', height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+                >
+                  <div style={{ position: 'relative', paddingTop: '62.5%', width: '100%', overflow: 'hidden' }}>
+                    <img 
+                      src={c.thumbnail || "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop"} 
+                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
+                      alt={c.title}
+                    />
+                    <div style={{ position: 'absolute', top: 20, right: 20, zIndex: 10 }}>
+                      <Badge label={c.instructor || "Elite Faculty"} />
+                    </div>
+                  </div>
+
+                  <div style={{ padding: 32, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+                      {c.tags?.slice(0, 2).map(t => (
+                        <span key={t} style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', padding: '4px 8px', borderRadius: 4, background: 'rgba(255,255,255,0.05)', color: '#64748b' }}>{t}</span>
+                      ))}
+                    </div>
+                    <h3 style={{ fontSize: 22, fontWeight: 900, marginBottom: 12, color: '#fff' }}>{c.title}</h3>
+                    <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.6, marginBottom: 32, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      {c.description}
+                    </p>
+                    
+                    <div style={{ marginTop: 'auto', paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <Icon name="users" size={14} color="#64748b" />
+                        <span style={{ fontSize: 13, fontWeight: 700, color: '#94a3b8' }}>{(c.students || 0).toLocaleString()} Cohort</span>
+                      </div>
+                      <div style={{ color: C.accent, fontWeight: 900, fontSize: 14, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        Access Masterclass <Icon name="arrow" size={12} />
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            ))}
+          </div>
         </div>
-      </Card>
+      </section>
     </div>
-  </div>
-);
+  );
+};
 
 export default PublicLanding;
