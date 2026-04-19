@@ -117,7 +117,7 @@ export const PublicNav = ({ onLoginClick }) => {
                   placeholder="What will you master today?" 
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '2px solid rgba(255,255,255,0.1)', padding: '20px 0', color: '#fff', fontSize: clamp(24, 5vw, 40), fontWeight: 800, outline: 'none' }}
+                  style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '2px solid rgba(255,255,255,0.1)', padding: '20px 0', color: '#fff', fontSize: 'clamp(24px, 5vw, 40px)', fontWeight: 800, outline: 'none' }}
                 />
               </div>
             </div>
@@ -149,4 +149,3 @@ const MenuItem = ({ icon, label, color, onClick }) => (
   </button>
 );
 
-const clamp = (min, val, max) => `clamp(${min}px, ${val}, ${max}px)`;
