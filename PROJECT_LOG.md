@@ -48,4 +48,13 @@ This document tracks the architectural growth and bug fixes of the Literight Aca
 | **Data** | Architecture | Transitioned from `COURSES` constant to `courses.json` API delivery. |
 
 ---
-*Last updated: 2026-04-16T21:30:00Z by Antigravity*
+
+## 📱 Phase 5: Mobile UI Mastery (Elite 2.0)
+**Timestamp:** 2026-04-19
+- **Infrastructure:** Refined the production CSS framework in `index.css` with responsive-first variable tokens (`--container-px`).
+- **Feature (Creative Search):** Implemented a high-end "Floating Glass Search" for mobile devices. Collapses the standard header search into a dedicated glassmorphism action button.
+- **UX Fix (Mobile Overflow):** Resolved critical horizontal scrolling issues by implementing responsive text logic for navigation buttons (e.g., dynamically switching "Back to Academy" to a compact "Back" on small screens).
+- **Aesthetics:** Introduced dynamic Gaussian blurs and floating keyframe animations to enhance the "Elite" brand identity on mobile viewports.
+
+---
+*Last updated: 2026-04-19T17:53:00Z by Antigravity*
