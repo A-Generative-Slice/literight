@@ -24,17 +24,16 @@ const PublicLanding = ({ courses, onCourse }) => {
   return (
     <div style={{ background: '#000', minHeight: '100vh', color: '#fff' }}>
       
-      {/* Heritage Hero with Illustration BG */}
+      {/* Heritage Hero */}
       <section style={{ 
         position: 'relative', 
-        height: '70vh', 
+        height: '80vh', 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
         padding: '0 var(--container-px)',
         overflow: 'hidden'
       }}>
-        {/* The motivation-bg sketch integrated wisely */}
         <div style={{ 
           position: 'absolute', 
           inset: 0, 
@@ -42,27 +41,25 @@ const PublicLanding = ({ courses, onCourse }) => {
           backgroundSize: 'contain', 
           backgroundPosition: 'center', 
           backgroundRepeat: 'no-repeat',
-          opacity: 0.1,
-          filter: 'invert(1)', // Convert black ink to white glow
+          opacity: 0.08,
+          filter: 'invert(1)',
           zIndex: 0
         }} />
-        
-        {/* Gradient Fade to Black */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, #000 90%)', zIndex: 1 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, #000 95%)', zIndex: 1 }} />
 
-        <div className="reveal" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 800 }}>
-          <h1 style={{ fontSize: 'clamp(40px, 8vw, 72px)', fontWeight: 900, lineHeight: 0.9, marginBottom: 24, letterSpacing: '-0.04em' }}>
-            Designing <span style={{ opacity: 0.5 }}>The Speed Of Light.</span>
+        <div className="reveal" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 900 }}>
+          <h1 style={{ fontSize: 'clamp(40px, 10vw, 90px)', fontWeight: 900, lineHeight: 0.85, marginBottom: 32, letterSpacing: '-0.05em' }}>
+            Designing <br/><span style={{ opacity: 0.3 }}>The Speed Of Light.</span>
           </h1>
-          <p style={{ fontSize: 13, fontWeight: 800, color: '#888', letterSpacing: '0.4em', textTransform: 'uppercase' }}>
-            International Lighting Academy
+          <p style={{ fontSize: 11, fontWeight: 900, color: '#fff', letterSpacing: '0.5em', textTransform: 'uppercase' }}>
+            International Learning Academy
           </p>
         </div>
       </section>
 
       {/* 8-Circle Masterclass Navigator */}
       <section style={{ padding: '40px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 3 }}>
-        <h2 style={{ fontSize: 13, fontWeight: 900, textAlign: 'center', letterSpacing: '0.3em', marginBottom: 60, color: '#666' }}>EXPLORE MASTERY TRACKS</h2>
+        <h2 style={{ fontSize: 10, fontWeight: 900, textAlign: 'center', letterSpacing: '0.4em', marginBottom: 60, color: '#444' }}>EXPLORE MASTERY TRACKS</h2>
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
@@ -76,91 +73,85 @@ const PublicLanding = ({ courses, onCourse }) => {
               onClick={() => setActiveTrack(activeTrack === track.id ? null : track.id)}
               style={{ 
                 animationDelay: `${i * 0.05}s`,
-                opacity: activeTrack && activeTrack !== track.id ? 0.4 : 1
+                opacity: activeTrack && activeTrack !== track.id ? 0.3 : 1
               }}
             >
               <div className="circle-img" style={{ borderColor: activeTrack === track.id ? '#fff' : 'rgba(255,255,255,0.1)' }}>
                 <img src={track.img} alt={track.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <div className="circle-label" style={{ color: activeTrack === track.id ? '#fff' : '#888' }}>{track.name}</div>
+              <div className="circle-label" style={{ color: activeTrack === track.id ? '#fff' : '#666' }}>{track.name}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Courses Section */}
-      <section style={{ padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+      <section id="courses" style={{ padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 60 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.02em' }}>
-              {activeTrack ? `Featured in ${activeTrack}` : 'Elite Masterclasses'}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 80 }}>
+            <h2 style={{ fontSize: 48, fontWeight: 900, letterSpacing: '-0.03em' }}>
+              {activeTrack ? activeTrack.toUpperCase() : 'Elite Masterclasses'}
             </h2>
             {activeTrack && (
-              <button onClick={() => setActiveTrack(null)} style={{ background: 'none', border: 'none', color: '#888', fontSize: 11, fontWeight: 800, cursor: 'pointer', letterSpacing: '0.1em' }}>
-                SHOW ALL COURSES —
+              <button onClick={() => setActiveTrack(null)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: 10, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.2em', textDecoration: 'underline' }}>
+                SHOW ALL COURSES
               </button>
             )}
           </div>
           
-          {filteredCourses.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 40 }}>
-              {filteredCourses.map((c, i) => (
-                <Card 
-                  key={i} 
-                  onClick={() => onCourse(c)}
-                  padding="0"
-                  style={{ cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden' }}
-                >
-                  <div style={{ position: 'relative', paddingTop: '60%', width: '100%' }}>
-                    <img src={c.thumbnail} alt="" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <div style={{ position: 'absolute', top: 16, right: 16, background: '#fff', color: '#000', padding: '4px 12px', fontSize: 10, fontWeight: 900, borderRadius: 2 }}>{c.duration}</div>
-                  </div>
-                  <div style={{ padding: 32 }}>
-                    <h3 style={{ fontSize: 24, marginBottom: 16, lineHeight: 1.1 }}>{c.title}</h3>
-                    <p style={{ fontSize: 13, color: '#888', marginBottom: 32, lineHeight: 1.6, height: '3.2em', overflow: 'hidden' }}>{c.description}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.1em' }}>{c.instructor}</span>
-                      <Icon name="arrow" size={16} />
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div style={{ padding: '100px 0', textAlign: 'center', color: '#444' }}>
-              <Icon name="info" size={40} style={{ marginBottom: 20, opacity: 0.2 }} />
-              <div style={{ fontSize: 14, fontWeight: 800, letterSpacing: '0.1em' }}>NO MASTERCLASSES FOUND IN THIS TRACK</div>
-            </div>
-          )}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 60 }}>
+            {filteredCourses.map((c, i) => (
+              <div 
+                key={i} 
+                onClick={() => onCourse(c)}
+                style={{ cursor: 'pointer', animationDelay: `${i * 0.1}s` }}
+                className="reveal"
+              >
+                <div style={{ position: 'relative', paddingTop: '65%', width: '100%', marginBottom: 32, overflow: 'hidden' }}>
+                    <img src={c.thumbnail} alt="" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }} />
+                    <div style={{ position: 'absolute', top: 20, right: 20, background: '#fff', color: '#000', padding: '6px 14px', fontSize: 9, fontWeight: 900, borderRadius: 0 }}>{c.duration}</div>
+                </div>
+                <h3 style={{ fontSize: 28, marginBottom: 16, lineHeight: 1, fontWeight: 800 }}>{c.title.toUpperCase()}</h3>
+                <p style={{ fontSize: 13, color: '#888', marginBottom: 24, lineHeight: 1.6, height: '3.2em', overflow: 'hidden' }}>{c.description}</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                  <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.1em', opacity: 0.6 }}>{c.instructor.toUpperCase()}</span>
+                  <Icon name="arrow" size={14} />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Academy Footer */}
-      <footer style={{ padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.1)', background: '#000' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 60 }}>
-          <div>
-            <div style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: 24, letterSpacing: '0.1em', marginBottom: 24 }}>LITERIGHT<br/>ACADEMY</div>
-            <p style={{ fontSize: 12, color: '#666', lineHeight: 1.8 }}>The elite global platform for mastering the science and art of architectural lighting design.</p>
+      {/* Minimalist Footer from Screenshot */}
+      <footer style={{ padding: '80px 0 40px', borderTop: '1px solid rgba(255,255,255,0.05)', background: '#000' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', textAlign: 'center' }}>
+          
+          {/* Social Icons Row */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginBottom: 40 }}>
+            <Icon name="instagram" size={20} />
+            <Icon name="linkedin" size={20} />
+            <Icon name="pinterest" size={20} />
+            <Icon name="facebook" size={20} />
+            <Icon name="twitter" size={20} />
+            <Icon name="youtube" size={20} />
           </div>
-          <div>
-            <h4 style={{ fontSize: 13, marginBottom: 24 }}>CURRICULUM</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 11, fontWeight: 800, color: '#888' }}>
-              <span>MASTERCLASSES</span>
-              <span>CERTIFICATIONS</span>
-              <span>PARTNERSHIPS</span>
+
+          {/* Nav Links Row */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(20px, 4vw, 40px)', marginBottom: 40, fontSize: 12, fontWeight: 900, letterSpacing: '0.1em' }}>
+            <span style={{ cursor: 'pointer' }}>HOME</span>
+            <span style={{ cursor: 'pointer' }}>ABOUT</span>
+            <span style={{ cursor: 'pointer' }}>PROJECTS</span>
+            <span style={{ cursor: 'pointer' }}>TEAM</span>
+            <span style={{ cursor: 'pointer' }}>CONTACT</span>
+          </div>
+
+          {/* Legal Row */}
+          <div style={{ fontSize: 11, color: '#fff', fontWeight: 700, letterSpacing: '0.02em', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div>
+              Copyright © 2026. All Rights Reserved <span style={{ opacity: 0.3, margin: '0 10px' }}>|</span> Privacy Policy <span style={{ opacity: 0.3, margin: '0 10px' }}>|</span> Designed and Developed by LITERIGHT ACADEMY
             </div>
           </div>
-          <div>
-            <h4 style={{ fontSize: 13, marginBottom: 24 }}>ACADEMY</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, fontSize: 11, fontWeight: 800, color: '#888' }}>
-              <span>OUR STORY</span>
-              <span>STUDENT WORK</span>
-              <span>CONTACT</span>
-            </div>
-          </div>
-        </div>
-        <div style={{ textAlign: 'center', marginTop: 100, fontSize: 10, color: '#333', letterSpacing: '0.1em' }}>
-          COPYRIGHT © 2026 LITERIGHT ACADEMY. ALL RIGHTS RESERVED.
         </div>
       </footer>
     </div>

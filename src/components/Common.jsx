@@ -3,22 +3,32 @@ import React from 'react';
 export const C = {
   bg: '#000000', 
   surface: '#000000',
-  border: 'rgba(255, 255, 255, 0.2)',
+  border: 'rgba(255, 255, 255, 0.1)',
   text: '#ffffff',
   muted: '#888888',
   accent: '#ffffff',
   success: '#ffffff',
   warning: '#ffffff',
-  danger: '#ef4444',
+  danger: '#ff4444',
   shadow: 'none',
   shadowLg: 'none',
 };
 
 export const Logo = ({ size = 'md' }) => {
-  const fs = { sm: 16, md: 24, lg: 32 }[size];
+  const fs = { sm: 14, md: 20, lg: 32 }[size];
   return (
-    <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontSize: fs, letterSpacing: '0.1em', userSelect: 'none', color: '#fff', display: 'flex', alignItems: 'center' }}>
-      LITE<span style={{ color: '#fff', opacity: 0.7 }}>LAB</span>
+    <span style={{ 
+      fontFamily: 'Outfit, sans-serif', 
+      fontWeight: 900, 
+      fontSize: fs, 
+      letterSpacing: '0.15em', 
+      userSelect: 'none', 
+      color: '#fff', 
+      display: 'flex', 
+      alignItems: 'center',
+      textTransform: 'uppercase'
+    }}>
+      LITERIGHT <span style={{ opacity: 0.5, marginLeft: '0.3em' }}>ACADEMY</span>
     </span>
   );
 };
@@ -29,15 +39,15 @@ export const Badge = ({ label, active = false, onClick }) => (
     style={{ 
       display: 'inline-flex', 
       alignItems: 'center', 
-      padding: '8px 24px', 
-      borderRadius: 99, 
-      fontSize: 11, 
-      fontWeight: 800, 
+      padding: '6px 20px', 
+      borderRadius: 1, 
+      fontSize: 10, 
+      fontWeight: 900, 
       textTransform: 'uppercase', 
-      letterSpacing: '0.15em', 
+      letterSpacing: '0.2em', 
       background: active ? '#fff' : 'transparent', 
       color: active ? '#000' : '#fff', 
-      border: `1px solid #fff`,
+      border: `1px solid rgba(255,255,255, ${active ? 1 : 0.2})`,
       cursor: 'pointer',
       transition: 'all 0.3s'
     }}
@@ -46,12 +56,13 @@ export const Badge = ({ label, active = false, onClick }) => (
   </button>
 );
 
-export const Card = ({ children, style: ex = {}, padding = '24px', className = '', onClick }) => (
+export const Card = ({ children, style: ex = {}, padding = '24px', className = '', onClick, glass = false }) => (
   <div 
-    className={`${className} hover-lift`} 
+    className={`${className} ${glass ? 'glass' : ''}`} 
     onClick={onClick}
     style={{ 
-      background: '#000', 
+      background: glass ? 'rgba(255,255,255,0.03)' : '#000', 
+      backdropFilter: glass ? 'blur(10px)' : 'none',
       borderRadius: 0, 
       border: `1px solid rgba(255,255,255,0.1)`, 
       padding, 

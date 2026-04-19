@@ -28,26 +28,26 @@ export const PublicNav = ({ onLoginClick, user }) => {
       borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
       transition: 'all 0.3s'
     }}>
-      <Logo />
+      <Logo size="md" />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
-        <div className="md-hidden" style={{ display: 'flex', gap: 32, fontSize: 11, fontWeight: 900, letterSpacing: '0.2em' }}>
-          <span className="hover-lift" style={{ cursor: 'pointer' }}>MASTERCLASSES</span>
-          <span className="hover-lift" style={{ cursor: 'pointer' }}>CURRICULUM</span>
-          <span className="hover-lift" style={{ cursor: 'pointer' }}>ADMISSIONS</span>
+        <div className="md-hidden" style={{ display: 'flex', gap: 32, fontSize: 10, fontWeight: 900, letterSpacing: '0.25em' }}>
+          <span className="hover-lift" style={{ cursor: 'pointer', opacity: 0.6 }}>MASTERCLASSES</span>
+          <span className="hover-lift" style={{ cursor: 'pointer', opacity: 0.6 }}>CURRICULUM</span>
+          <span className="hover-lift" style={{ cursor: 'pointer', opacity: 0.6 }}>ADMISSIONS</span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
           <button onClick={() => setOverlayActive(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff' }}>
-            <Icon name="search" size={18} />
+            <Icon name="search" size={16} />
           </button>
           
           {user ? (
-             <Avatar user={user} size={32} />
+             <Avatar user={user} size={30} />
           ) : (
             <button 
               onClick={onLoginClick}
-              style={{ background: '#fff', color: '#000', border: 'none', padding: '8px 24px', borderRadius: 2, fontSize: 11, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}
+              style={{ background: '#fff', color: '#000', border: 'none', padding: '8px 20px', fontSize: 10, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.15em' }}
             >
               SIGN IN
             </button>
@@ -55,22 +55,22 @@ export const PublicNav = ({ onLoginClick, user }) => {
         </div>
       </div>
 
-      {/* Search Overlay (Minimalist) */}
+      {/* Search Overlay */}
       {overlayActive && (
         <div style={{ position: 'fixed', inset: 0, background: '#000', zIndex: 1100, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards' }}>
           <button 
             onClick={() => setOverlayActive(false)}
-            style={{ position: 'absolute', top: 30, right: 30, background: 'none', border: '1px solid #fff', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
+            style={{ position: 'absolute', top: 30, right: 30, background: 'none', border: '1px solid rgba(255,255,255,0.2)', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
           >
-            <Icon name="x" size={20} />
+            <Icon name="x" size={18} />
           </button>
           
-          <div style={{ maxWidth: 800, margin: '60px auto' }}>
-            <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.3em', marginBottom: 20, color: '#444' }}>ACADEMY SEARCH</div>
+          <div style={{ maxWidth: 800, margin: '100px auto' }}>
+            <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.4em', marginBottom: 20, color: '#444' }}>ACADEMY SEARCH</div>
             <input 
               autoFocus
-              placeholder="FIND A MASTERCLASS..." 
-              style={{ width: '100%', background: 'none', border: 'none', borderBottom: '2px solid #fff', padding: '20px 0', fontSize: 32, color: '#fff', fontWeight: 900, outline: 'none', letterSpacing: '-0.02em' }}
+              placeholder="FIND A TRACK..." 
+              style={{ width: '100%', background: 'none', border: 'none', borderBottom: '1px solid #fff', padding: '20px 0', fontSize: 40, color: '#fff', fontWeight: 900, outline: 'none', letterSpacing: '-0.03em' }}
             />
           </div>
         </div>
