@@ -1,61 +1,75 @@
 import React from 'react';
 
 export const C = {
-  bg: '#f8fafc', 
-  surface: 'rgba(255, 255, 255, 0.8)',
-  border: 'rgba(226, 232, 240, 0.6)',
-  text: '#0f172a',
-  muted: '#64748b',
-  accent: '#BE123C', // Deep Ruby
-  accentGlow: 'rgba(190, 18, 60, 0.15)',
-  success: '#10b981',
-  warning: '#f59e0b',
+  bg: '#000000', 
+  surface: '#000000',
+  border: 'rgba(255, 255, 255, 0.2)',
+  text: '#ffffff',
+  muted: '#888888',
+  accent: '#ffffff',
+  success: '#ffffff',
+  warning: '#ffffff',
   danger: '#ef4444',
-  shadow: '0 10px 30px -10px rgba(0,0,0,0.1)',
-  shadowLg: '0 20px 40px -15px rgba(0,0,0,0.15)',
+  shadow: 'none',
+  shadowLg: 'none',
 };
 
 export const Logo = ({ size = 'md' }) => {
-  const fs = { sm: 16, md: 20, lg: 32 }[size];
+  const fs = { sm: 16, md: 24, lg: 32 }[size];
   return (
-    <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontSize: fs, letterSpacing: '-0.04em', userSelect: 'none', color: '#0f172a', display: 'flex', alignItems: 'center' }}>
-      LITE<span style={{ color: C.accent }}>RIGHT</span>
-      <span style={{ fontSize: fs * 0.45, marginLeft: 8, padding: '2px 6px', fontWeight: 800, color: '#fff', letterSpacing: '0.1em', background: C.text, borderRadius: 4 }}>ACADEMY</span>
+    <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontSize: fs, letterSpacing: '0.1em', userSelect: 'none', color: '#fff', display: 'flex', alignItems: 'center' }}>
+      LITE<span style={{ color: '#fff', opacity: 0.7 }}>LAB</span>
     </span>
   );
 };
 
-export const Badge = ({ label, color = C.accent }) => (
-  <span style={{ display: 'inline-flex', alignItems: 'center', padding: '4px 12px', borderRadius: 99, fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', background: color + '12', color, border: `1px solid ${color}20`, backdropFilter: 'blur(4px)' }}>
+export const Badge = ({ label, active = false, onClick }) => (
+  <button 
+    onClick={onClick}
+    style={{ 
+      display: 'inline-flex', 
+      alignItems: 'center', 
+      padding: '8px 24px', 
+      borderRadius: 99, 
+      fontSize: 11, 
+      fontWeight: 800, 
+      textTransform: 'uppercase', 
+      letterSpacing: '0.15em', 
+      background: active ? '#fff' : 'transparent', 
+      color: active ? '#000' : '#fff', 
+      border: `1px solid #fff`,
+      cursor: 'pointer',
+      transition: 'all 0.3s'
+    }}
+  >
     {label}
-  </span>
+  </button>
 );
 
-export const Card = ({ children, style: ex = {}, padding = '24px', className = '', glass = false }) => (
-  <div className={className} style={{ 
-    background: glass ? 'rgba(255,255,255,0.7)' : '#fff', 
-    borderRadius: 24, 
-    border: `1px solid ${C.border}`, 
-    boxShadow: C.shadow, 
-    padding, 
-    transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-    backdropFilter: glass ? 'blur(16px)' : 'none',
-    ...ex 
-  }}>
+export const Card = ({ children, style: ex = {}, padding = '24px', className = '', onClick }) => (
+  <div 
+    className={`${className} hover-lift`} 
+    onClick={onClick}
+    style={{ 
+      background: '#000', 
+      borderRadius: 0, 
+      border: `1px solid rgba(255,255,255,0.1)`, 
+      padding, 
+      ...ex 
+    }}
+  >
     {children}
   </div>
 );
 
 export const Avatar = ({ user, size = 40 }) => {
-  if (!user) return <div style={{ width: size, height: size, borderRadius: 16, background: '#f1f5f9', flexShrink: 0 }} />;
-  const initial = (user.name || user.username || 'U')[0].toUpperCase();
+  if (!user) return <div style={{ width: size, height: size, borderRadius: '50%', border: '1px solid #fff', flexShrink: 0 }} />;
+  const initial = (user.name || user.username || 'A')[0].toUpperCase();
   const dp = user.dp || user.photo;
   
   return (
-    <div style={{ width: size, height: size, borderRadius: 16, background: 'linear-gradient(135deg, #f1f5f9, #e2e8f0)', color: C.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 800, border: `2px solid #fff`, boxShadow: '0 8px 16px -4px rgba(0,0,0,0.1)', overflow: 'hidden', flexShrink: 0, position: 'relative' }}>
-      {dp ? (
-        <img src={dp} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" onError={(e) => e.target.style.display = 'none'} />
-      ) : initial}
+    <div style={{ width: size, height: size, borderRadius: '50%', background: '#000', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 800, border: `1px solid #fff`, overflow: 'hidden', flexShrink: 0 }}>
+      {dp ? <img src={dp} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : initial}
     </div>
   );
 };
