@@ -5,71 +5,8 @@ import Icon from '../components/Icon';
 import { useLmsStore } from '../stores/useLmsStore';
 import { useSearchParams } from 'react-router-dom';
 
-const OTPInput = ({ onChange, onComplete }) => {
-  const len = 6;
-  const [digits, setDigits] = useState(Array(len).fill(''));
-  const refs = Array.from({ length: len }, () => useRef(null));
-  
-  const handle = (i, v) => {
-    if (!/^\d?$/.test(v)) return;
-    const next = [...digits]; 
-    next[i] = v; 
-    setDigits(next);
-    const code = next.join('');
-    onChange(code);
-    
-    if (v && i < len - 1) {
-      refs[i + 1].current?.focus();
-    }
-    
-    if (code.length === len) {
-      onComplete(code);
-    }
-  };
 
-  const keyDown = (i, e) => { 
-    if (e.key === 'Backspace' && !digits[i] && i > 0) {
-      refs[i - 1].current?.focus(); 
-    }
-  };
 
-  return (
-    <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 32 }}>
-      {digits.map((d, i) => (
-        <input 
-          key={i} 
-          ref={refs[i]} 
-          value={d} 
-          maxLength={1} 
-          onChange={e => handle(i, e.target.value)} 
-          onKeyDown={e => keyDown(i, e)}
-          style={{ 
-            width: 48, height: 60, textAlign: 'center', fontSize: 24, fontWeight: 800, 
-            border: `2px solid ${d ? C.accent : C.border}`, borderRadius: 12, 
-            background: d ? C.accentLight : '#fff', color: C.accent, outline: 'none', 
-            fontFamily: 'Outfit, sans-serif', transition: 'all 0.2s'
-          }} 
-        />
-      ))}
-    </div>
-  );
-};
-const ErrorBanner = ({ message }) => {
-  if (!message) return null;
-  return (
-    <div style={{
-      display: 'flex', alignItems: 'flex-start', gap: 10,
-      background: '#fff1f2', border: '1.5px solid #fca5a5',
-      borderLeft: '4px solid #e11d48', borderRadius: 10,
-      padding: '14px 16px', animation: 'slideInErr 0.25s ease'
-    }}>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
-        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-      </svg>
-      <span style={{ fontSize: 13.5, fontWeight: 600, color: '#9f1239', lineHeight: 1.5 }}>{message}</span>
-    </div>
-  );
-};
 
 
 const AuthPage = ({ onBack }) => {
@@ -103,234 +40,163 @@ const AuthPage = ({ onBack }) => {
       setOtpContext(result.context || 'signup');
       setStep('otp');
     } else if (result.success) {
-      // Logic handled by App.jsx through store update
+      // Logic handled by App.jsx
     } else {
       const msg = result.error || '';
-      const isAlreadyExists = msg.toLowerCase().includes('already exists');
-      const isNotFound = msg.toLowerCase().includes('not found') || msg.toLowerCase().includes('sign up');
-      if (isAlreadyExists) {
-        setConflictModal('already-exists');
-      } else if (isNotFound) {
-        setConflictModal('not-found');
-      } else {
-        setErr(msg || 'Authentication failed');
-      }
-    }
-  };
-
-  const handleForgotRequest = async (e) => {
-    e.preventDefault();
-    setErr('');
-    if (!form.username) {
-      setErr('Please enter your email address.');
-      return;
-    }
-    const result = await requestPasswordReset(form.username);
-    if (result.success) {
-      setStep('forgot-reset');
-    } else {
-      const msg = result.error || '';
-      if (msg.toLowerCase().includes('not found')) {
-        setErr('No account found with this email. Please sign up first.');
-      } else {
-        setErr(msg || 'Something went wrong. Please try again.');
-      }
-    }
-  };
-
-  const handleForgotReset = async (e) => {
-    e.preventDefault();
-    setErr('');
-    if (form.password !== form.confirmPassword) {
-      setErr('New passwords do not match.');
-      return;
-    }
-    const success = await submitPasswordReset(form.username, form.otp, form.password);
-    if (success) {
-      setStep('auth');
-      setTab('login');
-      setForm({ ...form, password: '', confirmPassword: '', otp: '' });
-    } else {
-      setErr('Invalid security code. Please try again.');
+      if (msg.toLowerCase().includes('already exists')) setConflictModal('already-exists');
+      else if (msg.toLowerCase().includes('not found') || msg.toLowerCase().includes('sign up')) setConflictModal('not-found');
+      else setErr(msg || 'Authentication failed');
     }
   };
 
   const handleOtpVerify = async (code) => {
     setErr('');
     const success = await verifyOtp(form.username, code || form.otp);
-    if (!success) {
-      setErr('Invalid security code. Please try again.');
-    }
+    if (!success) setErr('Invalid security code. Please try again.');
   };
 
   return (
-    <div className="md-p-4" style={{ minHeight: '100vh', background: C.surface, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div className="md-p-4" style={{ 
+      minHeight: '100vh', 
+      background: '#0f172a', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      padding: 24,
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Background Gradients */}
+      <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(190,18,60,0.15) 0%, transparent 70%)' }} />
+      <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '50%', height: '50%', background: 'radial-gradient(circle, rgba(190,18,60,0.1) 0%, transparent 70%)' }} />
 
       {/* Conflict Modal Overlay */}
       {conflictModal && (
-        <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.65)', zIndex: 1000,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
-          animation: 'fadeIn 0.2s ease'
-        }}>
-          <div style={{
-            background: '#fff', borderRadius: 20, padding: 40, maxWidth: 400, width: '100%',
-            textAlign: 'center', boxShadow: '0 32px 80px rgba(0,0,0,0.2)',
-            animation: 'fadeUp 0.3s ease'
-          }}>
-            {conflictModal === 'already-exists' ? (
-              <>
-                <div style={{ width: 64, height: 64, background: '#fff1f2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e11d48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                </div>
-                <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 800, color: '#0f172a', marginBottom: 10 }}>Account Already Exists</h3>
-                <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.6, marginBottom: 28 }}>
-                  An account with <strong style={{ color: '#0f172a' }}>{form.username}</strong> is already registered.<br/>Please log in to continue.
-                </p>
-                <button
-                  onClick={() => { setConflictModal(null); setTab('login'); setErr(''); }}
-                  style={{ width: '100%', background: '#e11d48', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 0', fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 12 }}
-                >
-                  Go to Log In
-                </button>
-                <button onClick={() => setConflictModal(null)} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>Dismiss</button>
-              </>
-            ) : (
-              <>
-                <div style={{ width: 64, height: 64, background: '#fff1f2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e11d48" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                </div>
-                <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 800, color: '#0f172a', marginBottom: 10 }}>Account Not Found</h3>
-                <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.6, marginBottom: 28 }}>
-                  No account exists for <strong style={{ color: '#0f172a' }}>{form.username}</strong>.<br/>Create a new account to get started.
-                </p>
-                <button
-                  onClick={() => { setConflictModal(null); setTab('signup'); setErr(''); }}
-                  style={{ width: '100%', background: '#e11d48', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 0', fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 12 }}
-                >
-                  Create an Account
-                </button>
-                <button onClick={() => setConflictModal(null)} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>Dismiss</button>
-              </>
-            )}
-          </div>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.8)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+          <Card glass padding="48px" className="reveal" style={{ maxWidth: 440, width: '100%', textAlign: 'center', boxShadow: '0 40px 100px rgba(0,0,0,0.4)', borderColor: 'rgba(255,255,255,0.1)' }}>
+            <div style={{ width: 80, height: 80, background: 'rgba(190,18,60,0.1)', borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+              <Icon name={conflictModal === 'already-exists' ? "user" : "alert-circle"} size={32} color={C.accent} />
+            </div>
+            <h3 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 900, color: '#fff', marginBottom: 12 }}>
+              {conflictModal === 'already-exists' ? 'Account Found' : 'No Account Found'}
+            </h3>
+            <p style={{ color: '#94a3b8', fontSize: 16, lineHeight: 1.6, marginBottom: 32 }}>
+              {conflictModal === 'already-exists' 
+                ? <>An account with <strong style={{color: '#fff'}}>{form.username}</strong> already exists. Please sign in to proceed.</>
+                : <>The email <strong style={{color: '#fff'}}>{form.username}</strong> is not registered. Sign up to get started!</>
+              }
+            </p>
+            <Btn full size="lg" onClick={() => { setConflictModal(null); setTab(conflictModal === 'already-exists' ? 'login' : 'signup'); setErr(''); }}>
+              {conflictModal === 'already-exists' ? 'Go to Sign In' : 'Create Account Now'}
+            </Btn>
+            <button onClick={() => setConflictModal(null)} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: 14, cursor: 'pointer', fontWeight: 700, marginTop: 20 }}>Dismiss</button>
+          </Card>
         </div>
       )}
-      <div style={{ width: '100%', maxWidth: 480 }}>
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+
+      <div style={{ width: '100%', maxWidth: 500, position: 'relative', zIndex: 1 }}>
+        <div style={{ textAlign: 'center', marginBottom: 50 }} className="reveal">
           <Logo size="lg" />
-          <p style={{ color: C.muted, marginTop: 12, fontWeight: 500 }}>The Gateway to Architectural Mastery</p>
+          <p style={{ color: '#94a3b8', marginTop: 16, fontSize: 16, fontWeight: 500, letterSpacing: '0.01em' }}>Join the Global Vanguard of Lighting Design</p>
         </div>
 
-        <Card padding="40px" className="md-p-4" style={{ border: 'none', boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
+        <Card glass padding="clamp(24px, 8vw, 48px)" className="reveal md-p-4" style={{ borderColor: 'rgba(255,255,255,0.1)', boxShadow: '0 32px 64px -16px rgba(0,0,0,0.5)' }}>
           {step === 'auth' ? (
             <>
-              <div style={{ display: 'flex', background: C.surface, borderRadius: 14, padding: 6, marginBottom: 32 }}>
+              <div style={{ display: 'flex', background: 'rgba(15,23,42,0.6)', borderRadius: 16, padding: 6, marginBottom: 40 }}>
                 {[['login', 'Log In'], ['signup', 'Sign Up']].map(([t, l]) => (
                   <button key={t} onClick={() => setTab(t)}
-                    style={{ flex: 1, padding: '12px', border: 'none', cursor: 'pointer', borderRadius: 10, fontSize: 13, fontWeight: 800, background: tab === t ? '#fff' : 'transparent', color: tab === t ? C.accent : C.muted, transition: 'all 0.2s' }}>
+                    style={{ flex: 1, padding: '14px', border: 'none', cursor: 'pointer', borderRadius: 12, fontSize: 12, fontWeight: 900, background: tab === t ? '#fff' : 'transparent', color: tab === t ? C.accent : '#94a3b8', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', letterSpacing: '0.05em' }}>
                     {l.toUpperCase()}
                   </button>
                 ))}
               </div>
 
-              <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
                 {tab === 'signup' && (
-                  <Field label="Full Name" value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} icon="user" placeholder="Leonardo da Vinci" required />
+                  <DarkField label="Full Name" value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} icon="user" placeholder="Leonardo da Vinci" required />
                 )}
-                <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
-                <Field label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder={tab === 'signup' ? "Create a strong password" : "••••••••"} required />
+                <DarkField label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
+                <DarkField label="Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="••••••••" required />
                 
                 {tab === 'signup' && (
-                  <Field label="Confirm Password" type="password" value={form.confirmPassword} onChange={e => setForm({ ...form, confirmPassword: e.target.value })} icon="shield-check" placeholder="Retype your password" required />
+                  <DarkField label="Confirm Password" type="password" value={form.confirmPassword} onChange={e => setForm({ ...form, confirmPassword: e.target.value })} icon="shield-check" placeholder="••••••••" required />
                 )}
 
                 {tab === 'login' && (
-                  <div style={{ textAlign: 'right', marginTop: -14 }}>
-                    <button type="button" onClick={() => { setErr(''); setStep('forgot-request'); }} style={{ background: 'none', border: 'none', color: C.accent, fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>
-                      Forgot Password?
-                    </button>
+                  <div style={{ textAlign: 'right', marginTop: -16 }}>
+                    <button type="button" onClick={() => setStep('forgot-request')} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}>Forgot Password?</button>
                   </div>
                 )}
                 
                 <ErrorBanner message={err} />
-                
-
-                <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
-                  {tab === 'login' ? 'Continue' : 'Sign Up'}
-                </Btn>
+                <Btn full size="lg" type="submit" style={{ height: 60, fontSize: 16, borderRadius: 16 }}>{tab === 'login' ? 'Enter Academy' : 'Start My Journey'}</Btn>
               </form>
             </>
           ) : step === 'otp' ? (
             <div style={{ textAlign: 'center' }}>
-              <div style={{ width: 64, height: 64, background: C.accentLight, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+              <div style={{ width: 80, height: 80, background: 'rgba(190,18,60,0.1)', borderRadius: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
                 <Icon name="shield-check" size={32} color={C.accent} />
               </div>
-              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 8 }}>
-                {otpContext === 'login' ? 'Verify Your Identity' : 'Check your inbox'}
-              </h2>
-              <p style={{ color: C.muted, fontSize: 15, marginBottom: 8, lineHeight: 1.5 }}>
-                {otpContext === 'resend'
-                  ? <>This email is registered but not yet verified. We've resent a code to <strong style={{ color: C.text }}>{form.username}</strong></>
-                  : otpContext === 'login'
-                  ? <>Your account isn't verified yet. Enter the code sent to <strong style={{ color: C.text }}>{form.username}</strong> to complete verification.</>
-                  : <>We've sent a 6-digit verification code to <strong style={{ color: C.text }}>{form.username}</strong></>
-                }
-              </p>
+              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, color: '#fff', marginBottom: 12 }}>Check your inbox</h2>
+              <p style={{ color: '#94a3b8', fontSize: 15, marginBottom: 32, lineHeight: 1.6 }}>We've sent a 6-digit verification code to <strong style={{color: '#fff'}}>{form.username}</strong></p>
               
               <OTPInput onChange={v => setForm({ ...form, otp: v })} onComplete={handleOtpVerify} />
-              
               <ErrorBanner message={err} />
               
-              <Btn full size="lg" onClick={() => handleOtpVerify(form.otp)} style={{ height: 56, fontSize: 16, marginBottom: 20 }}>
-                Complete Registration & Start Learning
-              </Btn>
-
-              <button type="button" onClick={() => setStep('auth')} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>
-                Didn't get a code? <span style={{ color: C.accent }}>Resend</span>
-              </button>
+              <Btn full size="lg" onClick={() => handleOtpVerify(form.otp)} style={{ height: 60, fontSize: 16, borderRadius: 16, marginTop: 12 }}>Complete Registration</Btn>
+              <button type="button" onClick={() => setStep('auth')} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: 14, cursor: 'pointer', fontWeight: 700, marginTop: 24 }}>Didn't get a code? <span style={{color: C.accent}}>Resend</span></button>
             </div>
-          ) : step === 'forgot-request' ? (
-            <form onSubmit={handleForgotRequest} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-              <div style={{ textAlign: 'center', marginBottom: 10 }}>
-                <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 800, marginBottom: 8 }}>Reset Password</h2>
-                <p style={{ color: C.muted, fontSize: 14 }}>Enter your registered email to receive a recovery code.</p>
-              </div>
-              <Field label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="designer@example.com" required />
-              
-              <ErrorBanner message={err} />
-              
-              <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
-                Send Recovery Code
-              </Btn>
-              
-              <button type="button" onClick={() => setStep('auth')} style={{ background: 'none', border: 'none', color: C.muted, fontSize: 14, cursor: 'pointer', fontWeight: 600 }}>
-                ← Back to Login
-              </button>
-            </form>
           ) : (
-            <form onSubmit={handleForgotReset} style={{ display: 'flex', flexDirection: 'column', gap: 24, textAlign: 'center' }}>
-              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 22, fontWeight: 800 }}>Create New Password</h2>
-              <p style={{ color: C.muted, fontSize: 14, marginTop: -16 }}>Enter the 6-digit code sent to {form.username}</p>
-              
-              <OTPInput onChange={v => setForm({ ...form, otp: v })} onComplete={() => {}} />
-              
-              <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <Field label="New Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="Create a strong password" required />
-                <Field label="Confirm New Password" type="password" value={form.confirmPassword} onChange={e => setForm({ ...form, confirmPassword: e.target.value })} icon="shield-check" placeholder="Retype your new password" required />
-              </div>
-
-              <ErrorBanner message={err} />
-              
-              <Btn full size="lg" type="submit" style={{ height: 56, fontSize: 16 }}>
-                Reset & Log In
-              </Btn>
-            </form>
+            <div style={{ textAlign: 'center' }}>
+               <h2 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, color: '#fff', marginBottom: 32 }}>Reset Access</h2>
+               <form style={{ display: 'flex', flexDirection: 'column', gap: 28, textAlign: 'left' }}>
+                  <DarkField label="Email Address" icon="mail" placeholder="Your email..." />
+                  <Btn full size="lg" style={{ height: 60, borderRadius: 16 }}>Request Code</Btn>
+                  <button type="button" onClick={() => setStep('auth')} style={{ alignSelf: 'center', background: 'none', border: 'none', color: '#64748b', fontSize: 14, cursor: 'pointer', fontWeight: 700 }}>Back to Sign In</button>
+               </form>
+            </div>
           )}
         </Card>
       </div>
     </div>
   );
 };
+
+const DarkField = ({ label, icon, ...props }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <label style={{ fontSize: 11, fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', marginLeft: 4 }}>{label}</label>
+    <div style={{ position: 'relative' }}>
+      <div style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#64748b' }}><Icon name={icon} size={16} /></div>
+      <input {...props} style={{ width: '100%', background: 'rgba(15,23,42,0.4)', borderRadius: 16, border: '1px solid rgba(255,255,255,0.05)', padding: '16px 16px 16px 48px', color: '#fff', outline: 'none', fontSize: 14, transition: 'all 0.3s' }} onFocus={e => { e.target.style.borderColor = C.accent; e.target.style.background = 'rgba(15,23,42,0.6)'; }} onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.05)'; e.target.style.background = 'rgba(15,23,42,0.4)'; }} />
+    </div>
+  </div>
+);
+
+const OTPInput = ({ onChange, onComplete }) => {
+  const [digits, setDigits] = useState(Array(6).fill(''));
+  const refs = Array.from({ length: 6 }, () => useRef(null));
+  const handle = (i, v) => {
+    if (!/^\d?$/.test(v)) return;
+    const next = [...digits]; next[i] = v; setDigits(next);
+    onChange(next.join(''));
+    if (v && i < 5) refs[i + 1].current?.focus();
+    if (next.join('').length === 6) onComplete(next.join(''));
+  };
+  return (
+    <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 40 }}>
+      {digits.map((d, i) => (
+        <input key={i} ref={refs[i]} value={d} maxLength={1} onChange={e => handle(i, e.target.value)} onKeyDown={e => e.key === 'Backspace' && !d && i > 0 && refs[i - 1].current?.focus()} style={{ width: 50, height: 64, textAlign: 'center', fontSize: 24, fontWeight: 900, border: `2px solid ${d ? C.accent : 'rgba(255,255,255,0.05)'}`, borderRadius: 16, background: 'rgba(15,23,42,0.4)', color: '#fff', outline: 'none', transition: 'all 0.2s' }} />
+      ))}
+    </div>
+  );
+};
+
+const ErrorBanner = ({ message }) => message ? (
+  <div className="reveal" style={{ display: 'flex', gap: 12, background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '14px 18px', borderRadius: 16 }}>
+    <Icon name="alert-circle" size={18} color="#ef4444" />
+    <span style={{ fontSize: 14, color: '#fca5a5', fontWeight: 600, lineHeight: 1.4 }}>{message}</span>
+  </div>
+) : null;
 
 export default AuthPage;

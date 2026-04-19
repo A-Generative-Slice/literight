@@ -102,14 +102,14 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
       {/* Hero Section */}
       <div className="md-py-8" style={{ 
         background: course.thumbnail 
-          ? `linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.7)), url(${course.thumbnail}) center/cover no-repeat`
+          ? `linear-gradient(to right, rgba(15,23,42,0.95), rgba(15,23,42,0.7)), url(${course.thumbnail}) center/cover no-repeat`
           : `linear-gradient(135deg, ${C.text} 0%, #1e293b 100%)`, 
         color: '#fff', 
         padding: '60px 0 100px 0', 
         position: 'relative', 
         overflow: 'hidden' 
       }}>
-        <div className="md-grid-1 md-gap-4 md-pb-8" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60, alignItems: 'center', position: 'relative', zIndex: 10 }}>
+        <div className="md-grid-reset md-gap-4 md-pb-8" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 0.8fr)', gap: 'clamp(24px, 4vw, 60px)', alignItems: 'center', position: 'relative', zIndex: 10 }}>
           <div>
             <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
               {course?.tags?.map(t => <span key={t} style={{ background: 'rgba(255,255,255,0.1)', padding: '5px 12px', borderRadius: 99, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t}</span>)}
@@ -133,31 +133,10 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
               </div>
             </div>
           </div>
-
-          <div style={{ position: 'relative' }}>
-            <div className="md-translate-y-0" style={{ transform: 'translateY(40px)' }}>
-              <Card className="md-p-4" style={{ padding: 40, background: '#fff', color: C.text, boxShadow: '10px 30px 60px rgba(0,0,0,0.1)' }}>
-              <div style={{ marginBottom: 32 }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 36, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>${course?.price || '0'}</span>
-                  <span style={{ color: C.muted, textDecoration: 'line-through' }}>${course?.originalPrice || (course?.price * 1.5) || '0'}</span>
-                </div>
-                <div style={{ color: C.success, fontSize: 13, fontWeight: 700 }}>Exclusive Early Bird Offer</div>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <Btn full size="lg" onClick={() => onEnroll(course.id)}>Enroll Now — Lifetime Access</Btn>
-                <div style={{ textAlign: 'center', fontSize: 12, color: C.muted, marginTop: 12 }}>
-                  30-Day Money-Back Guarantee
-                </div>
-              </div>
-              </Card>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="md-grid-1 md-gap-4 md-py-8" style={{ maxWidth: 1200, margin: '80px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 60 }}>
+      <div className="md-grid-reset" style={{ maxWidth: 1200, margin: '-60px auto 100px', padding: '0 var(--container-px)', display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 0.8fr)', gap: 'clamp(24px, 4vw, 60px)', position: 'relative', zIndex: 20 }}>
         <div>
           <section style={{ marginBottom: 60 }}>
             <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 24, fontWeight: 800, marginBottom: 24 }}>About this course</h2>
@@ -200,7 +179,7 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
                     </button>
                   </div>
                 </div>
-                <img src={course.thumbnail} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }} />
+                <img src={course.thumbnail} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }} alt="Course Preview" />
               </div>
               
               <div style={{ marginTop: 24, padding: 24, background: C.surface, borderRadius: 16, border: `1px solid ${C.border}` }}>
@@ -212,7 +191,14 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
         </div>
 
         <aside>
-          <div style={{ position: 'sticky', top: 40 }}>
+          <div style={{ position: 'sticky', top: 40, display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {!isLoggedIn && (
+               <Card padding="32px" style={{ background: '#fff', border: `1px solid ${C.accent}`, boxShadow: '0 20px 40px rgba(190,18,60,0.1)' }}>
+                  <div style={{ fontSize: 32, fontWeight: 900, color: C.text, marginBottom: 8 }}>FREE</div>
+                  <p style={{ color: C.muted, fontSize: 14, marginBottom: 24, fontWeight: 500 }}>Unlock module 1 instantly upon registration.</p>
+                  <Btn full size="lg" onClick={() => onEnroll('signup')}>Enroll Now</Btn>
+               </Card>
+            )}
             <Syllabus 
               course={course} 
               progress={progress} 
