@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card } from '../components/Common';
 import Icon from '../components/Icon';
+import motivationBg from '../assets/motivation-bg.png';
 
 const LEARNING_TRACKS = [
   { id: 'architectural', name: 'ARCHITECTURAL', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=400&auto=format&fit=crop' },
@@ -21,9 +22,46 @@ const PublicLanding = ({ courses, onCourse }) => {
     : (courses || []);
 
   return (
-    <div style={{ background: '#000', minHeight: '100vh', color: '#fff', paddingTop: 100 }}>
+    <div style={{ background: '#000', minHeight: '100vh', color: '#fff' }}>
+      
+      {/* Heritage Hero with Illustration BG */}
+      <section style={{ 
+        position: 'relative', 
+        height: '70vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        padding: '0 var(--container-px)',
+        overflow: 'hidden'
+      }}>
+        {/* The motivation-bg sketch integrated wisely */}
+        <div style={{ 
+          position: 'absolute', 
+          inset: 0, 
+          backgroundImage: `url(${motivationBg})`, 
+          backgroundSize: 'contain', 
+          backgroundPosition: 'center', 
+          backgroundRepeat: 'no-repeat',
+          opacity: 0.1,
+          filter: 'invert(1)', // Convert black ink to white glow
+          zIndex: 0
+        }} />
+        
+        {/* Gradient Fade to Black */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, #000 90%)', zIndex: 1 }} />
+
+        <div className="reveal" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 800 }}>
+          <h1 style={{ fontSize: 'clamp(40px, 8vw, 72px)', fontWeight: 900, lineHeight: 0.9, marginBottom: 24, letterSpacing: '-0.04em' }}>
+            Designing <span style={{ opacity: 0.5 }}>The Speed Of Light.</span>
+          </h1>
+          <p style={{ fontSize: 13, fontWeight: 800, color: '#888', letterSpacing: '0.4em', textTransform: 'uppercase' }}>
+            International Lighting Academy
+          </p>
+        </div>
+      </section>
+
       {/* 8-Circle Masterclass Navigator */}
-      <section style={{ padding: '40px 0', maxWidth: 1200, margin: '0 auto' }}>
+      <section style={{ padding: '40px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 3 }}>
         <h2 style={{ fontSize: 13, fontWeight: 900, textAlign: 'center', letterSpacing: '0.3em', marginBottom: 60, color: '#666' }}>EXPLORE MASTERY TRACKS</h2>
         <div style={{ 
           display: 'grid', 
