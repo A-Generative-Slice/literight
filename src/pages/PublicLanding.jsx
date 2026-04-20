@@ -1,72 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '../components/Common';
 import Icon from '../components/Icon';
-import motivationBg from '../assets/motivation-bg.png';
+import ParticleField from '../components/ParticleField';
 
 const PublicLanding = ({ courses, onCourse }) => {
-  // No longer using activeTrack filtering for now since the circle navigator is removed
   const filteredCourses = courses || [];
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Normalize mouse position to range -1 to 1
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      setMousePos({ x, y });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   return (
     <div style={{ background: '#000', minHeight: '100vh', color: '#fff' }}>
       
-      {/* Heritage Hero */}
+      {/* Full-Screen Interactive Hero */}
       <section style={{ 
         position: 'relative', 
-        height: '75vh', 
+        height: '100dvh', // Dynamic Viewport Height for mobile optimization
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
         padding: '0 var(--container-px)',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        background: '#000'
       }}>
-        <div style={{ 
-          position: 'absolute', 
-          inset: 0, 
-          backgroundImage: `url(${motivationBg})`, 
-          backgroundSize: 'contain', 
-          backgroundPosition: 'center', 
-          backgroundRepeat: 'no-repeat',
-          opacity: 0.08,
-          filter: 'invert(1)',
-          zIndex: 0
-        }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 0%, #000 95%)', zIndex: 1 }} />
-
-        <div className="reveal" style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 900 }}>
-          <h1 style={{ fontSize: 'clamp(40px, 10vw, 90px)', fontWeight: 900, lineHeight: 0.85, marginBottom: 32, letterSpacing: '-0.05em' }}>
-            Designing <br/><span style={{ opacity: 0.3 }}>The Speed Of Light.</span>
+        <ParticleField />
+        
+        {/* Parallax Content Wrapper */}
+        <div className="reveal" style={{ 
+          position: 'relative', 
+          zIndex: 2, 
+          textAlign: 'center', 
+          maxWidth: 1000,
+          transform: `translate(${mousePos.x * 15}px, ${mousePos.y * 15}px)`,
+          transition: 'transform 0.1s ease-out'
+        }}>
+          <h1 style={{ 
+            fontSize: 'clamp(40px, 12vw, 120px)', 
+            fontWeight: 900, 
+            lineHeight: 0.8, 
+            marginBottom: 24, 
+            letterSpacing: '-0.06em',
+            textTransform: 'uppercase'
+          }}>
+            Literight <br/>
+            <span style={{ opacity: 0.15 }}>Academy</span>
           </h1>
-          <p style={{ fontSize: 11, fontWeight: 900, color: '#fff', letterSpacing: '0.5em', textTransform: 'uppercase' }}>
-            International Learning Academy
+          
+          <p style={{ 
+            fontSize: 'clamp(10px, 2vw, 14px)', 
+            fontWeight: 900, 
+            color: '#fff', 
+            letterSpacing: '0.4em', 
+            textTransform: 'uppercase',
+            opacity: 0.6,
+            marginBottom: 60,
+            maxWidth: 600,
+            margin: '0 auto 60px'
+          }}>
+            Synergizing engineering and passionate design for the next generation of lighting masters.
           </p>
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 20 }}>
+            <div style={{ 
+              height: 1, 
+              width: 100, 
+              background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent)' 
+            }} />
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', opacity: 0.3, fontSize: 8, fontWeight: 900, letterSpacing: '0.5em' }}>
+          SCROLL TO EXPLORE
         </div>
       </section>
 
-      {/* Brand Intro / About Section (Replaces Circles) */}
-      <section style={{ padding: '80px 0 100px', position: 'relative', zIndex: 3 }}>
+      {/* Brand Intro / About Section */}
+      <section style={{ padding: '120px 0', position: 'relative', zIndex: 3, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 var(--container-px)', textAlign: 'center' }}>
-          <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.5em', color: '#444', marginBottom: 32 }}>THE LEGACY</div>
+          <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.5em', color: '#444', marginBottom: 40 }}>THE LEGACY</div>
           <p style={{ 
-            fontSize: 'clamp(18px, 4vw, 22px)', 
-            lineHeight: 1.6, 
-            fontWeight: 500, 
+            fontSize: 'clamp(18px, 4vw, 24px)', 
+            lineHeight: 1.5, 
+            fontWeight: 400, 
             color: '#eee',
             letterSpacing: '-0.01em'
           }}>
             LITERIGHT ACADEMY exists to translate Litelab's independent lighting design expertise into professional pathways for new learners. 
             Specializing in sustainable lighting, IoT solutions, and home automation, we synergize engineering and passionate design 
-            to deliver qualitative, industry-grade education for the next generation of designers.
+            to deliver qualitative, industry-grade education.
           </p>
-          <div style={{ marginTop: 48, height: 1, width: 80, background: 'rgba(255,255,255,0.2)', margin: '48px auto' }} />
         </div>
       </section>
 
-      {/* Courses Section - NEW High Contrast Design */}
-      <section id="courses" style={{ padding: '0 0 120px' }}>
+      {/* Courses Section - Solid White Cards */}
+      <section id="courses" style={{ padding: '60px 0 120px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)' }}>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 40 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 60 }}>
             {filteredCourses.map((c, i) => (
               <div 
                 key={i} 
@@ -74,18 +113,16 @@ const PublicLanding = ({ courses, onCourse }) => {
                 style={{ cursor: 'pointer', animationDelay: `${i * 0.1}s` }}
                 className="reveal"
               >
-                {/* Solid White High-Contrast Card */}
                 <div style={{ 
                   background: '#fff', 
                   padding: 0, 
-                  borderRadius: 0, 
-                  overflow: 'hidden',
-                  transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s',
-                  position: 'relative'
+                  transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                  position: 'relative',
+                  border: '1px solid transparent'
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.4)';
+                  e.currentTarget.style.transform = 'translateY(-12px)';
+                  e.currentTarget.style.boxShadow = '0 40px 80px rgba(0,0,0,0.5)';
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = 'translateY(0)';
@@ -103,11 +140,11 @@ const PublicLanding = ({ courses, onCourse }) => {
                     
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 24, borderTop: '1px solid rgba(0,0,0,0.08)' }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontSize: 8, fontWeight: 900, letterSpacing: '0.2em', color: '#888', marginBottom: 4 }}>INSTRUCTOR</span>
+                        <span style={{ fontSize: 8, fontWeight: 900, letterSpacing: '0.2em', color: '#888' }}>INSTRUCTOR</span>
                         <span style={{ fontSize: 10, fontWeight: 900, color: '#000' }}>{c.instructor.toUpperCase()}</span>
                       </div>
-                      <div style={{ width: 40, height: 40, border: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                         <Icon name="arrow" size={14} color="#000" />
+                      <div style={{ width: 44, height: 44, border: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                         <Icon name="arrow" size={16} color="#000" />
                       </div>
                     </div>
                   </div>
@@ -119,33 +156,20 @@ const PublicLanding = ({ courses, onCourse }) => {
       </section>
 
       {/* Minimalist Footer */}
-      <footer style={{ padding: '80px 0 40px', borderTop: '1px solid rgba(255,255,255,0.05)', background: '#000' }}>
+      <footer style={{ padding: '100px 0 60px', borderTop: '1px solid rgba(255,255,255,0.05)', background: '#000' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', textAlign: 'center' }}>
-          
-          {/* Social Icons Row */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginBottom: 40 }}>
-            <Icon name="instagram" size={20} />
-            <Icon name="linkedin" size={20} />
-            <Icon name="pinterest" size={20} />
-            <Icon name="facebook" size={20} />
-            <Icon name="twitter" size={20} />
-            <Icon name="youtube" size={20} />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginBottom: 60 }}>
+            {['instagram', 'linkedin', 'pinterest', 'facebook', 'twitter', 'youtube'].map(s => (
+              <Icon key={s} name={s} size={20} />
+            ))}
           </div>
-
-          {/* Nav Links Row */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 'clamp(20px, 4vw, 40px)', marginBottom: 40, fontSize: 12, fontWeight: 900, letterSpacing: '0.1em' }}>
-            <span style={{ cursor: 'pointer' }}>HOME</span>
-            <span style={{ cursor: 'pointer' }}>ABOUT</span>
-            <span style={{ cursor: 'pointer' }}>PROJECTS</span>
-            <span style={{ cursor: 'pointer' }}>TEAM</span>
-            <span style={{ cursor: 'pointer' }}>CONTACT</span>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: 60, fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', opacity: 0.6 }}>
+            {['HOME', 'ABOUT', 'PROJECTS', 'TEAM', 'CONTACT'].map(l => (
+              <span key={l} style={{ cursor: 'pointer' }} className="hover-lift">{l}</span>
+            ))}
           </div>
-
-          {/* Legal Row */}
-          <div style={{ fontSize: 11, color: '#fff', fontWeight: 700, letterSpacing: '0.02em', display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div>
-              Copyright © 2026. All Rights Reserved <span style={{ opacity: 0.3, margin: '0 10px' }}>|</span> Privacy Policy <span style={{ opacity: 0.3, margin: '0 10px' }}>|</span> Designed and Developed by LITERIGHT ACADEMY
-            </div>
+          <div style={{ fontSize: 10, color: '#444', fontWeight: 600, letterSpacing: '0.05em' }}>
+            Copyright © 2026. All Rights Reserved | Privacy Policy | Designed and Developed by LITERIGHT ACADEMY
           </div>
         </div>
       </footer>

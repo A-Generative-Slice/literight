@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Logo, Avatar } from './Common';
+import { Avatar } from './Common';
 import Icon from './Icon';
 
 export const PublicNav = ({ onLoginClick, user }) => {
@@ -13,49 +13,84 @@ export const PublicNav = ({ onLoginClick, user }) => {
   }, []);
 
   return (
-    <nav style={{ 
-      position: 'fixed', 
-      top: 0, 
-      left: 0, 
-      right: 0, 
-      height: 80, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'space-between', 
-      padding: '0 var(--container-px)', 
-      zIndex: 1000,
-      background: isScrolled ? 'rgba(0,0,0,0.98)' : 'transparent',
-      borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
-      transition: 'all 0.3s'
-    }}>
-      <Logo size="md" />
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-        <button onClick={() => setOverlayActive(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="search" size={18} />
-        </button>
-        
-        {user ? (
-           <Avatar user={user} size={30} />
-        ) : (
+    <>
+      <nav style={{ 
+        position: 'fixed', 
+        top: 30, 
+        right: 30, 
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12
+      }}>
+        {/* Desktop Mirror Island */}
+        <div className="md-hidden" style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 12,
+          padding: '8px 8px 8px 20px',
+          background: 'rgba(255, 255, 255, 0.03)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: 100,
+          boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+        }}>
           <button 
-            onClick={onLoginClick}
+            onClick={() => setOverlayActive(true)} 
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', padding: 8, display: 'flex', alignItems: 'center', opacity: 0.8 }}
+          >
+            <Icon name="search" size={18} />
+          </button>
+          
+          {user ? (
+             <Avatar user={user} size={32} />
+          ) : (
+            <button 
+              onClick={onLoginClick}
+              style={{ 
+                background: '#fff', 
+                color: '#000', 
+                border: 'none', 
+                padding: '10px 24px', 
+                fontSize: 10, 
+                fontWeight: 900, 
+                cursor: 'pointer', 
+                letterSpacing: '0.15em',
+                borderRadius: 100,
+                textTransform: 'uppercase'
+              }}
+            >
+              GET STARTED
+            </button>
+          )}
+        </div>
+
+        {/* Mobile Menu Button - Appears on small screens */}
+        <div className="md-block" style={{ display: 'none' }}>
+           <button 
+            onClick={() => {/* Toggle Mobile Menu logic if needed, for now use Search as entry */}}
             style={{ 
-              background: '#fff', 
-              color: '#000', 
-              border: 'none', 
-              padding: '10px 24px', 
-              fontSize: 10, 
-              fontWeight: 900, 
-              cursor: 'pointer', 
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase'
+              width: 50, 
+              height: 50, 
+              background: 'rgba(255,255,255,0.05)', 
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              cursor: 'pointer'
             }}
           >
-            GET STARTED
-          </button>
-        )}
-      </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, width: 20 }}>
+               <div style={{ height: 1.5, background: '#fff', width: '100%' }} />
+               <div style={{ height: 1.5, background: '#fff', width: '100%' }} />
+            </div>
+           </button>
+        </div>
+      </nav>
 
       {/* Search Overlay */}
       {overlayActive && (
@@ -77,6 +112,6 @@ export const PublicNav = ({ onLoginClick, user }) => {
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 };
