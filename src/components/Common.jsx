@@ -14,7 +14,7 @@ export const C = {
   shadowLg: 'none',
 };
 
-export const Logo = ({ size = 'md' }) => {
+export const Logo = ({ size = 'md', stacked = false }) => {
   const fs = { sm: 14, md: 20, lg: 32 }[size];
   return (
     <span style={{ 
@@ -24,11 +24,13 @@ export const Logo = ({ size = 'md' }) => {
       letterSpacing: '0.15em', 
       userSelect: 'none', 
       color: '#fff', 
-      display: 'flex', 
+      display: stacked ? 'flex' : 'inline-flex',
+      flexDirection: stacked ? 'column' : 'row',
       alignItems: 'center',
-      textTransform: 'uppercase'
+      textTransform: 'uppercase',
+      lineHeight: stacked ? 1.1 : 1
     }}>
-      LITERIGHT <span style={{ opacity: 0.5, marginLeft: '0.3em' }}>ACADEMY</span>
+      LITERIGHT {stacked && <br />} <span style={{ opacity: 0.5, marginLeft: stacked ? 0 : '0.3em' }}>ACADEMY</span>
     </span>
   );
 };

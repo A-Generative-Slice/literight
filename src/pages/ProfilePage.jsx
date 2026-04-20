@@ -68,7 +68,7 @@ const ProfilePage = () => {
           </div>
           
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.4em', color: '#444', marginBottom: 12 }}>STUDENT IDENTITY</div>
+            <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.4em', color: '#444', marginBottom: 12 }}>STUDENT PROFILE</div>
             <h1 style={{ fontSize: 'clamp(32px, 6vw, 64px)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1, textTransform: 'uppercase' }}>
               {(user.name || user.username.split('@')[0]).toUpperCase()}
             </h1>
@@ -76,7 +76,7 @@ const ProfilePage = () => {
 
           <div style={{ display: 'flex', gap: 12 }}>
             <Badge label="Learning Path" active={activeTab === 'courses'} onClick={() => setActiveTab('courses')} />
-            <Badge label="Identity Settings" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
+            <Badge label="Account Settings" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
           </div>
         </div>
       </section>
@@ -114,7 +114,7 @@ const ProfilePage = () => {
                   >
                     <div style={{ width: 140, height: 140, background: course.thumbnail ? `url(${course.thumbnail}) center/cover` : '#111', flexShrink: 0 }} />
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.2em', opacity: 0.4, marginBottom: 16 }}>ACTIVE CERTIFICATION</div>
+                      <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.2em', opacity: 0.4, marginBottom: 16 }}>ACTIVE COURSE</div>
                       <h3 style={{ fontSize: 24, fontWeight: 900, marginBottom: 20, letterSpacing: '-0.02em' }}>{course.title.toUpperCase()}</h3>
                       
                       <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
@@ -127,7 +127,7 @@ const ProfilePage = () => {
                   </div>
                 )) : (
                   <div style={{ textAlign: 'center', padding: '100px 0', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                    <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', opacity: 0.4, marginBottom: 20 }}>NO ACTIVE PATHWAYS</div>
+                    <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', opacity: 0.4, marginBottom: 20 }}>NO ACTIVE COURSES</div>
                     <button 
                       onClick={() => navigate('/')}
                       style={{ background: '#fff', color: '#000', border: 'none', padding: '16px 32px', fontSize: 10, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}
@@ -143,7 +143,7 @@ const ProfilePage = () => {
           {activeTab === 'profile' && (
             <div className="reveal" style={{ maxWidth: 500 }}>
               <div style={{ marginBottom: 60 }}>
-                <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.2em', color: '#444', marginBottom: 30 }}>IDENTITY NEXUS</div>
+                <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.2em', color: '#444', marginBottom: 30 }}>PROFILE SETTINGS</div>
                 
                 <div style={{ marginBottom: 40 }}>
                    <label style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', opacity: 0.4, display: 'block', marginBottom: 12 }}>FULL NAME</label>
@@ -166,7 +166,7 @@ const ProfilePage = () => {
 
                 {message && (
                   <div style={{ marginBottom: 30, fontSize: 10, fontWeight: 900, letterSpacing: '0.2em', color: '#fff' }}>
-                    {message}
+                    {message.toUpperCase()}
                   </div>
                 )}
 
@@ -175,7 +175,7 @@ const ProfilePage = () => {
                   disabled={saving}
                   style={{ background: '#fff', color: '#000', border: 'none', padding: '20px 40px', fontSize: 11, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em', width: '100%' }}
                 >
-                  {saving ? 'SYNCING...' : 'SAVE IDENTITY'}
+                  {saving ? 'SAVING...' : 'SAVE CHANGES'}
                 </button>
               </div>
 
@@ -186,7 +186,7 @@ const ProfilePage = () => {
                     }}
                     style={{ background: 'none', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '14px 24px', fontSize: 9, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.2em' }}
                   >
-                    TERMINATE SESSION
+                    LOGOUT
                   </button>
               </div>
             </div>
