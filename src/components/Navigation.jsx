@@ -73,7 +73,13 @@ export const PublicNav = ({ user }) => {
     navigate(path);
   };
 
-  const handleActionClick = () => {
+  const handleActionClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Explicit console logging for debugging (if user checks)
+    console.log("Navigation toggle triggered", isAuthPage ? "to Home" : "to Auth");
+
     if (isAuthPage) {
       navigate('/');
     } else {
@@ -83,12 +89,11 @@ export const PublicNav = ({ user }) => {
 
   return (
     <>
-      {/* Universal Floating Island - Consistent on all devices */}
       <nav style={{ 
         position: 'fixed', 
         top: 'clamp(20px, 4vw, 30px)', 
         right: 'clamp(20px, 4vw, 30px)', 
-        zIndex: 1000,
+        zIndex: 10000, // Maximized Z-Index
         display: 'flex',
         alignItems: 'center',
         pointerEvents: 'auto'
@@ -98,31 +103,45 @@ export const PublicNav = ({ user }) => {
           alignItems: 'center', 
           gap: 'clamp(8px, 2vw, 12px)',
           padding: 'clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 20px)',
-          background: 'rgba(255, 255, 255, 0.05)',
-          backdropFilter: 'blur(34px)',
-          WebkitBackdropFilter: 'blur(34px)',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
+          background: 'rgba(255, 255, 255, 0.08)', // Slightly more visible
+          backdropFilter: 'blur(40px)',
+          WebkitBackdropFilter: 'blur(40px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)', // Sharper border
           borderRadius: 100,
-          boxShadow: '0 30px 60px rgba(0,0,0,0.5)'
+          boxShadow: '0 30px 60px rgba(0,0,0,0.6)',
+          pointerEvents: 'auto'
         }}>
           <button 
-            onClick={() => setOverlayActive(true)} 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setOverlayActive(true);
+            }} 
             style={{ 
               background: 'none', 
               border: 'none', 
               cursor: 'pointer', 
               color: '#fff', 
-              padding: 8, 
+              padding: 10, 
               display: 'flex', 
-              alignItems: 'center', 
-              opacity: 1
+              alignItems: 'center',
+              pointerEvents: 'auto'
             }}
           >
-            <Icon name="search" size={18} />
+            <Icon name="search" size={20} />
           </button>
           
           {user ? (
-             <Avatar user={user} size={34} />
+             <button 
+               onClick={(e) => {
+                 e.preventDefault();
+                 e.stopPropagation();
+                 navigate('/profile');
+               }}
+               style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+             >
+               <Avatar user={user} size={36} />
+             </button>
           ) : (
             <button 
               onClick={handleActionClick}
@@ -130,14 +149,17 @@ export const PublicNav = ({ user }) => {
                 background: '#fff', 
                 color: '#000', 
                 border: 'none', 
-                padding: '10px clamp(16px, 3vw, 24px)', 
-                fontSize: 'clamp(9px, 1.5vw, 10px)', 
+                padding: '12px clamp(20px, 3.5vw, 32px)', // Larger tap area
+                fontSize: 'clamp(10px, 1.8vw, 11px)', 
                 fontWeight: 900, 
                 cursor: 'pointer', 
                 letterSpacing: '0.15em',
                 borderRadius: 100,
                 textTransform: 'uppercase',
-                outline: 'none'
+                outline: 'none',
+                WebkitTapHighlightColor: 'transparent', // Remove blue flash on mobile
+                pointerEvents: 'auto',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
               }}
             >
               {isAuthPage ? 'BACK TO ACADEMY' : 'GET STARTED'}
@@ -148,15 +170,15 @@ export const PublicNav = ({ user }) => {
 
       {/* Search Overlay */}
       {overlayActive && (
-        <div style={{ position: 'fixed', inset: 0, background: '#0a0a0a', zIndex: 1100, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
+        <div style={{ position: 'fixed', inset: 0, background: '#0a0a0a', zIndex: 11000, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
           <button 
             onClick={() => {
               setOverlayActive(false);
               setSearchTerm('');
             }}
-            style={{ position: 'fixed', top: 30, right: 30, background: 'none', border: '1px solid rgba(255,255,255,0.2)', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
+            style={{ position: 'fixed', top: 30, right: 30, background: 'none', border: '1px solid rgba(255,255,255,0.2)', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
           >
-            <Icon name="x" size={18} />
+            <Icon name="x" size={20} />
           </button>
           
           <div style={{ maxWidth: 800, margin: '100px auto' }}>
@@ -166,7 +188,7 @@ export const PublicNav = ({ user }) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="FIND A TRACK, MODULE OR SESSION..." 
-              style={{ width: '100%', background: 'none', border: 'none', borderBottom: '1px solid #fff', padding: '20px 0', fontSize: 'clamp(24px, 5vw, 40px)', color: '#fff', fontWeight: 900, outline: 'none', letterSpacing: '-0.03em' }}
+              style={{ width: '100%', background: 'none', border: 'none', borderBottom: '1px solid #fff', padding: '24px 0', fontSize: 'clamp(24px, 5vw, 40px)', color: '#fff', fontWeight: 900, outline: 'none', letterSpacing: '-0.03em' }}
             />
 
             {searchResults.length > 0 && (
@@ -180,7 +202,7 @@ export const PublicNav = ({ user }) => {
                       justifyContent: 'space-between', 
                       alignItems: 'center', 
                       cursor: 'pointer',
-                      padding: '16px 0',
+                      padding: '20px 0',
                       borderBottom: '1px solid rgba(255,255,255,0.05)',
                       transition: 'all 0.4s'
                     }}
@@ -192,14 +214,14 @@ export const PublicNav = ({ user }) => {
                       </div>
                       <div style={{ fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>{result.title.toUpperCase()}</div>
                     </div>
-                    <Icon name="arrow" size={18} />
+                    <Icon name="arrow" size={20} />
                   </div>
                 ))}
               </div>
             )}
 
             {searchTerm && searchResults.length === 0 && (
-              <div style={{ marginTop: 60, fontSize: 14, color: '#444', letterSpacing: '0.1em', fontWeight: 900 }}>
+              <div style={{ marginTop: 60, fontSize: 13, color: '#444', letterSpacing: '0.1em', fontWeight: 900 }}>
                 NO DIRECT MATCHES FOUND FOR "{searchTerm.toUpperCase()}"
               </div>
             )}
