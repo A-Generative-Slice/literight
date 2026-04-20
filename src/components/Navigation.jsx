@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Avatar } from './Common';
 import Icon from './Icon';
 
 export const PublicNav = ({ onLoginClick, user }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [overlayActive, setOverlayActive] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isAuthPage = location.pathname === '/sign-up';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -47,7 +52,7 @@ export const PublicNav = ({ onLoginClick, user }) => {
              <Avatar user={user} size={32} />
           ) : (
             <button 
-              onClick={onLoginClick}
+              onClick={isAuthPage ? () => navigate('/') : onLoginClick}
               style={{ 
                 background: '#fff', 
                 color: '#000', 
@@ -61,7 +66,7 @@ export const PublicNav = ({ onLoginClick, user }) => {
                 textTransform: 'uppercase'
               }}
             >
-              GET STARTED
+              {isAuthPage ? 'BACK TO ACADEMY' : 'GET STARTED'}
             </button>
           )}
         </div>
