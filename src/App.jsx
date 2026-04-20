@@ -119,8 +119,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
 
-      <Footer />
-
       <Modal 
         open={showPhoneModal} 
         onClose={() => setShowPhoneModal(false)} 
