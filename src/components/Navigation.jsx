@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useLmsStore } from '../stores/useLmsStore';
 import { Avatar } from './Common';
 import Icon from './Icon';
 
@@ -10,12 +11,34 @@ export const PublicNav = ({ onLoginClick, user }) => {
   const navigate = useNavigate();
 
   const isAuthPage = location.pathname === '/sign-up';
+  
+  const { courses } = useLmsStore();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setSearchResults([]);
+    } else {
+      const filtered = courses.filter(c => 
+        c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (c.instructor && c.instructor.toLowerCase().includes(searchTerm.toLowerCase()))
+      ).slice(0, 5);
+      setSearchResults(filtered);
+    }
+  }, [searchTerm, courses]);
+
+  const handleResultClick = (id) => {
+    setOverlayActive(false);
+    setSearchTerm('');
+    navigate(`/course/${id}`);
+  };
 
   return (
     <>
@@ -28,7 +51,6 @@ export const PublicNav = ({ onLoginClick, user }) => {
         alignItems: 'center',
         gap: 12
       }}>
-        {/* Desktop Mirror Island */}
         <div className="md-hidden" style={{ 
           display: 'flex', 
           alignItems: 'center', 
@@ -71,10 +93,9 @@ export const PublicNav = ({ onLoginClick, user }) => {
           )}
         </div>
 
-        {/* Mobile Menu Button - Appears on small screens */}
         <div className="md-block" style={{ display: 'none' }}>
            <button 
-            onClick={() => {/* Toggle Mobile Menu logic if needed, for now use Search as entry */}}
+            onClick={() => setOverlayActive(true)}
             style={{ 
               width: 50, 
               height: 50, 
@@ -97,11 +118,13 @@ export const PublicNav = ({ onLoginClick, user }) => {
         </div>
       </nav>
 
-      {/* Search Overlay */}
       {overlayActive && (
         <div style={{ position: 'fixed', inset: 0, background: '#000', zIndex: 1100, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards' }}>
           <button 
-            onClick={() => setOverlayActive(false)}
+            onClick={() => {
+              setOverlayActive(false);
+              setSearchTerm('');
+            }}
             style={{ position: 'absolute', top: 30, right: 30, background: 'none', border: '1px solid rgba(255,255,255,0.2)', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
           >
             <Icon name="x" size={18} />
@@ -111,9 +134,45 @@ export const PublicNav = ({ onLoginClick, user }) => {
             <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.4em', marginBottom: 20, color: '#444' }}>ACADEMY SEARCH</div>
             <input 
               autoFocus
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="FIND A TRACK..." 
               style={{ width: '100%', background: 'none', border: 'none', borderBottom: '1px solid #fff', padding: '20px 0', fontSize: 40, color: '#fff', fontWeight: 900, outline: 'none', letterSpacing: '-0.03em' }}
             />
+
+            {searchResults.length > 0 && (
+              <div style={{ marginTop: 40, display: 'flex', flexDirection: 'column', gap: 24 }}>
+                {searchResults.map(result => (
+                  <div 
+                    key={result.id}
+                    onClick={() => handleResultClick(result.id)}
+                    style={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center', 
+                      cursor: 'pointer',
+                      padding: '10px 0',
+                      borderBottom: '1px solid rgba(255,255,255,0.05)',
+                      transition: 'all 0.3s'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.paddingLeft = '10px'}
+                    onMouseLeave={e => e.currentTarget.style.paddingLeft = '0'}
+                  >
+                    <div>
+                      <div style={{ fontSize: 20, fontWeight: 900, color: '#fff' }}>{result.title.toUpperCase()}</div>
+                      <div style={{ fontSize: 9, color: '#666', fontWeight: 900, letterSpacing: '0.2em', marginTop: 4 }}>{result.instructor?.toUpperCase()}</div>
+                    </div>
+                    <Icon name="arrow" size={16} />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {searchTerm && searchResults.length === 0 && (
+              <div style={{ marginTop: 40, fontSize: 14, color: '#444', letterSpacing: '0.1em' }}>
+                NO RESULTS FOUND FOR "{searchTerm.toUpperCase()}"
+              </div>
+            )}
           </div>
         </div>
       )}
