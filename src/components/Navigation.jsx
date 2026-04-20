@@ -4,7 +4,7 @@ import { useLmsStore } from '../stores/useLmsStore';
 import { Avatar } from './Common';
 import Icon from './Icon';
 
-export const PublicNav = ({ onLoginClick, user }) => {
+export const PublicNav = ({ user }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [overlayActive, setOverlayActive] = useState(false);
   const location = useLocation();
@@ -73,6 +73,14 @@ export const PublicNav = ({ onLoginClick, user }) => {
     navigate(path);
   };
 
+  const handleActionClick = () => {
+    if (isAuthPage) {
+      navigate('/');
+    } else {
+      navigate('/sign-up');
+    }
+  };
+
   return (
     <>
       {/* Universal Floating Island - Consistent on all devices */}
@@ -82,7 +90,8 @@ export const PublicNav = ({ onLoginClick, user }) => {
         right: 'clamp(20px, 4vw, 30px)', 
         zIndex: 1000,
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        pointerEvents: 'auto'
       }}>
         <div style={{ 
           display: 'flex', 
@@ -90,11 +99,11 @@ export const PublicNav = ({ onLoginClick, user }) => {
           gap: 'clamp(8px, 2vw, 12px)',
           padding: 'clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 20px)',
           background: 'rgba(255, 255, 255, 0.05)',
-          backdropFilter: 'blur(30px)',
-          WebkitBackdropFilter: 'blur(30px)',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
-          borderRadius: 100, // Matching the sleek "pill" from web view
-          boxShadow: '0 30px 60px rgba(0,0,0,0.4)'
+          backdropFilter: 'blur(34px)',
+          WebkitBackdropFilter: 'blur(34px)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          borderRadius: 100,
+          boxShadow: '0 30px 60px rgba(0,0,0,0.5)'
         }}>
           <button 
             onClick={() => setOverlayActive(true)} 
@@ -106,11 +115,8 @@ export const PublicNav = ({ onLoginClick, user }) => {
               padding: 8, 
               display: 'flex', 
               alignItems: 'center', 
-              opacity: 0.8,
-              transition: 'opacity 0.3s'
+              opacity: 1
             }}
-            onMouseEnter={e => e.currentTarget.style.opacity = '1'}
-            onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}
           >
             <Icon name="search" size={18} />
           </button>
@@ -119,7 +125,7 @@ export const PublicNav = ({ onLoginClick, user }) => {
              <Avatar user={user} size={34} />
           ) : (
             <button 
-              onClick={isAuthPage ? () => navigate('/') : onLoginClick}
+              onClick={handleActionClick}
               style={{ 
                 background: '#fff', 
                 color: '#000', 
@@ -131,10 +137,8 @@ export const PublicNav = ({ onLoginClick, user }) => {
                 letterSpacing: '0.15em',
                 borderRadius: 100,
                 textTransform: 'uppercase',
-                transition: 'transform 0.2s'
+                outline: 'none'
               }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
             >
               {isAuthPage ? 'BACK TO ACADEMY' : 'GET STARTED'}
             </button>
@@ -179,14 +183,6 @@ export const PublicNav = ({ onLoginClick, user }) => {
                       padding: '16px 0',
                       borderBottom: '1px solid rgba(255,255,255,0.05)',
                       transition: 'all 0.4s'
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.paddingLeft = '15px';
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.paddingLeft = '0';
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
                     }}
                   >
                     <div>
