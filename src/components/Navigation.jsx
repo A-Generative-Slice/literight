@@ -89,14 +89,16 @@ export const PublicNav = ({ user }) => {
     <>
       {/* Universal Floating Island - Consistent on all devices */}
       {/* Set to the absolute highest Z-index to beat any blockers */}
-      <nav style={{ 
-        position: 'fixed', 
-        top: 'clamp(20px, 4vw, 30px)', 
-        right: 'clamp(20px, 4vw, 30px)', 
-        zIndex: 99999, 
-        display: 'flex',
-        alignItems: 'center',
-        pointerEvents: 'auto' // Parent now active to avoid click loss
+      <nav 
+        data-version="99999"
+        style={{ 
+          position: 'fixed', 
+          top: 'clamp(20px, 4vw, 30px)', 
+          right: 'clamp(20px, 4vw, 30px)', 
+          zIndex: 99999, 
+          display: 'flex',
+          alignItems: 'center',
+          pointerEvents: 'auto'
       }}>
         <div style={{ 
           display: 'flex', 

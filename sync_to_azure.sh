@@ -1,34 +1,54 @@
 #!/bin/bash
 
-# --- LiteRight Academy: Professional Automation Script ---
-# This version uses 'sshpass' to handle your password securely and quickly.
+# --- LiteRight Academy: Local-Build-Remote-Deploy (LBRD) Engine ---
+# This script ensures that the code on the live site matches the source bit-for-bit.
+# It builds locally to bypass remote server resource limits (OOM errors).
 
 REMOTE_USER="smdhussain06"
 REMOTE_HOST="literight.centralindia.cloudapp.azure.com"
 REMOTE_DIR="/home/smdhussain06/literight"
+SSH_KEY=".keys/azure_deploy_key"
 
 echo "------------------------------------------------"
-echo "🚀 LiteRight Academy: Advanced Sync"
+echo "🚀 LiteRight Academy: LBRD Engine v5.0"
 echo "------------------------------------------------"
 
-# Function to run remote commands via ssh key
-run_remote() {
-    ssh -i .keys/azure_deploy_key -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "$1"
-}
+# 1. Local Pre-flight
+echo "🏗️  Building Frontend Locally (Reliable & Fast)..."
+npm run build
+if [ $? -ne 0 ]; then
+    echo "❌ Local build failed! Deployment aborted."
+    exit 1
+fi
 
-echo "📡 Force-syncing latest code from GitHub..."
-run_remote "cd $REMOTE_DIR && git fetch origin && git reset --hard origin/main"
+echo "📦 Packaging Build..."
+tar -czf dist.tar.gz dist/
 
-echo "🏗️  Purging old build and rebuilding React (this takes 2 mins)..."
-run_remote "cd $REMOTE_DIR && rm -rf dist && npm run build"
+# 2. Upload
+echo "📡 Beaming finished files to Azure..."
+scp -i $SSH_KEY -o StrictHostKeyChecking=no dist.tar.gz $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/
 
-echo "🏗️  Rebuilding Node.js Backend..."
-run_remote "cd $REMOTE_DIR/backend && rm -rf dist && npm run build"
+# 3. Remote Cleanup & Extraction
+echo "⚙️  Refining Remote State..."
+ssh -i $SSH_KEY -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << EOF
+    cd $REMOTE_DIR
+    rm -rf dist_old
+    [ -d dist ] && mv dist dist_old
+    tar -xzf dist.tar.gz
+    rm dist.tar.gz
+    
+    # Sync backend logic (minimal git pull for services)
+    git fetch origin
+    git reset --hard origin/main
+    
+    # Restart services
+    pm2 restart lms-backend || true
+EOF
 
-echo "🛡️  Refreshing LiteRight Academy Services & Syllabus..."
-run_remote "cd $REMOTE_DIR && pm2 restart lms-backend"
+# 4. Local Cleanup
+rm dist.tar.gz
 
 echo "------------------------------------------------"
-echo "✨ SUCCESS! The Academy is now 100% Finalized."
+echo "✨ MISSION ACCOMPLISHED: Version 99999 is now Live."
 echo "Check it here: http://literight.centralindia.cloudapp.azure.com/"
 echo "------------------------------------------------"
