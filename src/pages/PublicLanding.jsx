@@ -66,7 +66,7 @@ const PublicLanding = ({ courses, onCourse }) => {
             maxWidth: 600,
             margin: '0 auto 60px'
           }}>
-            Synergizing engineering and passionate design for the next generation of lighting masters.
+            Designing the speed of light.
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: 20 }}>

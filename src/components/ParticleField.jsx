@@ -9,14 +9,14 @@ const ParticleField = () => {
     let animationFrameId;
 
     let particles = [];
-    const particleCount = window.innerWidth < 768 ? 40 : 100;
+    const beamCount = window.innerWidth < 768 ? 20 : 60;
     
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
 
-    class Particle {
+    class LightBeam {
       constructor() {
         this.init();
       }
@@ -24,43 +24,54 @@ const ParticleField = () => {
       init() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 1.5 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.length = Math.random() * 80 + 20; // Length of the light streak
+        this.width = Math.random() * 1 + 0.5;
+        // Faster, linear motion
+        this.speedX = (Math.random() * 8 + 4); 
         this.speedY = (Math.random() - 0.5) * 0.5;
-        this.opacity = Math.random() * 0.5 + 0.2;
+        this.opacity = Math.random() * 0.3 + 0.1;
       }
 
       update(mouseX, mouseY) {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Mouse interaction
+        // Mouse acceleration effect
         const dx = mouseX - this.x;
         const dy = mouseY - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < 150) {
-          this.x -= dx * 0.01;
-          this.y -= dy * 0.01;
+        if (distance < 200) {
+           this.x += this.speedX * 0.5; // "Warp speed" effect near mouse
         }
 
-        if (this.x < 0) this.x = canvas.width;
-        if (this.x > canvas.width) this.x = 0;
+        if (this.x > canvas.width) {
+          this.x = -this.length;
+          this.y = Math.random() * canvas.height;
+        }
         if (this.y < 0) this.y = canvas.height;
         if (this.y > canvas.height) this.y = 0;
       }
 
       draw() {
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        const gradient = ctx.createLinearGradient(this.x, this.y, this.x + this.length, this.y);
+        gradient.addColorStop(0, `rgba(255, 255, 255, 0)`);
+        gradient.addColorStop(0.5, `rgba(255, 255, 255, ${this.opacity})`);
+        gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = this.width;
+        ctx.lineCap = 'round';
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + this.length, this.y);
+        ctx.stroke();
       }
     }
 
-    const initParticles = () => {
+    const initBeams = () => {
       particles = [];
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
+      for (let i = 0; i < beamCount; i++) {
+        particles.push(new LightBeam());
       }
     };
 
@@ -83,7 +94,7 @@ const ParticleField = () => {
     window.addEventListener('resize', resize);
     window.addEventListener('mousemove', handleMouseMove);
     resize();
-    initParticles();
+    initBeams();
     animate();
 
     return () => {
@@ -100,8 +111,7 @@ const ParticleField = () => {
         position: 'absolute', 
         inset: 0, 
         zIndex: 0, 
-        pointerEvents: 'none',
-        background: 'transparent' 
+        pointerEvents: 'none'
       }} 
     />
   );
