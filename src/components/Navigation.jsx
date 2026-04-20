@@ -30,7 +30,6 @@ export const PublicNav = ({ onLoginClick, user }) => {
       const query = searchTerm.toLowerCase();
 
       courses.forEach(course => {
-        // 1. Check Course Title
         if (course.title.toLowerCase().includes(query)) {
           results.push({
             id: course.id,
@@ -40,8 +39,6 @@ export const PublicNav = ({ onLoginClick, user }) => {
             path: `/course/${course.id}`
           });
         }
-
-        // 2. Check Chapters (Modules)
         course.chapters?.forEach(chapter => {
           if (chapter.title.toLowerCase().includes(query)) {
             results.push({
@@ -49,11 +46,9 @@ export const PublicNav = ({ onLoginClick, user }) => {
               title: chapter.title,
               type: 'MODULE',
               parent: course.title,
-              path: `/course/${course.id}` // Modules usually don't have deep links yet, go to course
+              path: `/course/${course.id}`
             });
           }
-
-          // 3. Check Lessons (Sessions)
           chapter.lessons?.forEach(lesson => {
             if (lesson.title.toLowerCase().includes(query)) {
               results.push({
@@ -68,7 +63,7 @@ export const PublicNav = ({ onLoginClick, user }) => {
         });
       });
 
-      setSearchResults(results.slice(0, 8)); // Show up to 8 mixed results
+      setSearchResults(results.slice(0, 8));
     }
   }, [searchTerm, courses]);
 
@@ -80,36 +75,48 @@ export const PublicNav = ({ onLoginClick, user }) => {
 
   return (
     <>
+      {/* Universal Floating Island - Consistent on all devices */}
       <nav style={{ 
         position: 'fixed', 
-        top: 30, 
-        right: 30, 
+        top: 'clamp(20px, 4vw, 30px)', 
+        right: 'clamp(20px, 4vw, 30px)', 
         zIndex: 1000,
         display: 'flex',
-        alignItems: 'center',
-        gap: 12
+        alignItems: 'center'
       }}>
-        <div className="md-hidden" style={{ 
+        <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
-          gap: 12,
-          padding: '8px 8px 8px 20px',
-          background: 'rgba(255, 255, 255, 0.03)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: 100,
-          boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+          gap: 'clamp(8px, 2vw, 12px)',
+          padding: 'clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 20px)',
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(30px)',
+          WebkitBackdropFilter: 'blur(30px)',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          borderRadius: 100, // Matching the sleek "pill" from web view
+          boxShadow: '0 30px 60px rgba(0,0,0,0.4)'
         }}>
           <button 
             onClick={() => setOverlayActive(true)} 
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', padding: 8, display: 'flex', alignItems: 'center', opacity: 0.8 }}
+            style={{ 
+              background: 'none', 
+              border: 'none', 
+              cursor: 'pointer', 
+              color: '#fff', 
+              padding: 8, 
+              display: 'flex', 
+              alignItems: 'center', 
+              opacity: 0.8,
+              transition: 'opacity 0.3s'
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}
           >
             <Icon name="search" size={18} />
           </button>
           
           {user ? (
-             <Avatar user={user} size={32} />
+             <Avatar user={user} size={34} />
           ) : (
             <button 
               onClick={isAuthPage ? () => navigate('/') : onLoginClick}
@@ -117,47 +124,27 @@ export const PublicNav = ({ onLoginClick, user }) => {
                 background: '#fff', 
                 color: '#000', 
                 border: 'none', 
-                padding: '10px 24px', 
-                fontSize: 10, 
+                padding: '10px clamp(16px, 3vw, 24px)', 
+                fontSize: 'clamp(9px, 1.5vw, 10px)', 
                 fontWeight: 900, 
                 cursor: 'pointer', 
                 letterSpacing: '0.15em',
                 borderRadius: 100,
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                transition: 'transform 0.2s'
               }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
             >
               {isAuthPage ? 'BACK TO ACADEMY' : 'GET STARTED'}
             </button>
           )}
         </div>
-
-        <div className="md-block" style={{ display: 'none' }}>
-           <button 
-            onClick={() => setOverlayActive(true)}
-            style={{ 
-              width: 50, 
-              height: 50, 
-              background: 'rgba(255,255,255,0.05)', 
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              cursor: 'pointer'
-            }}
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, width: 20 }}>
-               <div style={{ height: 1.5, background: '#fff', width: '100%' }} />
-               <div style={{ height: 1.5, background: '#fff', width: '100%' }} />
-            </div>
-           </button>
-        </div>
       </nav>
 
+      {/* Search Overlay */}
       {overlayActive && (
-        <div style={{ position: 'fixed', inset: 0, background: '#111', zIndex: 1100, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
+        <div style={{ position: 'fixed', inset: 0, background: '#0a0a0a', zIndex: 1100, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
           <button 
             onClick={() => {
               setOverlayActive(false);

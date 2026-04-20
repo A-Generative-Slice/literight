@@ -97,14 +97,6 @@ input:-webkit-autofill:active  {
 }
 /* --- LiteRight Royale: Cinematic UI Additions --- */
 
-.md-hidden { display: flex !important; }
-.md-block { display: none !important; }
-
-@media (max-width: 768px) {
-  .md-hidden { display: none !important; }
-  .md-block { display: flex !important; }
-}
-
 .reveal {
   opacity: 0;
   transform: translateY(30px);
