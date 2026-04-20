@@ -78,7 +78,6 @@ export const PublicNav = ({ user }) => {
       e.preventDefault();
       e.stopPropagation();
     }
-    
     if (isAuthPage) {
       navigate('/');
     } else {
@@ -89,27 +88,28 @@ export const PublicNav = ({ user }) => {
   return (
     <>
       {/* Universal Floating Island - Consistent on all devices */}
+      {/* Set to the absolute highest Z-index to beat any blockers */}
       <nav style={{ 
         position: 'fixed', 
         top: 'clamp(20px, 4vw, 30px)', 
         right: 'clamp(20px, 4vw, 30px)', 
-        zIndex: 10000, 
+        zIndex: 99999, 
         display: 'flex',
         alignItems: 'center',
-        pointerEvents: 'none' // Parent nav is transparent to clicks
+        pointerEvents: 'auto' // Parent now active to avoid click loss
       }}>
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
-          gap: 'clamp(8px, 2vw, 12px)',
-          padding: 'clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 20px)',
+          gap: 'clamp(8px, 1vw, 12px)',
+          padding: 'clamp(8px, 1.5vw, 10px) clamp(8px, 1.5vw, 10px) clamp(8px, 1.5vw, 10px) clamp(16px, 3.5vw, 24px)',
           background: 'rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           borderRadius: 100,
           boxShadow: '0 30px 60px rgba(0,0,0,0.6)',
-          pointerEvents: 'auto' // Only the island captures clicks
+          pointerEvents: 'auto'
         }}>
           <button 
             type="button"
@@ -123,7 +123,7 @@ export const PublicNav = ({ user }) => {
               border: 'none', 
               cursor: 'pointer', 
               color: '#fff', 
-              padding: 10, 
+              padding: '8px 12px', 
               display: 'flex', 
               alignItems: 'center'
             }}
@@ -139,7 +139,7 @@ export const PublicNav = ({ user }) => {
                  e.stopPropagation();
                  navigate('/profile');
                }}
-               style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+               style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
              >
                <Avatar user={user} size={36} />
              </button>
@@ -151,7 +151,7 @@ export const PublicNav = ({ user }) => {
                 background: '#fff', 
                 color: '#000', 
                 border: 'none', 
-                padding: '12px clamp(20px, 3.5vw, 32px)', 
+                padding: '14px clamp(24px, 4vw, 36px)', // Expanded hitbox
                 fontSize: 'clamp(10px, 1.8vw, 11px)', 
                 fontWeight: 900, 
                 cursor: 'pointer', 
@@ -160,7 +160,10 @@ export const PublicNav = ({ user }) => {
                 textTransform: 'uppercase',
                 outline: 'none',
                 WebkitTapHighlightColor: 'transparent',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
               {isAuthPage ? 'BACK TO ACADEMY' : 'GET STARTED'}
@@ -171,14 +174,14 @@ export const PublicNav = ({ user }) => {
 
       {/* Search Overlay */}
       {overlayActive && (
-        <div style={{ position: 'fixed', inset: 0, background: '#0a0a0a', zIndex: 11000, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
+        <div style={{ position: 'fixed', inset: 0, background: '#0a0a0a', zIndex: 110000, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
           <button 
             type="button"
             onClick={() => {
               setOverlayActive(false);
               setSearchTerm('');
             }}
-            style={{ position: 'fixed', top: 30, right: 30, background: 'none', border: '1px solid rgba(255,255,255,0.2)', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
+            style={{ position: 'fixed', top: 30, right: 30, border: '1px solid rgba(255,255,255,0.2)', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', background: 'none' }}
           >
             <Icon name="x" size={20} />
           </button>
@@ -214,17 +217,11 @@ export const PublicNav = ({ user }) => {
                         <span style={{ fontSize: 8, fontWeight: 900, letterSpacing: '0.1em', background: '#fff', color: '#000', padding: '2px 8px' }}>{result.type}</span>
                         <span style={{ fontSize: 9, color: '#555', fontWeight: 900, letterSpacing: '0.1em' }}>{result.parent?.toUpperCase()}</span>
                       </div>
-                      <div style={{ fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>{result.title.toUpperCase()}</div>
+                      <div style={{ fontSize: 'clamp(14px, 3vw, 24px)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>{result.title.toUpperCase()}</div>
                     </div>
                     <Icon name="arrow" size={20} />
                   </div>
                 ))}
-              </div>
-            )}
-
-            {searchTerm && searchResults.length === 0 && (
-              <div style={{ marginTop: 60, fontSize: 13, color: '#444', letterSpacing: '0.1em', fontWeight: 900 }}>
-                NO DIRECT MATCHES FOUND FOR "{searchTerm.toUpperCase()}"
               </div>
             )}
           </div>
