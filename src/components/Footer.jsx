@@ -2,80 +2,95 @@ import React from 'react';
 import { C, Logo } from './Common';
 import Icon from './Icon';
 
+const SOCIAL_LINKS = [
+  { name: 'instagram', url: 'https://www.instagram.com/lite.lab/' },
+  { name: 'pinterest', url: 'https://in.pinterest.com/litelabindia/_created/' },
+  { name: 'linkedin', url: 'https://www.linkedin.com/in/litelab-india-b78729277/' },
+  { name: 'facebook', url: 'https://www.facebook.com/litelab.india/' },
+  { name: 'x-social', url: 'https://x.com/litelab_india' },
+  { name: 'youtube', url: 'https://www.youtube.com/@litelab4250' }
+];
+
 const Footer = () => {
   return (
-    <footer style={{ background: '#0f172a', color: '#f8fafc', padding: '100px 32px 60px', marginTop: 'auto' }}>
+    <footer style={{ background: '#000', color: '#fff', padding: '120px 32px 60px', marginTop: 'auto', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 60, marginBottom: 80 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 80, marginBottom: 100 }}>
           
-          {/* Brand Section */}
-          <div style={{ maxWidth: 320 }}>
-            <div style={{ marginBottom: 28, filter: 'brightness(0) invert(1)' }}>
-              <Logo size="lg" />
+          {/* Brand Signature */}
+          <div>
+            <div style={{ marginBottom: 40 }}>
+              <Logo size="lg" stacked />
             </div>
-            <p style={{ color: '#94a3b8', fontSize: 15, lineHeight: 1.7, marginBottom: 32 }}>
-              Litelab LiteRight Academy is the global reference for professional architectural lighting education, bridging the gap between theory and industry excellence.
+            <p style={{ color: '#444', fontSize: 13, lineHeight: 1.8, marginBottom: 40, letterSpacing: '0.02em', maxWidth: 300 }}>
+              LITERIGHT ACADEMY IS THE GLOBAL VANGUARD OF PROFESSIONAL LIGHTING EDUCATION. WE ARCHITECT THE FUTURE OF LIGHT THROUGH RIGOROUS TECHNICAL MASTERY.
             </p>
-            <div style={{ display: 'flex', gap: 16 }}>
-              {['instagram', 'linkedin', 'twitter', 'youtube'].map(s => (
-                <div key={s} style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: '0.3s' }}
-                  onMouseEnter={e => e.currentTarget.style.background = C.accent}
-                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}>
-                  <Icon name={s} size={18} />
-                </div>
+            {/* Real Social Links with Architectural Icons */}
+            <div style={{ display: 'flex', gap: 24 }}>
+              {SOCIAL_LINKS.map(s => (
+                <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" 
+                  style={{ color: '#fff', transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)', cursor: 'pointer', opacity: 0.8 }}
+                  onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+                  onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}>
+                  <Icon name={s.name} size={20} />
+                </a>
               ))}
             </div>
           </div>
 
-          {/* Academy Links */}
+          {/* Academy Nexus */}
           <div>
-            <h4 style={{ fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 32, color: C.accent }}>Academy</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 18 }}>
-              {['Curriculum', 'Certification', 'Direct Career Path', 'Student Support'].map(l => (
-                <li key={l} style={{ color: '#94a3b8', fontSize: 15, cursor: 'pointer', transition: '0.2s' }}
+            <h4 style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: 40, color: '#222' }}>Academy</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {['CURRICULUM', 'CERTIFICATION', 'STUDENT PROFILE', 'SUPPORT'].map(l => (
+                <li key={l} style={{ color: '#444', fontSize: 10, fontWeight: 900, cursor: 'pointer', transition: '0.3s', letterSpacing: '0.2em' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#94a3b8'}>
+                  onMouseLeave={e => e.currentTarget.style.color = '#444'}>
                   {l}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Corporate Links */}
+          {/* Corporate Intel */}
           <div>
-            <h4 style={{ fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 32, color: '#fff' }}>Corporate</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 18 }}>
-              {['Litelab Consultancy', 'Bespoke Solutions', 'Global Projects', 'Career Opportunities'].map(l => (
-                <li key={l} style={{ color: '#94a3b8', fontSize: 15, cursor: 'pointer', transition: '0.2s' }}
+            <h4 style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: 40, color: '#222' }}>Intel</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {['CONSULTANCY', 'SOLUTIONS', 'GLOBAL PROJECTS', 'CAREERS'].map(l => (
+                <li key={l} style={{ color: '#444', fontSize: 10, fontWeight: 900, cursor: 'pointer', transition: '0.3s', letterSpacing: '0.2em' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#fff'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#94a3b8'}>
+                  onMouseLeave={e => e.currentTarget.style.color = '#444'}>
                   {l}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact Section */}
+          {/* Global Inquiries */}
           <div>
-            <h4 style={{ fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 32, color: '#fff' }}>Inquiries</h4>
-            <div style={{ color: '#94a3b8', fontSize: 15, lineHeight: 1.7 }}>
-              <p style={{ marginBottom: 12 }}>Milano HQ: Via della Luce 42, Italy</p>
-              <p style={{ marginBottom: 12 }}>contact@litelab.com</p>
-              <p style={{ fontWeight: 700, color: '#fff', marginTop: 20 }}>Global Support Available</p>
-              <p>Mon - Fri: 9:00 AM - 6:00 PM CET</p>
+            <h4 style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: 40, color: '#222' }}>Inquiries</h4>
+            <div style={{ color: '#444', fontSize: 10, fontWeight: 800, lineHeight: 2.2, letterSpacing: '0.1em' }}>
+              <p>MILANO HQ: VIA DELLA LUCE 42, ITALY</p>
+              <p>CONTACT@LITELAB.COM</p>
+              <p style={{ color: '#999', marginTop: 24 }}>GLOBAL SUPPORT ACTIVE</p>
+              <p>09:00 — 18:00 CET</p>
             </div>
           </div>
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="md-flex-col md-gap-4 md-text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 20 }}>
-          <p style={{ fontSize: 13, color: '#475569' }}>
-            © {new Date().getFullYear()} Litelab Milano. All rights reserved. LiteRight Academy is a registered trademark.
+        {/* Legal Horizon */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.03)', paddingTop: 60, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 32 }}>
+          <p style={{ fontSize: 9, color: '#222', fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+            © {new Date().getFullYear()} LITELAB MILANO. ARCHITECTED BY LBRD. ALL RIGHTS RESERVED.
           </p>
-          <div style={{ display: 'flex', gap: 32 }}>
-            {['Privacy Policy', 'Terms of Service', 'Cookie Settings'].map(l => (
-              <span key={l} style={{ fontSize: 13, color: '#475569', cursor: 'pointer' }}>{l}</span>
+          <div style={{ display: 'flex', gap: 40 }}>
+            {['PRIVACY', 'TERMS', 'COOKIES'].map(l => (
+              <span key={l} style={{ fontSize: 9, color: '#222', fontWeight: 900, letterSpacing: '0.2em', cursor: 'pointer', transition: '0.3s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#666'}
+                onMouseLeave={e => e.currentTarget.style.color = '#222'}>
+                {l}
+              </span>
             ))}
           </div>
         </div>

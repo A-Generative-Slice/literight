@@ -74,7 +74,7 @@ const ProfilePage = () => {
             </h1>
           </div>
 
-          <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, width: '100%', maxWidth: 400 }}>
             <Badge label="Learning Path" active={activeTab === 'courses'} onClick={() => setActiveTab('courses')} />
             <Badge label="Account Settings" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
           </div>

@@ -158,18 +158,25 @@ const PublicLanding = ({ courses, onCourse }) => {
       {/* Minimalist Footer */}
       <footer style={{ padding: '100px 0 60px', borderTop: '1px solid rgba(255,255,255,0.05)', background: '#000' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', textAlign: 'center' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginBottom: 60 }}>
-            {['instagram', 'linkedin', 'pinterest', 'facebook', 'twitter', 'youtube'].map(s => (
-              <Icon key={s} name={s} size={20} />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginBottom: 40 }}>
+            {[
+              { name: 'instagram', url: 'https://www.instagram.com/lite.lab/' },
+              { name: 'pinterest', url: 'https://in.pinterest.com/litelabindia/_created/' },
+              { name: 'linkedin', url: 'https://www.linkedin.com/in/litelab-india-b78729277/' },
+              { name: 'facebook', url: 'https://www.facebook.com/litelab.india/' },
+              { name: 'x-social', url: 'https://x.com/litelab_india' },
+              { name: 'youtube', url: 'https://www.youtube.com/@litelab4250' }
+            ].map(s => (
+              <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', transition: '0.3s', opacity: 0.8 }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}>
+                <Icon name={s.name} size={20} />
+              </a>
             ))}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: 60, fontSize: 11, fontWeight: 900, letterSpacing: '0.2em', opacity: 0.6 }}>
-            {['HOME', 'ABOUT', 'PROJECTS', 'TEAM', 'CONTACT'].map(l => (
-              <span key={l} style={{ cursor: 'pointer' }} className="hover-lift">{l}</span>
-            ))}
-          </div>
-          <div style={{ fontSize: 10, color: '#444', fontWeight: 600, letterSpacing: '0.05em' }}>
-            Copyright © 2026. All Rights Reserved | Privacy Policy | Designed and Developed by LITERIGHT ACADEMY
+          
+          <div style={{ fontSize: 10, color: '#fff', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            Copyright © 2026. All Rights Reserved | Privacy Policy | Designed and Developed by <a href="https://a-generative-slice.github.io/A-generative-slice/" target="_blank" rel="noopener noreferrer" style={{ color: '#FF6F00', textDecoration: 'none', fontWeight: 900 }}>A Generative Slice</a>
           </div>
         </div>
       </footer>

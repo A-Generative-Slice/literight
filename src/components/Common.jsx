@@ -41,7 +41,8 @@ export const Badge = ({ label, active = false, onClick }) => (
     style={{ 
       display: 'inline-flex', 
       alignItems: 'center', 
-      padding: '6px 20px', 
+      justifyContent: 'center',
+      padding: '12px 20px', 
       borderRadius: 1, 
       fontSize: 10, 
       fontWeight: 900, 
@@ -51,7 +52,9 @@ export const Badge = ({ label, active = false, onClick }) => (
       color: active ? '#000' : '#fff', 
       border: `1px solid rgba(255,255,255, ${active ? 1 : 0.2})`,
       cursor: 'pointer',
-      transition: 'all 0.3s'
+      transition: 'all 0.3s',
+      width: '100%',
+      minHeight: 44
     }}
   >
     {label}
