@@ -3,23 +3,9 @@ import { Card } from '../components/Common';
 import Icon from '../components/Icon';
 import motivationBg from '../assets/motivation-bg.png';
 
-const LEARNING_TRACKS = [
-  { id: 'architectural', name: 'ARCHITECTURAL', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=400&auto=format&fit=crop' },
-  { id: 'interior', name: 'INTERIOR LIGHTING', img: 'https://images.unsplash.com/photo-1513519247388-193ad51c50be?q=80&w=400&auto=format&fit=crop' },
-  { id: 'facade', name: 'FACADE DESIGN', img: 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?q=80&w=400&auto=format&fit=crop' },
-  { id: 'hospitality', name: 'HOSPITALITY', img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=400&auto=format&fit=crop' },
-  { id: 'urban', name: 'URBAN & SMART', img: 'https://images.unsplash.com/photo-1471018197924-c10a3000632a?q=80&w=400&auto=format&fit=crop' },
-  { id: 'landscape', name: 'LANDSCAPE', img: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=400&auto=format&fit=crop' },
-  { id: 'residential', name: 'RESIDENTIAL', img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=400&auto=format&fit=crop' },
-  { id: 'sustainable', name: 'SUSTAINABILITY', img: 'https://images.unsplash.com/photo-1518005020250-6859b2827c17?q=80&w=400&auto=format&fit=crop' },
-];
-
 const PublicLanding = ({ courses, onCourse }) => {
-  const [activeTrack, setActiveTrack] = useState(null);
-
-  const filteredCourses = activeTrack 
-    ? (courses || []).filter(c => (c.tags || []).some(t => t.toLowerCase() === activeTrack.toLowerCase()))
-    : (courses || []);
+  // No longer using activeTrack filtering for now since the circle navigator is removed
+  const filteredCourses = courses || [];
 
   return (
     <div style={{ background: '#000', minHeight: '100vh', color: '#fff' }}>
@@ -27,7 +13,7 @@ const PublicLanding = ({ courses, onCourse }) => {
       {/* Heritage Hero */}
       <section style={{ 
         position: 'relative', 
-        height: '80vh', 
+        height: '75vh', 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
@@ -57,59 +43,30 @@ const PublicLanding = ({ courses, onCourse }) => {
         </div>
       </section>
 
-      {/* 8-Circle Masterclass Navigator */}
-      <section style={{ padding: '60px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 3 }}>
-        <h2 style={{ fontSize: 10, fontWeight: 900, textAlign: 'center', letterSpacing: '0.4em', marginBottom: 60, color: '#444' }}>EXPLORE MASTERY TRACKS</h2>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-          gap: '40px 20px',
-          padding: '0 var(--container-px)',
-          justifyItems: 'center'
-        }}>
-          {LEARNING_TRACKS.map((track, i) => (
-            <div 
-              key={i} 
-              className="reveal circle-nav-item" 
-              onClick={() => setActiveTrack(activeTrack === track.id ? null : track.id)}
-              style={{ 
-                animationDelay: `${i * 0.05}s`,
-                opacity: activeTrack && activeTrack !== track.id ? 0.3 : 1,
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
-              }}
-            >
-              <div className="circle-img" style={{ 
-                borderColor: activeTrack === track.id ? '#fff' : 'rgba(255,255,255,0.1)',
-                marginBottom: 20
-              }}>
-                <img src={track.img} alt={track.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div className="circle-label" style={{ 
-                color: activeTrack === track.id ? '#fff' : '#666',
-                textAlign: 'center',
-                width: '100%',
-                lineHeight: 1.4
-              }}>{track.name}</div>
-            </div>
-          ))}
+      {/* Brand Intro / About Section (Replaces Circles) */}
+      <section style={{ padding: '80px 0 100px', position: 'relative', zIndex: 3 }}>
+        <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 var(--container-px)', textAlign: 'center' }}>
+          <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.5em', color: '#444', marginBottom: 32 }}>THE LEGACY</div>
+          <p style={{ 
+            fontSize: 'clamp(18px, 4vw, 22px)', 
+            lineHeight: 1.6, 
+            fontWeight: 500, 
+            color: '#eee',
+            letterSpacing: '-0.01em'
+          }}>
+            LITERIGHT ACADEMY exists to translate Litelab's independent lighting design expertise into professional pathways for new learners. 
+            Specializing in sustainable lighting, IoT solutions, and home automation, we synergize engineering and passionate design 
+            to deliver qualitative, industry-grade education for the next generation of designers.
+          </p>
+          <div style={{ marginTop: 48, height: 1, width: 80, background: 'rgba(255,255,255,0.2)', margin: '48px auto' }} />
         </div>
       </section>
 
-      {/* Courses Section */}
-      <section id="courses" style={{ padding: '40px 0 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      {/* Courses Section - NEW High Contrast Design */}
+      <section id="courses" style={{ padding: '0 0 120px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)' }}>
-          {activeTrack && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 40 }}>
-              <button onClick={() => setActiveTrack(null)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: 10, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.2em', textDecoration: 'underline' }}>
-                SHOW ALL COURSES
-              </button>
-            </div>
-          )}
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 60 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 40 }}>
             {filteredCourses.map((c, i) => (
               <div 
                 key={i} 
@@ -117,20 +74,41 @@ const PublicLanding = ({ courses, onCourse }) => {
                 style={{ cursor: 'pointer', animationDelay: `${i * 0.1}s` }}
                 className="reveal"
               >
-                <div className="glass" style={{ padding: '0 0 32px 0', border: '1px solid rgba(255,255,255,0.08)', transition: 'all 0.4s' }}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+                {/* Solid White High-Contrast Card */}
+                <div style={{ 
+                  background: '#fff', 
+                  padding: 0, 
+                  borderRadius: 0, 
+                  overflow: 'hidden',
+                  transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s',
+                  position: 'relative'
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.4)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
                 >
-                  <div style={{ position: 'relative', paddingTop: '65%', width: '100%', marginBottom: 32, overflow: 'hidden' }}>
-                      <img src={c.thumbnail} alt="" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                      <div style={{ position: 'absolute', top: 20, right: 20, background: '#fff', color: '#000', padding: '6px 14px', fontSize: 9, fontWeight: 900, borderRadius: 0 }}>{c.duration}</div>
+                  <div style={{ position: 'relative', paddingTop: '60%', width: '100%', overflow: 'hidden' }}>
+                      <img src={c.thumbnail} alt={c.title} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', top: 20, right: 20, background: '#000', color: '#fff', padding: '6px 14px', fontSize: 9, fontWeight: 900 }}>{c.duration}</div>
                   </div>
-                  <div style={{ padding: '0 32px' }}>
-                    <h3 style={{ fontSize: 24, marginBottom: 16, lineHeight: 1.1, fontWeight: 800 }}>{c.title.toUpperCase()}</h3>
-                    <p style={{ fontSize: 13, color: '#888', marginBottom: 24, lineHeight: 1.6, height: '3.2em', overflow: 'hidden' }}>{c.description}</p>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.1em', opacity: 0.6 }}>{c.instructor.toUpperCase()}</span>
-                      <Icon name="arrow" size={14} />
+                  
+                  <div style={{ padding: '40px' }}>
+                    <h3 style={{ fontSize: 24, marginBottom: 16, lineHeight: 1.1, fontWeight: 900, color: '#000' }}>{c.title.toUpperCase()}</h3>
+                    <p style={{ fontSize: 13, color: '#444', marginBottom: 32, lineHeight: 1.6, height: '3.2em', overflow: 'hidden' }}>{c.description}</p>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 24, borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ fontSize: 8, fontWeight: 900, letterSpacing: '0.2em', color: '#888', marginBottom: 4 }}>INSTRUCTOR</span>
+                        <span style={{ fontSize: 10, fontWeight: 900, color: '#000' }}>{c.instructor.toUpperCase()}</span>
+                      </div>
+                      <div style={{ width: 40, height: 40, border: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                         <Icon name="arrow" size={14} color="#000" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -140,7 +118,7 @@ const PublicLanding = ({ courses, onCourse }) => {
         </div>
       </section>
 
-      {/* Minimalist Footer from Screenshot */}
+      {/* Minimalist Footer */}
       <footer style={{ padding: '80px 0 40px', borderTop: '1px solid rgba(255,255,255,0.05)', background: '#000' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', textAlign: 'center' }}>
           
