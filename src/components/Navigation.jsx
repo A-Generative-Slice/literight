@@ -4,15 +4,17 @@ import { useLmsStore } from '../stores/useLmsStore';
 import { Avatar } from './Common';
 import Icon from './Icon';
 
-export const PublicNav = ({ user }) => {
+export const PublicNav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [overlayActive, setOverlayActive] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Consume store directly to avoid prop desync
+  const { user, courses } = useLmsStore();
+
   const isAuthPage = location.pathname === '/sign-up';
   
-  const { courses } = useLmsStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -87,8 +89,7 @@ export const PublicNav = ({ user }) => {
 
   return (
     <>
-      {/* Universal Floating Island - Consistent on all devices */}
-      {/* Set to the absolute highest Z-index to beat any blockers */}
+      {/* Universal Floating Island */}
       <nav 
         data-version="99999"
         style={{ 
@@ -153,7 +154,7 @@ export const PublicNav = ({ user }) => {
                 background: '#fff', 
                 color: '#000', 
                 border: 'none', 
-                padding: '14px clamp(24px, 4vw, 36px)', // Expanded hitbox
+                padding: '14px clamp(24px, 4vw, 36px)', 
                 fontSize: 'clamp(10px, 1.8vw, 11px)', 
                 fontWeight: 900, 
                 cursor: 'pointer', 

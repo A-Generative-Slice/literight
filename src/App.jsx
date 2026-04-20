@@ -90,13 +90,13 @@ export default function App() {
 
   return (
     <>
-      <PublicNav onLoginClick={() => navigate('/sign-up')} />
+      <PublicNav />
 
       <Routes>
         <Route path="/" element={<PublicLanding courses={courses} onCourse={c => navigate(`/course/${c.id}`)} />} />
         
         <Route path="/sign-up" element={
-          (user && token) ? (
+          (user?.id && token) ? (
             user.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/" />
           ) : (
             <AuthPage onBack={() => navigate('/')} />
