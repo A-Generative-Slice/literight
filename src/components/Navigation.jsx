@@ -30,29 +30,31 @@ export const PublicNav = ({ onLoginClick, user }) => {
     }}>
       <Logo size="md" />
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
-        <div className="md-hidden" style={{ display: 'flex', gap: 32, fontSize: 10, fontWeight: 900, letterSpacing: '0.25em' }}>
-          <span className="hover-lift" style={{ cursor: 'pointer', opacity: 0.6 }}>MASTERCLASSES</span>
-          <span className="hover-lift" style={{ cursor: 'pointer', opacity: 0.6 }}>CURRICULUM</span>
-          <span className="hover-lift" style={{ cursor: 'pointer', opacity: 0.6 }}>ADMISSIONS</span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <button onClick={() => setOverlayActive(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff' }}>
-            <Icon name="search" size={16} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+        <button onClick={() => setOverlayActive(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', padding: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="search" size={18} />
+        </button>
+        
+        {user ? (
+           <Avatar user={user} size={30} />
+        ) : (
+          <button 
+            onClick={onLoginClick}
+            style={{ 
+              background: '#fff', 
+              color: '#000', 
+              border: 'none', 
+              padding: '10px 24px', 
+              fontSize: 10, 
+              fontWeight: 900, 
+              cursor: 'pointer', 
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase'
+            }}
+          >
+            GET STARTED
           </button>
-          
-          {user ? (
-             <Avatar user={user} size={30} />
-          ) : (
-            <button 
-              onClick={onLoginClick}
-              style={{ background: '#fff', color: '#000', border: 'none', padding: '8px 20px', fontSize: 10, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.15em' }}
-            >
-              SIGN IN
-            </button>
-          )}
-        </div>
+        )}
       </div>
 
       {/* Search Overlay */}

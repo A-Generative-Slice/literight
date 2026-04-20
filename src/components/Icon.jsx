@@ -30,6 +30,7 @@ const PATHS = {
   'file-text': 'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8',
   'chevron-down': 'M6 9l6 6 6-6',
   'alert-circle': 'M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-7v-4m0 5h.01',
+  search: 'M11 19a8 8 0 100-16 8 8 0 000 16zm10 2l-4.35-4.35',
 };
 
 const Icon = ({ name, size = 16, color = 'currentColor' }) => (

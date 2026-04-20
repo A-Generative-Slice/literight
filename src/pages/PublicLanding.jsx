@@ -58,13 +58,14 @@ const PublicLanding = ({ courses, onCourse }) => {
       </section>
 
       {/* 8-Circle Masterclass Navigator */}
-      <section style={{ padding: '40px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 3 }}>
+      <section style={{ padding: '60px 0', maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 3 }}>
         <h2 style={{ fontSize: 10, fontWeight: 900, textAlign: 'center', letterSpacing: '0.4em', marginBottom: 60, color: '#444' }}>EXPLORE MASTERY TRACKS</h2>
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
-          gap: 40,
-          padding: '0 var(--container-px)'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          gap: '40px 20px',
+          padding: '0 var(--container-px)',
+          justifyItems: 'center'
         }}>
           {LEARNING_TRACKS.map((track, i) => (
             <div 
@@ -73,31 +74,40 @@ const PublicLanding = ({ courses, onCourse }) => {
               onClick={() => setActiveTrack(activeTrack === track.id ? null : track.id)}
               style={{ 
                 animationDelay: `${i * 0.05}s`,
-                opacity: activeTrack && activeTrack !== track.id ? 0.3 : 1
+                opacity: activeTrack && activeTrack !== track.id ? 0.3 : 1,
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
               }}
             >
-              <div className="circle-img" style={{ borderColor: activeTrack === track.id ? '#fff' : 'rgba(255,255,255,0.1)' }}>
+              <div className="circle-img" style={{ 
+                borderColor: activeTrack === track.id ? '#fff' : 'rgba(255,255,255,0.1)',
+                marginBottom: 20
+              }}>
                 <img src={track.img} alt={track.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              <div className="circle-label" style={{ color: activeTrack === track.id ? '#fff' : '#666' }}>{track.name}</div>
+              <div className="circle-label" style={{ 
+                color: activeTrack === track.id ? '#fff' : '#666',
+                textAlign: 'center',
+                width: '100%',
+                lineHeight: 1.4
+              }}>{track.name}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Courses Section */}
-      <section id="courses" style={{ padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section id="courses" style={{ padding: '40px 0 120px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 80 }}>
-            <h2 style={{ fontSize: 48, fontWeight: 900, letterSpacing: '-0.03em' }}>
-              {activeTrack ? activeTrack.toUpperCase() : 'Elite Masterclasses'}
-            </h2>
-            {activeTrack && (
+          {activeTrack && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 40 }}>
               <button onClick={() => setActiveTrack(null)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: 10, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.2em', textDecoration: 'underline' }}>
                 SHOW ALL COURSES
               </button>
-            )}
-          </div>
+            </div>
+          )}
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 60 }}>
             {filteredCourses.map((c, i) => (
@@ -107,15 +117,22 @@ const PublicLanding = ({ courses, onCourse }) => {
                 style={{ cursor: 'pointer', animationDelay: `${i * 0.1}s` }}
                 className="reveal"
               >
-                <div style={{ position: 'relative', paddingTop: '65%', width: '100%', marginBottom: 32, overflow: 'hidden' }}>
-                    <img src={c.thumbnail} alt="" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }} />
-                    <div style={{ position: 'absolute', top: 20, right: 20, background: '#fff', color: '#000', padding: '6px 14px', fontSize: 9, fontWeight: 900, borderRadius: 0 }}>{c.duration}</div>
-                </div>
-                <h3 style={{ fontSize: 28, marginBottom: 16, lineHeight: 1, fontWeight: 800 }}>{c.title.toUpperCase()}</h3>
-                <p style={{ fontSize: 13, color: '#888', marginBottom: 24, lineHeight: 1.6, height: '3.2em', overflow: 'hidden' }}>{c.description}</p>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                  <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.1em', opacity: 0.6 }}>{c.instructor.toUpperCase()}</span>
-                  <Icon name="arrow" size={14} />
+                <div className="glass" style={{ padding: '0 0 32px 0', border: '1px solid rgba(255,255,255,0.08)', transition: 'all 0.4s' }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
+                >
+                  <div style={{ position: 'relative', paddingTop: '65%', width: '100%', marginBottom: 32, overflow: 'hidden' }}>
+                      <img src={c.thumbnail} alt="" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', top: 20, right: 20, background: '#fff', color: '#000', padding: '6px 14px', fontSize: 9, fontWeight: 900, borderRadius: 0 }}>{c.duration}</div>
+                  </div>
+                  <div style={{ padding: '0 32px' }}>
+                    <h3 style={{ fontSize: 24, marginBottom: 16, lineHeight: 1.1, fontWeight: 800 }}>{c.title.toUpperCase()}</h3>
+                    <p style={{ fontSize: 13, color: '#888', marginBottom: 24, lineHeight: 1.6, height: '3.2em', overflow: 'hidden' }}>{c.description}</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                      <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.1em', opacity: 0.6 }}>{c.instructor.toUpperCase()}</span>
+                      <Icon name="arrow" size={14} />
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
