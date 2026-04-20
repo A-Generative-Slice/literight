@@ -74,12 +74,11 @@ export const PublicNav = ({ user }) => {
   };
 
   const handleActionClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     
-    // Explicit console logging for debugging (if user checks)
-    console.log("Navigation toggle triggered", isAuthPage ? "to Home" : "to Auth");
-
     if (isAuthPage) {
       navigate('/');
     } else {
@@ -89,29 +88,31 @@ export const PublicNav = ({ user }) => {
 
   return (
     <>
+      {/* Universal Floating Island - Consistent on all devices */}
       <nav style={{ 
         position: 'fixed', 
         top: 'clamp(20px, 4vw, 30px)', 
         right: 'clamp(20px, 4vw, 30px)', 
-        zIndex: 10000, // Maximized Z-Index
+        zIndex: 10000, 
         display: 'flex',
         alignItems: 'center',
-        pointerEvents: 'auto'
+        pointerEvents: 'none' // Parent nav is transparent to clicks
       }}>
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
           gap: 'clamp(8px, 2vw, 12px)',
           padding: 'clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 20px)',
-          background: 'rgba(255, 255, 255, 0.08)', // Slightly more visible
+          background: 'rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)', // Sharper border
+          border: '1px solid rgba(255, 255, 255, 0.2)',
           borderRadius: 100,
           boxShadow: '0 30px 60px rgba(0,0,0,0.6)',
-          pointerEvents: 'auto'
+          pointerEvents: 'auto' // Only the island captures clicks
         }}>
           <button 
+            type="button"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -124,8 +125,7 @@ export const PublicNav = ({ user }) => {
               color: '#fff', 
               padding: 10, 
               display: 'flex', 
-              alignItems: 'center',
-              pointerEvents: 'auto'
+              alignItems: 'center'
             }}
           >
             <Icon name="search" size={20} />
@@ -133,6 +133,7 @@ export const PublicNav = ({ user }) => {
           
           {user ? (
              <button 
+               type="button"
                onClick={(e) => {
                  e.preventDefault();
                  e.stopPropagation();
@@ -144,12 +145,13 @@ export const PublicNav = ({ user }) => {
              </button>
           ) : (
             <button 
+              type="button"
               onClick={handleActionClick}
               style={{ 
                 background: '#fff', 
                 color: '#000', 
                 border: 'none', 
-                padding: '12px clamp(20px, 3.5vw, 32px)', // Larger tap area
+                padding: '12px clamp(20px, 3.5vw, 32px)', 
                 fontSize: 'clamp(10px, 1.8vw, 11px)', 
                 fontWeight: 900, 
                 cursor: 'pointer', 
@@ -157,8 +159,7 @@ export const PublicNav = ({ user }) => {
                 borderRadius: 100,
                 textTransform: 'uppercase',
                 outline: 'none',
-                WebkitTapHighlightColor: 'transparent', // Remove blue flash on mobile
-                pointerEvents: 'auto',
+                WebkitTapHighlightColor: 'transparent',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
               }}
             >
@@ -172,6 +173,7 @@ export const PublicNav = ({ user }) => {
       {overlayActive && (
         <div style={{ position: 'fixed', inset: 0, background: '#0a0a0a', zIndex: 11000, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
           <button 
+            type="button"
             onClick={() => {
               setOverlayActive(false);
               setSearchTerm('');
