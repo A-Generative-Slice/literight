@@ -26,18 +26,56 @@ export const PublicNav = ({ onLoginClick, user }) => {
     if (searchTerm.trim() === '') {
       setSearchResults([]);
     } else {
-      const filtered = courses.filter(c => 
-        c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (c.instructor && c.instructor.toLowerCase().includes(searchTerm.toLowerCase()))
-      ).slice(0, 5);
-      setSearchResults(filtered);
+      const results = [];
+      const query = searchTerm.toLowerCase();
+
+      courses.forEach(course => {
+        // 1. Check Course Title
+        if (course.title.toLowerCase().includes(query)) {
+          results.push({
+            id: course.id,
+            title: course.title,
+            type: 'COURSE',
+            parent: course.instructor,
+            path: `/course/${course.id}`
+          });
+        }
+
+        // 2. Check Chapters (Modules)
+        course.chapters?.forEach(chapter => {
+          if (chapter.title.toLowerCase().includes(query)) {
+            results.push({
+              id: `${course.id}_ch_${chapter.id}`,
+              title: chapter.title,
+              type: 'MODULE',
+              parent: course.title,
+              path: `/course/${course.id}` // Modules usually don't have deep links yet, go to course
+            });
+          }
+
+          // 3. Check Lessons (Sessions)
+          chapter.lessons?.forEach(lesson => {
+            if (lesson.title.toLowerCase().includes(query)) {
+              results.push({
+                id: `${course.id}_ls_${lesson.id}`,
+                title: lesson.title,
+                type: 'SESSION',
+                parent: `${course.title} > ${chapter.title}`,
+                path: `/course/${course.id}?lessonId=${lesson.id}`
+              });
+            }
+          });
+        });
+      });
+
+      setSearchResults(results.slice(0, 8)); // Show up to 8 mixed results
     }
   }, [searchTerm, courses]);
 
-  const handleResultClick = (id) => {
+  const handleResultClick = (path) => {
     setOverlayActive(false);
     setSearchTerm('');
-    navigate(`/course/${id}`);
+    navigate(path);
   };
 
   return (
@@ -119,13 +157,13 @@ export const PublicNav = ({ onLoginClick, user }) => {
       </nav>
 
       {overlayActive && (
-        <div style={{ position: 'fixed', inset: 0, background: '#000', zIndex: 1100, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards' }}>
+        <div style={{ position: 'fixed', inset: 0, background: '#111', zIndex: 1100, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
           <button 
             onClick={() => {
               setOverlayActive(false);
               setSearchTerm('');
             }}
-            style={{ position: 'absolute', top: 30, right: 30, background: 'none', border: '1px solid rgba(255,255,255,0.2)', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
+            style={{ position: 'fixed', top: 30, right: 30, background: 'none', border: '1px solid rgba(255,255,255,0.2)', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}
           >
             <Icon name="x" size={18} />
           </button>
@@ -136,41 +174,50 @@ export const PublicNav = ({ onLoginClick, user }) => {
               autoFocus
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="FIND A TRACK..." 
-              style={{ width: '100%', background: 'none', border: 'none', borderBottom: '1px solid #fff', padding: '20px 0', fontSize: 40, color: '#fff', fontWeight: 900, outline: 'none', letterSpacing: '-0.03em' }}
+              placeholder="FIND A TRACK, MODULE OR SESSION..." 
+              style={{ width: '100%', background: 'none', border: 'none', borderBottom: '1px solid #fff', padding: '20px 0', fontSize: 'clamp(24px, 5vw, 40px)', color: '#fff', fontWeight: 900, outline: 'none', letterSpacing: '-0.03em' }}
             />
 
             {searchResults.length > 0 && (
-              <div style={{ marginTop: 40, display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <div style={{ marginTop: 60, display: 'flex', flexDirection: 'column', gap: 32 }}>
                 {searchResults.map(result => (
                   <div 
                     key={result.id}
-                    onClick={() => handleResultClick(result.id)}
+                    onClick={() => handleResultClick(result.path)}
                     style={{ 
                       display: 'flex', 
                       justifyContent: 'space-between', 
                       alignItems: 'center', 
                       cursor: 'pointer',
-                      padding: '10px 0',
+                      padding: '16px 0',
                       borderBottom: '1px solid rgba(255,255,255,0.05)',
-                      transition: 'all 0.3s'
+                      transition: 'all 0.4s'
                     }}
-                    onMouseEnter={e => e.currentTarget.style.paddingLeft = '10px'}
-                    onMouseLeave={e => e.currentTarget.style.paddingLeft = '0'}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.paddingLeft = '15px';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.paddingLeft = '0';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
+                    }}
                   >
                     <div>
-                      <div style={{ fontSize: 20, fontWeight: 900, color: '#fff' }}>{result.title.toUpperCase()}</div>
-                      <div style={{ fontSize: 9, color: '#666', fontWeight: 900, letterSpacing: '0.2em', marginTop: 4 }}>{result.instructor?.toUpperCase()}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                        <span style={{ fontSize: 8, fontWeight: 900, letterSpacing: '0.1em', background: '#fff', color: '#000', padding: '2px 8px' }}>{result.type}</span>
+                        <span style={{ fontSize: 9, color: '#555', fontWeight: 900, letterSpacing: '0.1em' }}>{result.parent?.toUpperCase()}</span>
+                      </div>
+                      <div style={{ fontSize: 'clamp(18px, 3vw, 24px)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>{result.title.toUpperCase()}</div>
                     </div>
-                    <Icon name="arrow" size={16} />
+                    <Icon name="arrow" size={18} />
                   </div>
                 ))}
               </div>
             )}
 
             {searchTerm && searchResults.length === 0 && (
-              <div style={{ marginTop: 40, fontSize: 14, color: '#444', letterSpacing: '0.1em' }}>
-                NO RESULTS FOUND FOR "{searchTerm.toUpperCase()}"
+              <div style={{ marginTop: 60, fontSize: 14, color: '#444', letterSpacing: '0.1em', fontWeight: 900 }}>
+                NO DIRECT MATCHES FOUND FOR "{searchTerm.toUpperCase()}"
               </div>
             )}
           </div>
