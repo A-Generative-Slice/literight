@@ -19,7 +19,7 @@ const PublicLanding = ({ courses, onCourse }) => {
   }, []);
 
   return (
-    <div style={{ background: '#000', minHeight: '100vh', color: '#fff' }}>
+    <div style={{ background: '#ffffff', minHeight: '100vh', color: '#0a0a0a' }}>
       
       {/* Full-Screen Interactive Hero */}
       <section style={{ 
@@ -30,7 +30,7 @@ const PublicLanding = ({ courses, onCourse }) => {
         justifyContent: 'center',
         padding: '0 var(--container-px)',
         overflow: 'hidden',
-        background: '#000'
+        background: '#ffffff'
       }}>
         <ParticleField />
         
@@ -49,19 +49,20 @@ const PublicLanding = ({ courses, onCourse }) => {
             lineHeight: 0.8, 
             marginBottom: 24, 
             letterSpacing: '-0.06em',
-            textTransform: 'uppercase'
+            textTransform: 'uppercase',
+            color: '#000'
           }}>
             Literight <br/>
-            <span style={{ opacity: 0.15 }}>Academy</span>
+            <span style={{ opacity: 0.25, color: '#000' }}>Academy</span>
           </h1>
           
           <p style={{ 
             fontSize: 'clamp(10px, 2vw, 14px)', 
             fontWeight: 900, 
-            color: '#fff', 
+            color: '#000', 
             letterSpacing: '0.4em', 
-            textTransform: 'uppercase',
-            opacity: 0.6,
+            textTransform: 'uppercase', 
+            opacity: 0.65,
             marginBottom: 60,
             maxWidth: 600,
             margin: '0 auto 60px'
@@ -73,26 +74,26 @@ const PublicLanding = ({ courses, onCourse }) => {
             <div style={{ 
               height: 1, 
               width: 100, 
-              background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent)' 
+              background: 'linear-gradient(to right, transparent, rgba(0,0,0,0.2), transparent)' 
             }} />
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', opacity: 0.3, fontSize: 8, fontWeight: 900, letterSpacing: '0.5em' }}>
+        <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', color: '#000', opacity: 0.35, fontSize: 8, fontWeight: 900, letterSpacing: '0.5em' }}>
           SCROLL TO EXPLORE
         </div>
       </section>
 
       {/* Brand Intro / About Section */}
-      <section style={{ padding: '120px 0', position: 'relative', zIndex: 3, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section style={{ padding: '120px 0', position: 'relative', zIndex: 3, borderTop: '1px solid rgba(0,0,0,0.06)', background: '#fafafa' }}>
         <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 var(--container-px)', textAlign: 'center' }}>
-          <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.5em', color: '#444', marginBottom: 40 }}>THE LEGACY</div>
+          <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.5em', color: '#888', marginBottom: 40 }}>THE LEGACY</div>
           <p style={{ 
             fontSize: 'clamp(18px, 4vw, 24px)', 
             lineHeight: 1.5, 
             fontWeight: 400, 
-            color: '#eee',
+            color: '#1a1a1a',
             letterSpacing: '-0.01em'
           }}>
             LITERIGHT ACADEMY exists to translate Litelab's independent lighting design expertise into professional pathways for new learners. 
@@ -103,7 +104,7 @@ const PublicLanding = ({ courses, onCourse }) => {
       </section>
 
       {/* Courses Section - Solid White Cards */}
-      <section id="courses" style={{ padding: '60px 0 120px' }}>
+      <section id="courses" style={{ padding: '60px 0 120px', background: '#ffffff' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 60 }}>
             {filteredCourses.map((c, i) => (
@@ -114,19 +115,20 @@ const PublicLanding = ({ courses, onCourse }) => {
                 className="reveal"
               >
                 <div style={{ 
-                  background: '#fff', 
+                  background: '#ffffff', 
                   padding: 0, 
                   transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                   position: 'relative',
-                  border: '1px solid transparent'
+                  border: '1px solid rgba(0,0,0,0.08)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.04)'
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = 'translateY(-12px)';
-                  e.currentTarget.style.boxShadow = '0 40px 80px rgba(0,0,0,0.5)';
+                  e.currentTarget.style.boxShadow = '0 30px 60px rgba(0,0,0,0.12)';
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.04)';
                 }}
                 >
                   <div style={{ position: 'relative', paddingTop: '60%', width: '100%', overflow: 'hidden' }}>
@@ -136,7 +138,7 @@ const PublicLanding = ({ courses, onCourse }) => {
                   
                   <div style={{ padding: '40px' }}>
                     <h3 style={{ fontSize: 24, marginBottom: 16, lineHeight: 1.1, fontWeight: 900, color: '#000' }}>{c.title.toUpperCase()}</h3>
-                    <p style={{ fontSize: 13, color: '#444', marginBottom: 32, lineHeight: 1.6, height: '3.2em', overflow: 'hidden' }}>{c.description}</p>
+                    <p style={{ fontSize: 13, color: '#555', marginBottom: 32, lineHeight: 1.6, height: '3.2em', overflow: 'hidden' }}>{c.description}</p>
                     
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 24, borderTop: '1px solid rgba(0,0,0,0.08)' }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -156,7 +158,7 @@ const PublicLanding = ({ courses, onCourse }) => {
       </section>
 
       {/* Minimalist Footer */}
-      <footer style={{ padding: '100px 0 60px', borderTop: '1px solid rgba(255,255,255,0.05)', background: '#000' }}>
+      <footer style={{ padding: '100px 0 60px', borderTop: '1px solid rgba(0,0,0,0.08)', background: '#fafafa' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', textAlign: 'center' }}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: 30, marginBottom: 40 }}>
             {[
@@ -167,15 +169,15 @@ const PublicLanding = ({ courses, onCourse }) => {
               { name: 'x-social', url: 'https://x.com/litelab_india' },
               { name: 'youtube', url: 'https://www.youtube.com/@litelab4250' }
             ].map(s => (
-              <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', transition: '0.3s', opacity: 0.8 }}
+              <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: '#000', transition: '0.3s', opacity: 0.8 }}
                 onMouseEnter={e => e.currentTarget.style.opacity = '1'}
                 onMouseLeave={e => e.currentTarget.style.opacity = '0.8'}>
-                <Icon name={s.name} size={20} />
+                <Icon name={s.name} size={20} color="#000" />
               </a>
             ))}
           </div>
           
-          <div style={{ fontSize: 10, color: '#fff', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 10, color: '#666', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
             Copyright © 2026. All Rights Reserved | Privacy Policy | Designed and Developed by <a href="https://a-generative-slice.github.io/A-generative-slice/" target="_blank" rel="noopener noreferrer" style={{ color: '#FF6F00', textDecoration: 'none', fontWeight: 900 }}>A Generative Slice</a>
           </div>
         </div>

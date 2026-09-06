@@ -75,21 +75,21 @@ const AuthPage = ({ onBack }) => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '100px 24px 60px' }}>
+    <div style={{ minHeight: '100vh', background: '#ffffff', color: '#0a0a0a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '100px 24px 60px' }}>
       <div style={{ width: '100%', maxWidth: 460 }}>
         {/* Two-Line Logo to prevent Mobile overlap */}
         <div style={{ textAlign: 'center', marginBottom: 60 }}>
           <Logo size="lg" stacked />
-          <p style={{ color: '#444', marginTop: 16, fontSize: 10, fontWeight: 900, letterSpacing: '0.4em' }}>GLOBAL VANGUARD OF LIGHTING</p>
+          <p style={{ color: '#888', marginTop: 16, fontSize: 10, fontWeight: 900, letterSpacing: '0.4em' }}>GLOBAL VANGUARD OF LIGHTING</p>
         </div>
 
-        <div className="glass" style={{ padding: 'clamp(24px, 10vw, 60px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="glass" style={{ padding: 'clamp(24px, 10vw, 60px)', background: '#ffffff', border: '1px solid rgba(0, 0, 0, 0.08)', boxShadow: '0 20px 50px rgba(0, 0, 0, 0.05)' }}>
           {step === 'auth' && (
             <>
-              <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: 50 }}>
+              <div style={{ display: 'flex', borderBottom: '1px solid rgba(0, 0, 0, 0.08)', marginBottom: 50 }}>
                 {[['login', 'Log In'], ['signup', 'Sign Up']].map(([t, l]) => (
                   <button key={t} onClick={() => { setTab(t); setErr(''); }}
-                    style={{ flex: 1, padding: '16px', border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 900, background: 'transparent', color: tab === t ? '#fff' : '#444', borderBottom: tab === t ? '2px solid #fff' : '2px solid transparent', transition: 'all 0.3s', letterSpacing: '0.1em' }}>
+                    style={{ flex: 1, padding: '16px', border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 900, background: 'transparent', color: tab === t ? '#000' : '#888', borderBottom: tab === t ? '2px solid #000' : '2px solid transparent', transition: 'all 0.3s', letterSpacing: '0.1em' }}>
                     {l.toUpperCase()}
                   </button>
                 ))}
@@ -116,7 +116,7 @@ const AuthPage = ({ onBack }) => {
 
                 <MsgBanner message={msg} />
                 <ErrorBanner message={err} />
-                <button type="submit" style={{ background: '#fff', color: '#000', border: 'none', padding: '20px', fontSize: 13, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}>
+                <button type="submit" style={{ background: '#000', color: '#fff', border: 'none', padding: '20px', fontSize: 13, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}>
                   {tab === 'login' ? 'ENTER ACADEMY' : 'START MY JOURNEY'}
                 </button>
               </form>
@@ -125,43 +125,43 @@ const AuthPage = ({ onBack }) => {
 
           {step === 'otp' && (
             <div className="reveal" style={{ textAlign: 'center' }}>
-              <h2 style={{ fontSize: 24, fontWeight: 900, color: '#fff', marginBottom: 12, textTransform: 'uppercase' }}>Verify Email</h2>
-              <p style={{ color: '#888', fontSize: 14, marginBottom: 40 }}>We've sent a code to {form.username}</p>
+              <h2 style={{ fontSize: 24, fontWeight: 900, color: '#000', marginBottom: 12, textTransform: 'uppercase' }}>Verify Email</h2>
+              <p style={{ color: '#666', fontSize: 14, marginBottom: 40 }}>We've sent a code to {form.username}</p>
               <OTPInput onChange={v => setForm({ ...form, otp: v })} onComplete={handleOtpVerify} />
               <ErrorBanner message={err} />
-              <button onClick={() => handleOtpVerify(form.otp)} style={{ background: '#fff', color: '#000', border: 'none', padding: '20px', width: '100%', marginTop: 24, fontSize: 13, fontWeight: 900, cursor: 'pointer' }}>VERIFY ACCOUNT</button>
-              <button onClick={() => setStep('auth')} style={{ marginTop: 20, background: 'none', border: 'none', color: '#444', fontSize: 11, fontWeight: 900, cursor: 'pointer' }}>BACK</button>
+              <button onClick={() => handleOtpVerify(form.otp)} style={{ background: '#000', color: '#fff', border: 'none', padding: '20px', width: '100%', marginTop: 24, fontSize: 13, fontWeight: 900, cursor: 'pointer' }}>VERIFY ACCOUNT</button>
+              <button onClick={() => setStep('auth')} style={{ marginTop: 20, background: 'none', border: 'none', color: '#666', fontSize: 11, fontWeight: 900, cursor: 'pointer' }}>BACK</button>
             </div>
           )}
 
           {step === 'forgot' && (
             <div className="reveal">
-              <h2 style={{ fontSize: 24, fontWeight: 900, color: '#fff', marginBottom: 12, textTransform: 'uppercase' }}>Recover Access</h2>
-              <p style={{ color: '#888', fontSize: 14, marginBottom: 40 }}>Enter your email to receive a recovery code.</p>
+              <h2 style={{ fontSize: 24, fontWeight: 900, color: '#000', marginBottom: 12, textTransform: 'uppercase' }}>Recover Access</h2>
+              <p style={{ color: '#666', fontSize: 14, marginBottom: 40 }}>Enter your email to receive a recovery code.</p>
               <form onSubmit={handleForgotReq} style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
                 <DarkField label="Email Address" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} icon="mail" placeholder="DESIGNER@ACADEMY.COM" required />
                 <MsgBanner message={msg} />
                 <ErrorBanner message={err} />
-                <button type="submit" style={{ background: '#fff', color: '#000', border: 'none', padding: '20px', fontSize: 13, fontWeight: 900, cursor: 'pointer' }}>SEND RECOVERY CODE</button>
-                <button type="button" onClick={() => setStep('auth')} style={{ background: 'none', border: 'none', color: '#444', fontSize: 11, fontWeight: 900, cursor: 'pointer' }}>BACK TO LOGIN</button>
+                <button type="submit" style={{ background: '#000', color: '#fff', border: 'none', padding: '20px', fontSize: 13, fontWeight: 900, cursor: 'pointer' }}>SEND RECOVERY CODE</button>
+                <button type="button" onClick={() => setStep('auth')} style={{ background: 'none', border: 'none', color: '#666', fontSize: 11, fontWeight: 900, cursor: 'pointer' }}>BACK TO LOGIN</button>
               </form>
             </div>
           )}
 
           {step === 'reset' && (
             <div className="reveal">
-              <h2 style={{ fontSize: 24, fontWeight: 900, color: '#fff', marginBottom: 12, textTransform: 'uppercase' }}>New Credentials</h2>
-              <p style={{ color: '#888', fontSize: 14, marginBottom: 40 }}>Enter the code from your email and your new password.</p>
+              <h2 style={{ fontSize: 24, fontWeight: 900, color: '#000', marginBottom: 12, textTransform: 'uppercase' }}>New Credentials</h2>
+              <p style={{ color: '#666', fontSize: 14, marginBottom: 40 }}>Enter the code from your email and your new password.</p>
               <form onSubmit={handleResetSub} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
                 <div style={{ marginBottom: 20 }}>
-                   <label style={{ fontSize: 9, fontWeight: 900, color: '#444', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: 16 }}>RECOVERY CODE</label>
+                   <label style={{ fontSize: 9, fontWeight: 900, color: '#888', textTransform: 'uppercase', letterSpacing: '0.2em', display: 'block', marginBottom: 16 }}>RECOVERY CODE</label>
                    <OTPInput onChange={v => setForm({ ...form, otp: v })} onComplete={() => {}} />
                 </div>
                 <DarkField label="New Password" type="password" value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} icon="key" placeholder="••••••••" required />
                 <DarkField label="Confirm New Password" type="password" value={form.confirmPassword} onChange={e => setForm({ ...form, confirmPassword: e.target.value })} icon="shield-check" placeholder="••••••••" required />
                 <MsgBanner message={msg} />
                 <ErrorBanner message={err} />
-                <button type="submit" style={{ background: '#fff', color: '#000', border: 'none', padding: '20px', fontSize: 13, fontWeight: 900, cursor: 'pointer' }}>UPDATE PASSWORD</button>
+                <button type="submit" style={{ background: '#000', color: '#fff', border: 'none', padding: '20px', fontSize: 13, fontWeight: 900, cursor: 'pointer' }}>UPDATE PASSWORD</button>
               </form>
             </div>
           )}
@@ -173,9 +173,9 @@ const AuthPage = ({ onBack }) => {
 
 const DarkField = ({ label, icon, ...props }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-    <label style={{ fontSize: 9, fontWeight: 900, color: '#444', textTransform: 'uppercase', letterSpacing: '0.2em' }}>{label}</label>
+    <label style={{ fontSize: 9, fontWeight: 900, color: '#888', textTransform: 'uppercase', letterSpacing: '0.2em' }}>{label}</label>
     <div style={{ position: 'relative' }}>
-      <input {...props} style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', padding: '16px 0', color: '#fff', outline: 'none', fontSize: 14, letterSpacing: '0.05em' }} />
+      <input {...props} style={{ width: '100%', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(0, 0, 0, 0.15)', padding: '16px 0', color: '#000', outline: 'none', fontSize: 14, letterSpacing: '0.05em' }} />
     </div>
   </div>
 );
@@ -193,18 +193,18 @@ const OTPInput = ({ onChange, onComplete }) => {
   return (
     <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
       {digits.map((d, i) => (
-        <input key={i} ref={refs[i]} value={d} maxLength={1} onChange={e => handle(i, e.target.value)} style={{ width: 'clamp(30px, 8vw, 40px)', height: 50, textAlign: 'center', fontSize: 24, fontWeight: 900, border: 'none', borderBottom: '2px solid rgba(255,255,255,0.2)', background: 'transparent', color: '#fff', outline: 'none' }} />
+        <input key={i} ref={refs[i]} value={d} maxLength={1} onChange={e => handle(i, e.target.value)} style={{ width: 'clamp(30px, 8vw, 40px)', height: 50, textAlign: 'center', fontSize: 24, fontWeight: 900, border: 'none', borderBottom: '2px solid rgba(0, 0, 0, 0.2)', background: 'transparent', color: '#000', outline: 'none' }} />
       ))}
     </div>
   );
 };
 
 const ErrorBanner = ({ message }) => message ? (
-  <div className="reveal" style={{ color: '#ff4444', fontSize: 11, fontWeight: 900, textAlign: 'center', letterSpacing: '0.1em' }}>{message.toUpperCase()}</div>
+  <div className="reveal" style={{ color: '#ef4444', fontSize: 11, fontWeight: 900, textAlign: 'center', letterSpacing: '0.1em' }}>{message.toUpperCase()}</div>
 ) : null;
 
 const MsgBanner = ({ message }) => message ? (
-  <div className="reveal" style={{ color: '#fff', fontSize: 11, fontWeight: 900, textAlign: 'center', letterSpacing: '0.1em', opacity: 0.8 }}>{message.toUpperCase()}</div>
+  <div className="reveal" style={{ color: '#0a0a0a', fontSize: 11, fontWeight: 900, textAlign: 'center', letterSpacing: '0.1em', opacity: 0.8 }}>{message.toUpperCase()}</div>
 ) : null;
 
 export default AuthPage;

@@ -1,17 +1,17 @@
 import React from 'react';
 
 export const C = {
-  bg: '#000000', 
-  surface: '#000000',
-  border: 'rgba(255, 255, 255, 0.1)',
-  text: '#ffffff',
-  muted: '#888888',
-  accent: '#ffffff',
-  success: '#ffffff',
-  warning: '#ffffff',
-  danger: '#ff4444',
-  shadow: 'none',
-  shadowLg: 'none',
+  bg: '#ffffff', 
+  surface: '#ffffff',
+  border: 'rgba(0, 0, 0, 0.08)',
+  text: '#0a0a0a',
+  muted: '#64748b',
+  accent: '#000000',
+  success: '#10b981',
+  warning: '#f59e0b',
+  danger: '#ef4444',
+  shadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+  shadowLg: '0 10px 30px rgba(0, 0, 0, 0.08)',
 };
 
 export const Logo = ({ size = 'md', stacked = false }) => {
@@ -23,14 +23,14 @@ export const Logo = ({ size = 'md', stacked = false }) => {
       fontSize: fs, 
       letterSpacing: '0.15em', 
       userSelect: 'none', 
-      color: '#fff', 
+      color: '#000', 
       display: stacked ? 'flex' : 'inline-flex',
       flexDirection: stacked ? 'column' : 'row',
       alignItems: 'center',
       textTransform: 'uppercase',
       lineHeight: stacked ? 1.1 : 1
     }}>
-      LITERIGHT {stacked && <br />} <span style={{ opacity: 0.5, marginLeft: stacked ? 0 : '0.3em' }}>ACADEMY</span>
+      LITERIGHT {stacked && <br />} <span style={{ opacity: 0.45, marginLeft: stacked ? 0 : '0.3em' }}>ACADEMY</span>
     </span>
   );
 };
@@ -48,9 +48,9 @@ export const Badge = ({ label, active = false, onClick }) => (
       fontWeight: 900, 
       textTransform: 'uppercase', 
       letterSpacing: '0.2em', 
-      background: active ? '#fff' : 'transparent', 
-      color: active ? '#000' : '#fff', 
-      border: `1px solid rgba(255,255,255, ${active ? 1 : 0.2})`,
+      background: active ? '#000' : 'transparent', 
+      color: active ? '#fff' : '#000', 
+      border: `1px solid rgba(0, 0, 0, ${active ? 1 : 0.15})`,
       cursor: 'pointer',
       transition: 'all 0.3s',
       width: '100%',
@@ -66,10 +66,10 @@ export const Card = ({ children, style: ex = {}, padding = '24px', className = '
     className={`${className} ${glass ? 'glass' : ''}`} 
     onClick={onClick}
     style={{ 
-      background: glass ? 'rgba(255,255,255,0.03)' : '#000', 
+      background: glass ? 'rgba(255, 255, 255, 0.7)' : '#ffffff', 
       backdropFilter: glass ? 'blur(10px)' : 'none',
       borderRadius: 0, 
-      border: `1px solid rgba(255,255,255,0.1)`, 
+      border: `1px solid rgba(0, 0, 0, 0.08)`, 
       padding, 
       ...ex 
     }}
@@ -79,12 +79,12 @@ export const Card = ({ children, style: ex = {}, padding = '24px', className = '
 );
 
 export const Avatar = ({ user, size = 40 }) => {
-  if (!user) return <div style={{ width: size, height: size, borderRadius: '50%', border: '1px solid #fff', flexShrink: 0 }} />;
+  if (!user) return <div style={{ width: size, height: size, borderRadius: '50%', border: '1px solid #000', flexShrink: 0 }} />;
   const initial = (user.name || user.username || 'A')[0].toUpperCase();
   const dp = user.dp || user.photo;
   
   return (
-    <div style={{ width: size, height: size, borderRadius: '50%', background: '#000', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 800, border: `1px solid #fff`, overflow: 'hidden', flexShrink: 0 }}>
+    <div style={{ width: size, height: size, borderRadius: '50%', background: '#ffffff', color: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 800, border: `1px solid #000`, overflow: 'hidden', flexShrink: 0 }}>
       {dp ? <img src={dp} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : initial}
     </div>
   );

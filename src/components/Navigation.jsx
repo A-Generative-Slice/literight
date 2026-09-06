@@ -106,12 +106,12 @@ export const PublicNav = () => {
           alignItems: 'center', 
           gap: 'clamp(8px, 1vw, 12px)',
           padding: 'clamp(8px, 1.5vw, 10px) clamp(8px, 1.5vw, 10px) clamp(8px, 1.5vw, 10px) clamp(16px, 3.5vw, 24px)',
-          background: 'rgba(255, 255, 255, 0.08)',
+          background: 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(40px)',
           WebkitBackdropFilter: 'blur(40px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          border: '1px solid rgba(0, 0, 0, 0.08)',
           borderRadius: 100,
-          boxShadow: '0 30px 60px rgba(0,0,0,0.6)',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08)',
           pointerEvents: 'auto'
         }}>
           <button 
@@ -125,13 +125,13 @@ export const PublicNav = () => {
               background: 'none', 
               border: 'none', 
               cursor: 'pointer', 
-              color: '#fff', 
+              color: '#000', 
               padding: '8px 12px', 
               display: 'flex', 
               alignItems: 'center'
             }}
           >
-            <Icon name="search" size={20} />
+            <Icon name="search" size={20} color="#000" />
           </button>
           
           {user ? (
@@ -151,21 +151,21 @@ export const PublicNav = () => {
               type="button"
               onClick={handleActionClick}
               style={{ 
-                background: '#fff', 
-                color: '#000', 
+                background: '#000', 
+                color: '#fff', 
                 border: 'none', 
                 padding: '14px clamp(24px, 4vw, 36px)', 
                 fontSize: 'clamp(10px, 1.8vw, 11px)', 
                 fontWeight: 900, 
                 cursor: 'pointer', 
-                letterSpacing: '0.15em',
-                borderRadius: 100,
-                textTransform: 'uppercase',
-                outline: 'none',
-                WebkitTapHighlightColor: 'transparent',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                display: 'flex',
-                alignItems: 'center',
+                letterSpacing: '0.15em', 
+                borderRadius: 100, 
+                textTransform: 'uppercase', 
+                outline: 'none', 
+                WebkitTapHighlightColor: 'transparent', 
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)', 
+                display: 'flex', 
+                alignItems: 'center', 
                 justifyContent: 'center'
               }}
             >
@@ -177,26 +177,26 @@ export const PublicNav = () => {
 
       {/* Search Overlay */}
       {overlayActive && (
-        <div style={{ position: 'fixed', inset: 0, background: '#0a0a0a', zIndex: 110000, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
+        <div style={{ position: 'fixed', inset: 0, background: '#ffffff', zIndex: 110000, padding: '60px var(--container-px)', animation: 'reveal 0.3s forwards', overflowY: 'auto' }}>
           <button 
             type="button"
             onClick={() => {
               setOverlayActive(false);
               setSearchTerm('');
-            }}
-            style={{ position: 'fixed', top: 30, right: 30, border: '1px solid rgba(255,255,255,0.2)', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', background: 'none' }}
+            }} 
+            style={{ position: 'fixed', top: 30, right: 30, border: '1px solid rgba(0, 0, 0, 0.1)', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#000', background: 'none' }}
           >
-            <Icon name="x" size={20} />
+            <Icon name="x" size={20} color="#000" />
           </button>
           
           <div style={{ maxWidth: 800, margin: '100px auto' }}>
-            <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.4em', marginBottom: 20, color: '#444' }}>ACADEMY SEARCH</div>
+            <div style={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.4em', marginBottom: 20, color: '#888' }}>ACADEMY SEARCH</div>
             <input 
               autoFocus
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="FIND A TRACK, MODULE OR SESSION..." 
-              style={{ width: '100%', background: 'none', border: 'none', borderBottom: '1px solid #fff', padding: '24px 0', fontSize: 'clamp(24px, 5vw, 40px)', color: '#fff', fontWeight: 900, outline: 'none', letterSpacing: '-0.03em' }}
+              style={{ width: '100%', background: 'none', border: 'none', borderBottom: '1px solid #000', padding: '24px 0', fontSize: 'clamp(24px, 5vw, 40px)', color: '#000', fontWeight: 900, outline: 'none', letterSpacing: '-0.03em' }}
             />
 
             {searchResults.length > 0 && (
@@ -209,20 +209,20 @@ export const PublicNav = () => {
                       display: 'flex', 
                       justifyContent: 'space-between', 
                       alignItems: 'center', 
-                      cursor: 'pointer',
-                      padding: '20px 0',
-                      borderBottom: '1px solid rgba(255,255,255,0.05)',
+                      cursor: 'pointer', 
+                      padding: '20px 0', 
+                      borderBottom: '1px solid rgba(0, 0, 0, 0.06)', 
                       transition: 'all 0.4s'
                     }}
                   >
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-                        <span style={{ fontSize: 8, fontWeight: 900, letterSpacing: '0.1em', background: '#fff', color: '#000', padding: '2px 8px' }}>{result.type}</span>
-                        <span style={{ fontSize: 9, color: '#555', fontWeight: 900, letterSpacing: '0.1em' }}>{result.parent?.toUpperCase()}</span>
+                        <span style={{ fontSize: 8, fontWeight: 900, letterSpacing: '0.1em', background: '#000', color: '#fff', padding: '2px 8px' }}>{result.type}</span>
+                        <span style={{ fontSize: 9, color: '#666', fontWeight: 900, letterSpacing: '0.1em' }}>{result.parent?.toUpperCase()}</span>
                       </div>
-                      <div style={{ fontSize: 'clamp(14px, 3vw, 24px)', fontWeight: 900, color: '#fff', lineHeight: 1.1 }}>{result.title.toUpperCase()}</div>
+                      <div style={{ fontSize: 'clamp(14px, 3vw, 24px)', fontWeight: 900, color: '#000', lineHeight: 1.1 }}>{result.title.toUpperCase()}</div>
                     </div>
-                    <Icon name="arrow" size={20} />
+                    <Icon name="arrow" size={20} color="#000" />
                   </div>
                 ))}
               </div>

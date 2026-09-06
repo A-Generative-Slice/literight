@@ -54,9 +54,9 @@ const ParticleField = () => {
 
       draw() {
         const gradient = ctx.createLinearGradient(this.x, this.y, this.x + this.length, this.y);
-        gradient.addColorStop(0, `rgba(255, 255, 255, 0)`);
-        gradient.addColorStop(0.5, `rgba(255, 255, 255, ${this.opacity})`);
-        gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
+        gradient.addColorStop(0, `rgba(0, 0, 0, 0)`);
+        gradient.addColorStop(0.5, `rgba(0, 0, 0, ${this.opacity * 0.35})`);
+        gradient.addColorStop(1, `rgba(0, 0, 0, 0)`);
 
         ctx.strokeStyle = gradient;
         ctx.lineWidth = this.width;

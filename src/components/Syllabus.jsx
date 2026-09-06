@@ -25,10 +25,10 @@ const Syllabus = ({ course, progress, onSelectLesson, isLoggedIn }) => {
   };
 
   return (
-    <div style={{ background: '#000' }}>
+    <div style={{ background: '#fff' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
-        <h2 style={{ fontSize: 11, fontWeight: 900, color: '#444', letterSpacing: '0.3em' }}>CURRICULUM</h2>
-        <div style={{ fontSize: 9, fontWeight: 900, color: '#666', border: '1px solid rgba(255,255,255,0.1)', padding: '4px 12px' }}>
+        <h2 style={{ fontSize: 11, fontWeight: 900, color: '#888', letterSpacing: '0.3em' }}>CURRICULUM</h2>
+        <div style={{ fontSize: 9, fontWeight: 900, color: '#555', border: '1px solid rgba(0, 0, 0, 0.1)', padding: '4px 12px' }}>
           {course.chapters.length} MODULES
         </div>
       </div>
@@ -42,8 +42,8 @@ const Syllabus = ({ course, progress, onSelectLesson, isLoggedIn }) => {
           
           return (
             <div key={chapter.id} style={{ 
-              border: `1px solid rgba(255,255,255,${isOpen ? 0.3 : 0.05})`,
-              background: isOpen ? 'rgba(255,255,255,0.02)' : 'transparent',
+              border: `1px solid rgba(0, 0, 0, ${isOpen ? 0.25 : 0.08})`,
+              background: isOpen ? 'rgba(0, 0, 0, 0.02)' : 'transparent',
               transition: 'all 0.3s',
               opacity: locked ? 0.4 : 1,
             }}>
@@ -58,17 +58,17 @@ const Syllabus = ({ course, progress, onSelectLesson, isLoggedIn }) => {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ fontSize: 11, fontWeight: 900, color: isFull ? '#fff' : isOpen ? '#fff' : '#444' }}>
+                  <div style={{ fontSize: 11, fontWeight: 900, color: isFull ? '#000' : isOpen ? '#000' : '#888' }}>
                     {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
                   </div>
                   <div>
-                    <h3 style={{ fontSize: 13, fontWeight: 800, color: '#fff', letterSpacing: '0.02em', marginBottom: 4 }}>{chapter.title.toUpperCase()}</h3>
-                    <div style={{ fontSize: 9, fontWeight: 800, color: '#444', letterSpacing: '0.1em' }}>
+                    <h3 style={{ fontSize: 13, fontWeight: 800, color: '#000', letterSpacing: '0.02em', marginBottom: 4 }}>{chapter.title.toUpperCase()}</h3>
+                    <div style={{ fontSize: 9, fontWeight: 800, color: '#888', letterSpacing: '0.1em' }}>
                       {completed}/{total} UNITS COMPLETE
                     </div>
                   </div>
                 </div>
-                {locked ? <Lock size={12} color="#444" /> : <ChevronRight size={14} color="#fff" style={{ transform: isOpen ? 'rotate(90deg)' : 'none', transition: '0.3s' }} />}
+                {locked ? <Lock size={12} color="#888" /> : <ChevronRight size={14} color="#000" style={{ transform: isOpen ? 'rotate(90deg)' : 'none', transition: '0.3s' }} />}
               </div>
 
               {isOpen && !locked && (
@@ -83,20 +83,20 @@ const Syllabus = ({ course, progress, onSelectLesson, isLoggedIn }) => {
                           padding: '12px 14px', 
                           display: 'flex', 
                           alignItems: 'center', 
-                          justifyContent: 'space-between',
-                          cursor: 'pointer',
-                          background: 'rgba(255,255,255,0.03)',
-                          border: '1px solid rgba(255,255,255,0.05)',
+                          justifyContent: 'space-between', 
+                          cursor: 'pointer', 
+                          background: 'rgba(0, 0, 0, 0.02)', 
+                          border: '1px solid rgba(0, 0, 0, 0.06)', 
                           transition: '0.2s'
                         }}
-                        onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'}
-                        onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'}
+                        onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.2)'}
+                        onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.06)'}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                          {completed ? <CheckCircle2 size={12} color="#fff" /> : <PlayCircle size={12} color="#fff" opacity={0.3} />}
-                          <span style={{ fontSize: 12, fontWeight: 700, color: completed ? '#666' : '#fff' }}>{lesson.title.toUpperCase()}</span>
+                          {completed ? <CheckCircle2 size={12} color="#000" /> : <PlayCircle size={12} color="#000" opacity={0.4} />}
+                          <span style={{ fontSize: 12, fontWeight: 700, color: completed ? '#888' : '#000' }}>{lesson.title.toUpperCase()}</span>
                         </div>
-                        <div style={{ fontSize: 8, fontWeight: 900, color: '#444' }}>VIDEO</div>
+                        <div style={{ fontSize: 8, fontWeight: 900, color: '#888' }}>VIDEO</div>
                       </div>
                     );
                   })}

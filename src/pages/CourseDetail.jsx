@@ -35,24 +35,24 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
   const isPremiumLocked = isLoggedIn && !user?.isPremium && activeLesson && activeLesson.chId > 1;
 
   const currentContent = isPremiumLocked ? (
-    <div className="glass" style={{ position: 'relative', overflow: 'hidden', minHeight: 400, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-       <div style={{ width: 64, height: 64, background: 'rgba(255,255,255,0.05)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, border: '1px solid rgba(255,255,255,0.1)' }}>
-          <Icon name="lock" size={24} />
+    <div className="glass" style={{ position: 'relative', overflow: 'hidden', minHeight: 400, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#fafafa', border: '1px solid rgba(0,0,0,0.08)' }}>
+       <div style={{ width: 64, height: 64, background: 'rgba(0,0,0,0.04)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, border: '1px solid rgba(0,0,0,0.1)' }}>
+          <Icon name="lock" size={24} color="#000" />
        </div>
-       <h3 style={{ color: 'white', fontSize: 24, fontWeight: 900, marginBottom: 12, letterSpacing: '-0.02em' }}>PREMIUM MODULE</h3>
+       <h3 style={{ color: '#000', fontSize: 24, fontWeight: 900, marginBottom: 12, letterSpacing: '-0.02em' }}>PREMIUM MODULE</h3>
        <p style={{ color: '#666', fontSize: 13, marginBottom: 32, textAlign: 'center', maxWidth: 300, fontWeight: 700, letterSpacing: '0.05em' }}>THIS LESSON IS RESERVED FOR PREMIUM STUDENTS.</p>
-       <button onClick={() => alert('Upgrade Flow')} style={{ background: '#fff', color: '#000', border: 'none', padding: '14px 32px', fontSize: 11, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}>UPGRADE NOW</button>
+       <button onClick={() => alert('Upgrade Flow')} style={{ background: '#000', color: '#fff', border: 'none', padding: '14px 32px', fontSize: 11, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}>UPGRADE NOW</button>
     </div>
   ) : (
-    <div style={{ background: '#000', border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden' }}>
+    <div style={{ background: '#000', border: '1px solid rgba(0,0,0,0.1)', overflow: 'hidden' }}>
       <div style={{ position: 'relative', paddingTop: '56.25%', width: '100%', background: '#000' }}>
          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: 80, height: 80, background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fff' }}>
-              <span style={{ fontSize: 24, marginLeft: 4 }}>▶</span>
+            <div style={{ width: 80, height: 80, background: 'rgba(255,255,255,0.15)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '1px solid #fff' }}>
+              <span style={{ fontSize: 24, marginLeft: 4, color: '#fff' }}>▶</span>
             </div>
             <div style={{ marginTop: 24, textAlign: 'center' }}>
-              <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.3em', color: '#666', marginBottom: 8 }}>{activeLesson ? 'PLAYING UNIT' : 'READY TO START'}</div>
-              <h3 style={{ fontSize: 20, fontWeight: 800 }}>{activeLesson ? activeLesson.title.toUpperCase() : 'COURSE PREVIEW'}</h3>
+              <div style={{ fontSize: 10, fontWeight: 900, letterSpacing: '0.3em', color: '#aaa', marginBottom: 8 }}>{activeLesson ? 'PLAYING UNIT' : 'READY TO START'}</div>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#fff' }}>{activeLesson ? activeLesson.title.toUpperCase() : 'COURSE PREVIEW'}</h3>
             </div>
          </div>
       </div>
@@ -60,34 +60,34 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
   );
 
   return (
-    <div style={{ background: '#000', minHeight: '100vh', color: '#fff', paddingBottom: 100 }}>
+    <div style={{ background: '#ffffff', minHeight: '100vh', color: '#0a0a0a', paddingBottom: 100 }}>
       {/* Hero Section */}
       <div style={{ 
         height: 500,
         background: course.thumbnail 
-          ? `linear-gradient(to bottom, transparent, #000), url(${course.thumbnail}) center/cover no-repeat`
-          : '#000', 
+          ? `linear-gradient(to bottom, transparent, #ffffff), url(${course.thumbnail}) center/cover no-repeat`
+          : '#ffffff', 
         padding: '100px 0', 
-        display: 'flex',
+        display: 'flex', 
         alignItems: 'flex-end'
       }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 var(--container-px)', width: '100%' }}>
           <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-            {course?.tags?.map(t => <span key={t} style={{ border: '1px solid rgba(255,255,255,0.2)', padding: '5px 14px', fontSize: 9, fontWeight: 900, letterSpacing: '0.1em' }}>{t.toUpperCase()}</span>)}
+            {course?.tags?.map(t => <span key={t} style={{ border: '1px solid rgba(0,0,0,0.15)', padding: '5px 14px', fontSize: 9, fontWeight: 900, letterSpacing: '0.1em', color: '#000' }}>{t.toUpperCase()}</span>)}
           </div>
-          <h1 style={{ fontSize: 'clamp(32px, 6vw, 64px)', fontWeight: 900, lineHeight: 0.9, letterSpacing: '-0.04em', marginBottom: 32 }}>{course?.title?.toUpperCase()}</h1>
+          <h1 style={{ fontSize: 'clamp(32px, 6vw, 64px)', fontWeight: 900, lineHeight: 0.9, letterSpacing: '-0.04em', marginBottom: 32, color: '#000' }}>{course?.title?.toUpperCase()}</h1>
           
           <div style={{ display: 'flex', gap: 60 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <Avatar user={{ name: course?.instructor }} size={40} />
               <div>
-                <div style={{ fontSize: 9, color: '#666', fontWeight: 900, letterSpacing: '0.1em' }}>LEAD INSTRUCTOR</div>
-                <div style={{ fontWeight: 800, fontSize: 13 }}>{course?.instructor?.toUpperCase()}</div>
+                <div style={{ fontSize: 9, color: '#888', fontWeight: 900, letterSpacing: '0.1em' }}>LEAD INSTRUCTOR</div>
+                <div style={{ fontWeight: 800, fontSize: 13, color: '#000' }}>{course?.instructor?.toUpperCase()}</div>
               </div>
             </div>
             <div>
-              <div style={{ fontSize: 9, color: '#666', fontWeight: 900, letterSpacing: '0.1em' }}>RATING</div>
-              <div style={{ fontWeight: 800, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ fontSize: 9, color: '#888', fontWeight: 900, letterSpacing: '0.1em' }}>RATING</div>
+              <div style={{ fontWeight: 800, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6, color: '#000' }}>
                 {course?.rating} <span style={{ opacity: 0.5 }}>/ 1,200+ STUDENTS</span>
               </div>
             </div>
@@ -98,47 +98,47 @@ const CourseDetail = ({ course, onEnroll, isLoggedIn }) => {
       <div className="md-grid-reset" style={{ maxWidth: 1200, margin: '60px auto', padding: '0 var(--container-px)', display: 'grid', gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 0.8fr)', gap: 80 }}>
         <div>
           <section style={{ marginBottom: 80 }}>
-            <h2 style={{ fontSize: 11, fontWeight: 900, color: '#444', letterSpacing: '0.3em', marginBottom: 24 }}>THE SYLLABUS</h2>
+            <h2 style={{ fontSize: 11, fontWeight: 900, color: '#888', letterSpacing: '0.3em', marginBottom: 24 }}>THE SYLLABUS</h2>
             {isLoggedIn ? (
               <div className="reveal">
                 {currentContent}
-                <div className="glass" style={{ marginTop: 24, padding: 32 }}>
-                  <h3 style={{ fontSize: 18, fontWeight: 900, marginBottom: 12 }}>{activeLesson ? activeLesson.title.toUpperCase() : 'CURRICULUM OVERVIEW'}</h3>
-                  <p style={{ fontSize: 14, color: '#888', lineHeight: 1.6 }}>{activeLesson?.description || course.description}</p>
+                <div className="glass" style={{ marginTop: 24, padding: 32, background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)' }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 900, marginBottom: 12, color: '#000' }}>{activeLesson ? activeLesson.title.toUpperCase() : 'CURRICULUM OVERVIEW'}</h3>
+                  <p style={{ fontSize: 14, color: '#555', lineHeight: 1.6 }}>{activeLesson?.description || course.description}</p>
                 </div>
               </div>
             ) : (
-              <div className="glass" style={{ position: 'relative', overflow: 'hidden', minHeight: 400 }}>
+              <div className="glass" style={{ position: 'relative', overflow: 'hidden', minHeight: 400, background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)' }}>
                  <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 10, padding: 40 }}>
-                    <div style={{ width: 64, height: 64, background: 'rgba(255,255,255,0.05)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, border: '1px solid rgba(255,255,255,0.1)' }}>
-                      <Icon name="lock" size={24} />
+                    <div style={{ width: 64, height: 64, background: 'rgba(0,0,0,0.04)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, border: '1px solid rgba(0,0,0,0.1)' }}>
+                      <Icon name="lock" size={24} color="#000" />
                     </div>
-                    <h3 style={{ fontSize: 24, fontWeight: 900, marginBottom: 12, textAlign: 'center' }}>UNLOCK THE MASTERCLASS</h3>
+                    <h3 style={{ fontSize: 24, fontWeight: 900, marginBottom: 12, textAlign: 'center', color: '#000' }}>UNLOCK THE MASTERCLASS</h3>
                     <p style={{ color: '#666', fontSize: 13, textAlign: 'center', maxWidth: 300, marginBottom: 32, fontWeight: 700, letterSpacing: '0.05em' }}>REGISTRATION IS REQUIRED TO ACCESS THE PROFESSIONAL CURRICULUM.</p>
                     <div style={{ display: 'flex', gap: 16 }}>
-                      <button onClick={() => onEnroll('signup')} style={{ background: '#fff', color: '#000', border: 'none', padding: '14px 32px', fontSize: 11, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}>ENROLL FREE</button>
-                      <button onClick={() => onEnroll('login')} style={{ background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', padding: '14px 32px', fontSize: 11, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}>SIGN IN</button>
+                      <button onClick={() => onEnroll('signup')} style={{ background: '#000', color: '#fff', border: 'none', padding: '14px 32px', fontSize: 11, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}>ENROLL FREE</button>
+                      <button onClick={() => onEnroll('login')} style={{ background: 'transparent', color: '#000', border: '1px solid rgba(0,0,0,0.2)', padding: '14px 32px', fontSize: 11, fontWeight: 900, cursor: 'pointer', letterSpacing: '0.1em' }}>SIGN IN</button>
                     </div>
                  </div>
-                 <img src={course.thumbnail} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.2 }} alt="" />
+                 <img src={course.thumbnail} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }} alt="" />
               </div>
             )}
           </section>
 
           <section>
-            <h2 style={{ fontSize: 11, fontWeight: 900, color: '#444', letterSpacing: '0.3em', marginBottom: 24 }}>ABOUT THIS TRACK</h2>
-            <div style={{ color: '#888', fontSize: 15, lineHeight: 1.8, maxWidth: 640 }}>{course.description}</div>
+            <h2 style={{ fontSize: 11, fontWeight: 900, color: '#888', letterSpacing: '0.3em', marginBottom: 24 }}>ABOUT THIS TRACK</h2>
+            <div style={{ color: '#444', fontSize: 15, lineHeight: 1.8, maxWidth: 640 }}>{course.description}</div>
           </section>
         </div>
 
         <aside>
           <div style={{ position: 'sticky', top: 120 }}>
             {!isLoggedIn && (
-               <div className="glass" style={{ padding: 40, marginBottom: 40 }}>
-                  <div style={{ fontSize: 10, fontWeight: 900, color: '#444', letterSpacing: '0.2em', marginBottom: 12 }}>ACADEMY STATUS</div>
-                  <div style={{ fontSize: 32, fontWeight: 900, marginBottom: 8 }}>FREE</div>
-                  <p style={{ color: '#888', fontSize: 12, fontWeight: 700, marginBottom: 32 }}>COMPLETE MODULE 1 AT NO COST.</p>
-                  <button onClick={() => onEnroll('signup')} style={{ background: '#fff', color: '#000', border: 'none', padding: '16px', width: '100%', fontSize: 11, fontWeight: 900, letterSpacing: '0.1em', cursor: 'pointer' }}>GET STARTED NOW</button>
+               <div className="glass" style={{ padding: 40, marginBottom: 40, background: '#ffffff', border: '1px solid rgba(0,0,0,0.08)' }}>
+                  <div style={{ fontSize: 10, fontWeight: 900, color: '#888', letterSpacing: '0.2em', marginBottom: 12 }}>ACADEMY STATUS</div>
+                  <div style={{ fontSize: 32, fontWeight: 900, marginBottom: 8, color: '#000' }}>FREE</div>
+                  <p style={{ color: '#666', fontSize: 12, fontWeight: 700, marginBottom: 32 }}>COMPLETE MODULE 1 AT NO COST.</p>
+                  <button onClick={() => onEnroll('signup')} style={{ background: '#000', color: '#fff', border: 'none', padding: '16px', width: '100%', fontSize: 11, fontWeight: 900, letterSpacing: '0.1em', cursor: 'pointer' }}>GET STARTED NOW</button>
                </div>
             )}
             <Syllabus 

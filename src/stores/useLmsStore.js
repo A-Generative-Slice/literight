@@ -2,8 +2,12 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from 'axios';
 
-const isProd = window.location.hostname !== 'localhost';
-const API_BASE = isProd ? '/api' : 'http://localhost:3000';
+const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname) 
+  || window.location.hostname.startsWith('192.168.') 
+  || window.location.hostname.startsWith('10.') 
+  || window.location.hostname.startsWith('172.')
+  || window.location.hostname.endsWith('.local');
+const API_BASE = isLocal ? `http://${window.location.hostname}:3000` : '/api';
 
 // Setup Axios defaults
 axios.defaults.baseURL = API_BASE;
