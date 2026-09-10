@@ -15,14 +15,26 @@ import { Progress } from './progress/entities/progress.entity';
 
 import { User } from './auth/entities/user.entity';
 
+const isPostgres = !!process.env.DATABASE_URL;
+
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'data/lms.db',
-      entities: [Course, Chapter, Lesson, Progress, User],
-      synchronize: true, // Auto-create tables for now
-    }),
+    TypeOrmModule.forRoot(
+      isPostgres
+        ? {
+            type: 'postgres',
+            url: process.env.DATABASE_URL,
+            entities: [Course, Chapter, Lesson, Progress, User],
+            synchronize: true,
+            ssl: { rejectUnauthorized: false },
+          }
+        : {
+            type: 'sqlite',
+            database: 'data/lms.db',
+            entities: [Course, Chapter, Lesson, Progress, User],
+            synchronize: true,
+          },
+    ),
     ProgressModule, 
     CoursesModule, 
     UploadsModule,
