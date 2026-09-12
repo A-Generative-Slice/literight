@@ -7,7 +7,8 @@ const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname)
   || window.location.hostname.startsWith('10.') 
   || window.location.hostname.startsWith('172.')
   || window.location.hostname.endsWith('.local');
-const API_BASE = isLocal ? `http://${window.location.hostname}:3000` : '/api';
+const API_BASE = import.meta.env.VITE_API_BASE
+  || (isLocal ? `http://${window.location.hostname}:3000` : 'https://literight-api.onrender.com');
 
 // Setup Axios defaults
 axios.defaults.baseURL = API_BASE;
@@ -172,7 +173,11 @@ export const useLmsStore = create(
         if (!get().courses.length) set({ isLoading: true });
         try {
           const res = await axios.get('/courses');
-          set({ courses: res.data, isLoading: false });
+          if (Array.isArray(res.data)) {
+            set({ courses: res.data, isLoading: false });
+          } else {
+            set({ isLoading: false });
+          }
         } catch (error) {
           set({ isLoading: false });
         }

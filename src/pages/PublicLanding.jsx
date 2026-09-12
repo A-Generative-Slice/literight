@@ -4,7 +4,7 @@ import Icon from '../components/Icon';
 import ParticleField from '../components/ParticleField';
 
 const PublicLanding = ({ courses, onCourse }) => {
-  const filteredCourses = courses || [];
+  const filteredCourses = Array.isArray(courses) ? courses : [];
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {

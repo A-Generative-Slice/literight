@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://literight-api.onrender.com/$1" },
+    { "source": "/courses(.*)", "destination": "https://literight-api.onrender.com/courses$1" },
+    { "source": "/auth/(.*)", "destination": "https://literight-api.onrender.com/auth/$1" },
+    { "source": "/uploads/(.*)", "destination": "https://literight-api.onrender.com/uploads/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
